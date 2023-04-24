@@ -1,9 +1,10 @@
+import { useRoutes } from 'react-router-dom';
 import React from 'react';
+import routes from './routes';
 
-const App = () => {
-  return (
-    <div className='text-red-800 font-bold text-center'>react-typescript-tailwindcss-base</div>
-  );
+const App: React.FC = () => {
+  const element = useRoutes(routes);
+  return element;
 };
 
 export default App;
