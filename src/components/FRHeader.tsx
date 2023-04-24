@@ -1,13 +1,18 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const FRHeader: React.FC = () => {
   const go = useNavigate();
   return (
-    <header className='sticky top-0 bg-white border-b-[1px] border-gray-400'>
+    <header className='sticky top-0 bg-white border-b-[1px] border-gray-300'>
       <div className='flex justify-between items-center h-[60px] px-2 box-border lg:max-w-[1024px] lg:mx-auto lg:px-0'>
         {/* left logo */}
-        <p>logo</p>
+        <Link className='flex items-center' to='/'>
+          <div className='w-[48px] h-[48px] flex items-center mr-4'>
+            <img src='images/logo.png' alt='logo' />
+          </div>
+          <h1 className='font-bold'>Fitness Record</h1>
+        </Link>
         {/* right nav  */}
         <div className='flex items-center'>
           {/* home */}
