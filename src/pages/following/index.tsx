@@ -1,13 +1,13 @@
 import React from 'react';
 import FRHeader from 'components/FRHeader';
 
-const Home: React.FC = () => {
+const Following: React.FC = () => {
   return (
     <>
       <FRHeader />
-      <div>home</div>
+      <div>following</div>
     </>
   );
 };
 
-export default Home;
+export default Following;
