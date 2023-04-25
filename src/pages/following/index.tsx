@@ -1,11 +1,14 @@
 import React from 'react';
 import FRHeader from 'components/FRHeader';
+import FRContainer from 'components/FRContainer';
 
 const Following: React.FC = () => {
   return (
     <>
       <FRHeader />
-      <div>following</div>
+      <FRContainer>
+        <div>following</div>
+      </FRContainer>
     </>
   );
 };
