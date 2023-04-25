@@ -16,9 +16,10 @@ export type State = {
 const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'SET_RECORDS': {
-      console.log(action.payload);
+      const records = action.payload;
       return {
         ...state,
+        records,
       };
     }
     default:
