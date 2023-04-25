@@ -1,9 +1,9 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import type { Record } from 'types';
+import type { Record, SportCategory } from 'types';
 
 const JWT_TOKEN = 'JWT_TOKEN';
-const API_URL = 'http://localhost:3000';
+const API_URL = 'http://192.168.0.144:3000';
 const axiosInstance = axios.create();
 
 // 驗證token
@@ -38,10 +38,17 @@ export const verifyToken = async (token: string) => {
   }
 };
 
-export const fetchRecords = async (): Promise<Record[] | unknown> => {
+type RecordsResponse = {
+  records: Record[];
+  sportCategories: SportCategory[];
+  sportCategoryId: string;
+  userId: string;
+};
+
+export const fetchRecords = async (): Promise<RecordsResponse> => {
   try {
     const { data } = await axios.get(`${API_URL}/records`);
-    return data;
+    return data.data;
   } catch (err) {
     return Promise.reject(err);
   }
