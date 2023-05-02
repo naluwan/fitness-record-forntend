@@ -7,6 +7,7 @@ import useRecordStore from 'store/useRecordStore';
 import { fetchRecords } from 'services/apis';
 import Loading from 'components/Loading';
 import FRPost from 'components/FRPost';
+import FRRanking from 'components/FRRanking';
 
 const Home: React.FC = () => {
   const { onSetRecords, records } = useRecordStore((state) => {
@@ -56,7 +57,25 @@ const Home: React.FC = () => {
             )}
           </div>
           {/* right */}
-          <div className='hidden lg:block lg:w-[424px]'>排行榜</div>
+          <div className='hidden lg:block lg:w-[424px]'>
+            <FRRanking
+              title='減重'
+              users={[
+                {
+                  id: 4,
+                  name: 'naluwan',
+                  email: 'example@example.com',
+                  avatar: 'https://i.imgur.com/pMVVEhb.jpeg',
+                },
+                {
+                  id: 5,
+                  name: 'Nonna',
+                  email: 'nonna@example.com',
+                  avatar: 'https://i.imgur.com/8lvq2X8.jpeg',
+                },
+              ]}
+            />
+          </div>
         </div>
       </FRContainer>
     </>
