@@ -18,4 +18,10 @@ export type User = {
   name: string;
   email: string;
   avatar: string;
+  weight?: number;
+  waistline?: number;
+  nowWeight?: number;
+  nowWaistline?: number;
+  weightDiff?: number;
+  waistlineDiff?: number;
 };

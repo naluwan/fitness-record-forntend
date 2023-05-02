@@ -2,14 +2,16 @@ import { create } from 'zustand';
 import type { Action } from 'actions';
 
 import { setRecords } from '../actions';
-import type { Record } from '../types';
+import type { Record, User } from '../types';
 
 const initialState = {
   records: [],
+  user: null,
 };
 
 export type State = {
   records: Record[];
+  user: User | null;
   onSetRecords: (records: Record[]) => void;
 };
 
