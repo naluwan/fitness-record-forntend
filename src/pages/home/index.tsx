@@ -33,7 +33,7 @@ const Home: React.FC = () => {
           {/* left */}
           <div className='w-full lg:w-[600px]'>
             {isLoading ? (
-              <div className='flex justify-center mt-20 w-full'>
+              <div className='mt-20 flex w-full justify-center'>
                 <Loading />
               </div>
             ) : (

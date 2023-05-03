@@ -11,26 +11,26 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
   const { users, title } = props;
 
   return (
-    <div className='mt-8 ml-8 shadow-lg box-border p-2'>
-      <p className='text-base text-center font-bold'>{title}排行榜</p>
+    <div className='ml-8 mt-8 box-border p-2 shadow-xl dark:shadow-gray-400/40'>
+      <p className='text-center text-base font-bold'>{title}排行榜</p>
       <div>
         {users.map((user, idx) => {
           const { id, name, avatar } = user;
           let ranking = '';
           switch (idx) {
             case 0:
-              ranking = 'https://i.imgur.com/N3yeixz.jpg';
+              ranking = 'https://i.imgur.com/PltVgVY.png';
               break;
             case 1:
               ranking = 'https://i.imgur.com/tDlT93s.png';
               break;
             default:
-              ranking = 'https://i.imgur.com/Gf7WWox.jpg';
+              ranking = 'https://i.imgur.com/36VoOCY.png';
           }
           return (
             <div className='flex items-center' key={id}>
               <div
-                className='w-[60px] h-[60px] overflow-hidden rounded-full'
+                className='h-[60px] w-[60px] overflow-hidden rounded-full'
                 style={{
                   backgroundImage: `url(${ranking})`,
                   backgroundPosition: 'center',
@@ -44,7 +44,7 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
                 </div>
                 <span>
                   <p className='text-xs'>目前體重：99公斤</p>
-                  <p className='text-green-500 font-bold'> - 5%</p>
+                  <p className='font-bold text-green-500'> - 5%</p>
                 </span>
               </div>
             </div>
