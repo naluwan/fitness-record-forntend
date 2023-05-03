@@ -11,6 +11,14 @@ const FRHeader: React.FC = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isDark, setIsDark] = React.useState<boolean>(false);
 
+  React.useEffect(() => {
+    if (document.documentElement.classList.contains('dark')) {
+      setIsDark(true);
+    } else {
+      setIsDark(false);
+    }
+  }, [setIsDark]);
+
   const { user } = useRecordStore((state) => {
     return {
       user: state.user,
