@@ -45,6 +45,7 @@ type RecordsResponse = {
   userId: string;
 };
 
+// 獲取記錄資訊
 export const fetchRecords = async (): Promise<RecordsResponse> => {
   try {
     const { data } = await axios.get(`${API_URL}/records`);

@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply dark:bg-black dark:text-white;
+  }
+}
+
+@layer components {
+  .popover-panel {
+    @apply absolute right-0 top-6 w-[180px] rounded-lg border border-[#efefef] bg-white p-4 opacity-0 shadow-lg lg:w-[250px];
+  }
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
