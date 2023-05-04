@@ -19,7 +19,7 @@ const FRPost: React.FC<FRPostProps> = (props) => {
   return (
     <div className='pb-4 shadow-xl dark:shadow-gray-400/40 lg:my-8'>
       <FRUser name={name} date={date} avatar={avatar} />
-      <img src={photo} alt='post' className='w-full' />
+      <img src={photo} alt='post' className='max-h-[400px] w-full object-contain' />
       <FRComment
         sportCategory={sportCategory}
         weight={weight}
