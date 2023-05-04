@@ -7,12 +7,15 @@ import type { Record, User } from '../types';
 const initialState = {
   records: [],
   user: null,
+  openPanel: false,
 };
 
 export type State = {
   records: Record[];
   user: User | null;
+  openPanel: boolean;
   onSetRecords: (records: Record[]) => void;
+  onSetOpenPanel: (openPanel: boolean) => void;
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -40,6 +43,9 @@ const useRecordStore = create<State>((set) => {
     dispatch,
     onSetRecords(records: Record[]) {
       dispatch(setRecords(records));
+    },
+    onSetOpenPanel(open: boolean) {
+      set({ openPanel: open });
     },
   };
 });
