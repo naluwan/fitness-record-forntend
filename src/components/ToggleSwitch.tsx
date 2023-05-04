@@ -23,12 +23,12 @@ const ToggleSwitch: React.FC<ToggleSwitchProps> = (props) => {
   return (
     <button
       onClick={() => atClickThemeChangeHandler()}
-      className={cx('flex w-16 h-8 bg-gray-600 rounded-full', {
+      className={cx('flex h-8 w-16 rounded-full bg-gray-600', {
         'bg-green-500': isDark,
       })}
     >
       <span
-        className={cx('h-8 w-8 bg-white rounded-full border-black border-[1px]', {
+        className={cx('h-8 w-8 rounded-full border-[1px] border-black bg-white', {
           'ml-8': isDark,
         })}
       />

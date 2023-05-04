@@ -17,10 +17,10 @@ const FRUser: React.FC<FRUserProps> = (props) => {
   console.log('user id ==> ', id);
 
   return (
-    <div className='flex items-center box-border px-4 h-[70px]'>
+    <div className='box-border flex h-[70px] items-center px-4'>
       <div
         className={`${
-          size === 'small' ? 'w-[40px] h-[40px]' : 'w-[60px] h-[60px]'
+          size === 'small' ? 'h-[40px] w-[40px]' : 'h-[60px] w-[60px]'
         } overflow-hidden rounded-full`}
         style={{
           backgroundImage: `url(${avatar})`,
@@ -29,14 +29,14 @@ const FRUser: React.FC<FRUserProps> = (props) => {
         }}
       />
       <div className='ml-4'>
-        <p className='font-bold text-sm'>{name}</p>
-        <p className='text-gray-400 text-xs'>{date}</p>
+        <p className='text-sm font-bold'>{name}</p>
+        <p className='text-xs text-gray-400'>{date}</p>
       </div>
       {showFollow && (
         <p
           className={`${
             isFollowing ? 'text-gray-700' : 'text-blue-400'
-          } ml-auto text-xs font-bold cursor-pointer`}
+          } ml-auto cursor-pointer text-xs font-bold`}
         >
           {isFollowing ? 'FOLLOWING' : 'FOLLOW'}
         </p>

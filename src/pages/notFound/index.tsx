@@ -5,7 +5,7 @@ const NotFound: React.FC = () => {
   return (
     <>
       <FRHeader />
-      <h1 className='text-center pt-6 font-bold '>找不到頁面，請重新嘗試！</h1>
+      <h1 className='pt-6 text-center font-bold '>找不到頁面，請重新嘗試！</h1>
     </>
   );
 };

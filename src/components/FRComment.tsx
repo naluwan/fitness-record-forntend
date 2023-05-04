@@ -12,19 +12,19 @@ const FRComment: React.FC<FRCommentProps> = (props) => {
   return (
     <div className='p-4'>
       <p className='text-base'>
-        <span className='font-bold inline-block mr-1'>運動：</span>
+        <span className='mr-1 inline-block font-bold'>運動：</span>
         <span>{sportCategory}</span>
       </p>
       <p className='text-base'>
-        <span className=' font-bold inline-block mr-1'>體重：</span>
+        <span className=' mr-1 inline-block font-bold'>體重：</span>
         <span>{weight}</span>
       </p>
       <p className='text-base'>
-        <span className=' font-bold inline-block mr-1'>腰圍：</span>
+        <span className=' mr-1 inline-block font-bold'>腰圍：</span>
         <span>{waistline}</span>
       </p>
       <p className='text-base'>
-        <span className=' font-bold inline-block mr-1'>心得：</span>
+        <span className=' mr-1 inline-block font-bold'>心得：</span>
         <span>{description}</span>
       </p>
     </div>
