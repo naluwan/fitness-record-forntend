@@ -6,10 +6,34 @@ import FRHamburgerAnimated from './FRHamburgerAnimated';
 import FRPopoverPanel from './FRPopoverPanel';
 import ToggleSwitch from './ToggleSwitch';
 
-const FRHeader: React.FC = () => {
-  const [open, setOpen] = React.useState<boolean>(false);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+// 設定多個ref的type
+export interface IRef {
+  getDiv: () => HTMLDivElement;
+  getButton: () => HTMLButtonElement;
+}
+
+const FRHeader = React.forwardRef<IRef>((props, ref) => {
   const [isDark, setIsDark] = React.useState<boolean>(false);
+
+  // 分別設定div和button的ref
+  const divRef = React.useRef<HTMLDivElement>(null);
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
+
+  // 使用useImperativeHandle來回傳各個ref
+  React.useImperativeHandle(ref, () => ({
+    getDiv() {
+      return divRef.current as HTMLDivElement;
+    },
+    getButton() {
+      return buttonRef.current as HTMLButtonElement;
+    },
+  }));
+
+  const { user } = useRecordStore((state) => {
+    return {
+      user: state.user,
+    };
+  }, shallow);
 
   React.useEffect(() => {
     if (document.documentElement.classList.contains('dark')) {
@@ -18,12 +42,6 @@ const FRHeader: React.FC = () => {
       setIsDark(false);
     }
   }, [setIsDark]);
-
-  const { user } = useRecordStore((state) => {
-    return {
-      user: state.user,
-    };
-  }, shallow);
 
   console.log(user);
 
@@ -125,8 +143,8 @@ const FRHeader: React.FC = () => {
 
           {/* more actions */}
           <div className='relative z-10 rounded-lg px-2 py-[0.3rem] hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
-            <FRHamburgerAnimated open={open} onSetOpen={setOpen} />
-            <FRPopoverPanel open={open}>
+            <FRHamburgerAnimated ref={buttonRef} />
+            <FRPopoverPanel ref={divRef}>
               <>
                 {/* profile */}
                 <div className='mb-2 flex cursor-pointer items-center rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
@@ -219,6 +237,6 @@ const FRHeader: React.FC = () => {
       </div>
     </header>
   );
-};
+});
 
 export default FRHeader;

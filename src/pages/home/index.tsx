@@ -1,5 +1,5 @@
 import React from 'react';
-import FRHeader from 'components/FRHeader';
+import FRHeader, { IRef } from 'components/FRHeader';
 import FRContainer from 'components/FRContainer';
 import { useQuery } from 'react-query';
 import { shallow } from 'zustand/shallow';
@@ -10,10 +10,11 @@ import FRPost from 'components/FRPost';
 import FRRanking from 'components/FRRanking';
 
 const Home: React.FC = () => {
-  const { onSetRecords, records } = useRecordStore((state) => {
+  const { records, onSetRecords, onSetOpenPanel } = useRecordStore((state) => {
     return {
       records: state.records,
       onSetRecords: state.onSetRecords,
+      onSetOpenPanel: state.onSetOpenPanel,
     };
   }, shallow);
 
@@ -25,9 +26,23 @@ const Home: React.FC = () => {
     }
   });
 
+  // popover panel ref
+  const panelRef = React.useRef<IRef>(null);
+
+  // 畫面點擊時，如果element沒有包含在popoverRef底下的話，就關閉panel
+  window.addEventListener('mousedown', (e) => {
+    if (
+      panelRef.current &&
+      !panelRef.current.getDiv().contains(e.target as HTMLElement) &&
+      !panelRef.current.getButton().contains(e.target as HTMLElement)
+    ) {
+      onSetOpenPanel(false);
+    }
+  });
+
   return (
     <>
-      <FRHeader />
+      <FRHeader ref={panelRef} />
       <FRContainer>
         <div className='flex lg:justify-center'>
           {/* left */}
