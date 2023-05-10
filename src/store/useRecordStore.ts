@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { Action } from 'actions';
 
-import { setRecords } from '../actions';
+import { setRecordsAction } from '../actions';
 import type { Record, User } from '../types';
 
 const initialState = {
@@ -42,7 +42,7 @@ const useRecordStore = create<State>((set) => {
     ...initialState,
     dispatch,
     onSetRecords(records: Record[]) {
-      dispatch(setRecords(records));
+      dispatch(setRecordsAction(records));
     },
     onSetOpenPanel(open: boolean) {
       set({ openPanel: open });

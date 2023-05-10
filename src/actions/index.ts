@@ -1,6 +1,6 @@
 import type { Record } from 'types';
 
-export const setRecords = (records: Record[]): Action => ({
+export const setRecordsAction = (records: Record[]): Action => ({
   type: 'SET_RECORDS',
   payload: records,
 });

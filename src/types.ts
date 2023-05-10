@@ -4,8 +4,10 @@ export type Record = {
   weight: number;
   waistline: number;
   description: string;
-  User: User;
-  SportCategory: SportCategory;
+  User?: User;
+  SportCategory?: SportCategory;
+  userId: number;
+  sportCategoryId: number;
 };
 
 export type SportCategory = {
