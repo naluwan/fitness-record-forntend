@@ -27,11 +27,17 @@ const FRUser: React.FC<FRUserProps> = (props) => {
 
   const [openPanel, setOpenPanel] = React.useState(false);
 
+  const buttonRef = React.useRef<HTMLButtonElement>(null);
   const panelRef = React.useRef<HTMLDivElement>(null);
 
   // 畫面點擊時，如果element沒有包含在popoverRef底下的話，就關閉panel
   window.addEventListener('mousedown', (e) => {
-    if (panelRef.current && !panelRef.current.contains(e.target as HTMLElement)) {
+    if (
+      panelRef.current &&
+      buttonRef.current &&
+      !panelRef.current.contains(e.target as HTMLElement) &&
+      !buttonRef.current.contains(e.target as HTMLElement)
+    ) {
       setOpenPanel(false);
     }
   });
@@ -58,21 +64,22 @@ const FRUser: React.FC<FRUserProps> = (props) => {
       </div>
       {showMore && (
         <div className='relative ml-auto'>
-          <svg
-            xmlns='http://www.w3.org/2000/svg'
-            fill='none'
-            viewBox='0 0 24 24'
-            strokeWidth={1.5}
-            stroke='currentColor'
-            className='h-6 w-6 cursor-pointer hover:text-[#e6e6e6] dark:hover:text-[#1c1c1c]'
-            onClick={() => setOpenPanel((prev) => !prev)}
-          >
-            <path
-              strokeLinecap='round'
-              strokeLinejoin='round'
-              d='M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
-            />
-          </svg>
+          <button onClick={() => setOpenPanel((prev) => !prev)} ref={buttonRef}>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth={1.5}
+              stroke='currentColor'
+              className='h-6 w-6 hover:text-[#e6e6e6] dark:hover:text-[#1c1c1c]'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                d='M6.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM12.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0zM18.75 12a.75.75 0 11-1.5 0 .75.75 0 011.5 0z'
+              />
+            </svg>
+          </button>
 
           {/* more popover panel */}
           <div
