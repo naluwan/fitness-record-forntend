@@ -54,3 +54,30 @@ export const fetchRecords = async (): Promise<RecordsResponse> => {
     return Promise.reject(err);
   }
 };
+
+type DeleteRecordResponse = {
+  status: string;
+  data: {
+    deleteRecord: Record;
+  };
+};
+
+export const deleteRecord = async (id: number): Promise<DeleteRecordResponse> => {
+  // try {
+  //   const { data } = await axiosInstance.delete(`${API_URL}/records/${id}`);
+  //   return data;
+  // } catch (err) {
+  //   return Promise.reject(err);
+  // }
+  try {
+    const { data } = await axios.delete(`${API_URL}/records/${id}`, {
+      headers: {
+        Authorization:
+          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6Ik5vbm5hIiwiZW1haWwiOiJub25uYUBleGFtcGxlLmNvbSIsImF2YXRhciI6Imh0dHBzOi8vaS5pbWd1ci5jb20vNVFxN20xei5qcGVnIiwid2VpZ2h0Ijo2NSwid2Fpc3RsaW5lIjpudWxsLCJub3dXZWlnaHQiOjYyLjgsIm5vd1dhaXN0bGluZSI6bnVsbCwid2VpZ2h0RGlmZiI6LTMuMzgsIndhaXN0bGluZURpZmYiOjAsImNyZWF0ZWRBdCI6IjIwMjMtMDQtMzBUMDY6MzE6NTguMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjMtMDUtMDlUMDk6MDk6MDUuMDAwWiIsImlhdCI6MTY4MzY5ODY3OSwiZXhwIjoxNjgzNzI3NDc5fQ.mC8Hk0uO3yBJOGLwb-GQVQdmkj3RdRGrSpyHY9wUIIw',
+      },
+    });
+    return data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
