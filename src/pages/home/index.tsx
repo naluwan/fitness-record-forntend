@@ -8,6 +8,7 @@ import { fetchRecords } from 'services/apis';
 import Loading from 'components/Loading';
 import FRPost from 'components/FRPost';
 import FRRanking from 'components/FRRanking';
+import { SportCategory, User } from 'types';
 
 const Home: React.FC = () => {
   const { records, onSetRecords, onSetOpenPanel } = useRecordStore((state) => {
@@ -18,7 +19,7 @@ const Home: React.FC = () => {
     };
   }, shallow);
 
-  const { data, isSuccess, isLoading, isError } = useQuery('allRecords', fetchRecords);
+  const { data, isSuccess, isLoading, isError, refetch } = useQuery('allRecords', fetchRecords);
 
   React.useEffect(() => {
     if (isSuccess && !isLoading && !isError) {
@@ -54,7 +55,8 @@ const Home: React.FC = () => {
             ) : (
               records.length > 0 &&
               records.map((record) => {
-                const user = record.User;
+                const user = record.User as User;
+                const sportCategory = record.SportCategory as SportCategory;
                 return (
                   <FRPost
                     key={record.id}
@@ -63,11 +65,12 @@ const Home: React.FC = () => {
                     name={user.name}
                     date={record.date}
                     avatar={user.avatar}
-                    sportCategory={record.SportCategory.name}
+                    sportCategory={sportCategory.name}
                     weight={record.weight}
                     waistline={record.waistline}
                     description={record.description}
                     photo='https://i.imgur.com/pMVVEhb.jpeg'
+                    onRefetch={refetch}
                   />
                 );
               })

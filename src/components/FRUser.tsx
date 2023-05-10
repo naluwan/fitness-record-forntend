@@ -1,4 +1,5 @@
 import React from 'react';
+import { deleteRecord } from '../services/apis';
 
 type FRUserProps = {
   size?: 'medium' | 'small';
@@ -10,6 +11,7 @@ type FRUserProps = {
   userId?: number;
   recordId?: number;
   showMore?: boolean;
+  onRefetch?: () => void;
 };
 
 const FRUser: React.FC<FRUserProps> = (props) => {
@@ -23,6 +25,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
     userId,
     recordId,
     showMore = false,
+    onRefetch,
   } = props;
 
   const [openPanel, setOpenPanel] = React.useState(false);
@@ -41,6 +44,19 @@ const FRUser: React.FC<FRUserProps> = (props) => {
       setOpenPanel(false);
     }
   });
+
+  const atDeleteRecord = React.useCallback(
+    (id: number) => {
+      deleteRecord(id)
+        .then(() => {
+          if (typeof onRefetch === 'function') {
+            onRefetch();
+          }
+        })
+        .catch((err) => console.log(err));
+    },
+    [onRefetch],
+  );
 
   // TODO: user id
   console.log('user id ==> ', userId);
@@ -115,7 +131,12 @@ const FRUser: React.FC<FRUserProps> = (props) => {
             </div>
 
             {/* 刪除 */}
-            <div className='mb-1 flex cursor-pointer items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
+            <div
+              className='mb-1 flex items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+              onClick={() => atDeleteRecord(recordId as number)}
+              role='button'
+              tabIndex={0}
+            >
               {/* left icon */}
               <div className='bg-fb-input mr-2 flex items-center justify-center rounded-full p-1'>
                 <svg

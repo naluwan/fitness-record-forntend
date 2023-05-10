@@ -13,6 +13,7 @@ type FRPostProps = {
   description: string;
   userId: number;
   recordId: number;
+  onRefetch: () => void;
 };
 
 const FRPost: React.FC<FRPostProps> = (props) => {
@@ -27,6 +28,7 @@ const FRPost: React.FC<FRPostProps> = (props) => {
     description,
     userId,
     recordId,
+    onRefetch,
   } = props;
 
   return (
@@ -38,6 +40,7 @@ const FRPost: React.FC<FRPostProps> = (props) => {
         userId={userId}
         recordId={recordId}
         showMore
+        onRefetch={onRefetch}
       />
       <img src={photo} alt='post' className='max-h-[400px] w-full object-contain' />
       <FRComment
