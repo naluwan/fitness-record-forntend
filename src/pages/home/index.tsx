@@ -58,6 +58,8 @@ const Home: React.FC = () => {
                 return (
                   <FRPost
                     key={record.id}
+                    userId={record.id}
+                    recordId={record.id}
                     name={user.name}
                     date={record.date}
                     avatar={user.avatar}
