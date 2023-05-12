@@ -32,7 +32,7 @@ const FRHamburgerAnimated = React.forwardRef<HTMLButtonElement>((props, ref) => 
         />
         <span
           aria-hidden='true'
-          className={`absolute block  h-0.5 w-5 transform bg-current  transition duration-500 ease-in-out ${
+          className={`absolute block  h-0.5 w-5 transform bg-current transition duration-500 ease-in-out ${
             openPanel ? '-rotate-45' : 'translate-y-1.5'
           }`}
         />

@@ -45,6 +45,34 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
 
   console.log(user);
 
+  // header icon button mouse enter event
+  const atIconBtnMouseEnterHandler = React.useCallback((e: React.MouseEvent) => {
+    const target = e.currentTarget;
+    if (target.id !== 'hamburgerBtn') {
+      // 一般icon button的放大效果
+      target.firstElementChild?.classList.add('scale-110');
+    } else {
+      // 漢堡排 icon button的放大效果
+      Array.from(target.firstElementChild?.children[1].children as HTMLCollection).forEach((item) =>
+        item.classList.add('scale-110'),
+      );
+    }
+  }, []);
+
+  // header icon button mouse leave event
+  const atIconBtnMouseLeaveHandler = React.useCallback((e: React.MouseEvent) => {
+    const target = e.currentTarget;
+    if (target.id !== 'hamburgerBtn') {
+      // 一般icon button的放大效果
+      target.firstElementChild?.classList.remove('scale-110');
+    } else {
+      // 漢堡排 icon button的放大效果
+      Array.from(target.firstElementChild?.children[1].children as HTMLCollection).forEach((item) =>
+        item.classList.remove('scale-110'),
+      );
+    }
+  }, []);
+
   const go = useNavigate();
 
   return (
@@ -60,15 +88,19 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
         {/* right nav  */}
         <div className='relative flex items-center'>
           {/* home */}
-          <div className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
+          <button
+            className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+            onClick={() => go('/')}
+            onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
+            onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
               viewBox='0 0 24 24'
-              strokeWidth={1.5}
+              strokeWidth={2}
               stroke='currentColor'
-              className='z-20 h-6 w-6 cursor-pointer'
-              onClick={() => go('/')}
+              className='z-20 h-6 w-6 duration-500'
             >
               <path
                 strokeLinecap='round'
@@ -76,17 +108,21 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                 d='M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25'
               />
             </svg>
-          </div>
+          </button>
 
           {/* following */}
-          <div className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
+          <button
+            className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+            onClick={() => go('/following')}
+            onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
+            onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
+          >
             <svg
               xmlns='http://www.w3.org/2000/svg'
-              className='z-20 h-6 w-6 cursor-pointer'
+              className='z-20 h-6 w-6 duration-500'
               fill='none'
               viewBox='0 0 24 24'
               stroke='currentColor'
-              onClick={() => go('/following')}
             >
               <path
                 strokeLinecap='round'
@@ -95,12 +131,16 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                 d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
               />
             </svg>
-          </div>
+          </button>
 
           {/* new post */}
-          <div className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
+          <button
+            className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+            onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
+            onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
+          >
             <svg
-              className='z-20 h-6 w-6 cursor-pointer dark:text-white'
+              className='z-20 h-6 w-6 duration-500 dark:text-white'
               color='rgb(0, 0, 0)'
               fill='rgb(0, 0, 0)'
               height='24'
@@ -139,10 +179,15 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                 y2='17.455'
               />
             </svg>
-          </div>
+          </button>
 
           {/* more actions */}
-          <div className='relative z-10 rounded-lg px-2 py-[0.3rem] hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
+          <button
+            className='relative z-10 rounded-lg px-2 py-[0.3rem] hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+            onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
+            onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
+            id='hamburgerBtn'
+          >
             <FRHamburgerAnimated ref={buttonRef} />
             <FRPopoverPanel ref={divRef}>
               <>
@@ -232,7 +277,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                 </div>
               </>
             </FRPopoverPanel>
-          </div>
+          </button>
         </div>
       </div>
     </header>
