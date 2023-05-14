@@ -13,6 +13,7 @@ const Register: React.FC = () => {
     avatar: '',
   });
 
+  // 更新註冊資訊
   const atChangeInput = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setRegisterInfo((prev) => {
@@ -23,6 +24,7 @@ const Register: React.FC = () => {
     });
   }, []);
 
+  // 註冊事件
   const atSubmit = React.useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();

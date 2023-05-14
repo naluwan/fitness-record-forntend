@@ -6,6 +6,7 @@ const SignIn: React.FC = () => {
   const go = useNavigate();
   const [accountInfo, setAccountInfo] = React.useState({ email: '', password: '' });
 
+  // 更新帳號資訊
   const atChangeInput = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setAccountInfo((prev) => {
@@ -16,6 +17,15 @@ const SignIn: React.FC = () => {
     });
   }, []);
 
+  // 登入按鈕
+  const atSubmit = React.useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      console.log('account info ==> ', accountInfo);
+    },
+    [accountInfo],
+  );
+
   return (
     <div className='relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12'>
       <div className='relative mx-auto w-full max-w-md bg-white px-6 pb-8 pt-10 shadow-xl ring-1 ring-gray-900/5 sm:rounded-xl sm:px-10'>
@@ -25,7 +35,7 @@ const SignIn: React.FC = () => {
             <p className='mt-2 text-gray-500'>請輸入註冊的Email和密碼</p>
           </div>
           <div className='mt-5'>
-            <form action=''>
+            <form onSubmit={atSubmit}>
               <div className='relative mt-6'>
                 <input
                   type='email'
@@ -63,7 +73,6 @@ const SignIn: React.FC = () => {
                 <button
                   type='submit'
                   className='w-full rounded-md bg-black px-3 py-4 text-white focus:bg-gray-600 focus:outline-none'
-                  onClick={() => console.log(accountInfo)}
                 >
                   登入
                 </button>
