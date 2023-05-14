@@ -1,5 +1,6 @@
 import type { RouteObject } from 'react-router-dom';
 import SignIn from 'pages/signIn';
+import Register from 'pages/register';
 import Following from './pages/following';
 import Home from './pages/home';
 import NotFound from './pages/notFound';
@@ -18,6 +19,11 @@ const routes: RouteObject[] = [
   {
     path: '/signin',
     element: <SignIn />,
+    children: [],
+  },
+  {
+    path: '/register',
+    element: <Register />,
     children: [],
   },
   {
