@@ -76,7 +76,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
   const go = useNavigate();
 
   return (
-    <header className='sticky top-0 border-b-[1px] border-gray-300 bg-white dark:bg-black'>
+    <header className='sticky top-0 z-50 border-b-[1px] border-gray-300 bg-white dark:bg-black'>
       <div className='box-border flex h-[60px] items-center justify-between px-2 lg:mx-auto lg:max-w-[1024px] lg:px-0'>
         {/* left logo */}
         <Link className='flex items-center' to='/'>
