@@ -8,14 +8,17 @@ const initialState = {
   records: [],
   user: null,
   openPanel: false,
+  isFetching: false,
 };
 
 export type State = {
   records: Record[];
   user: User | null;
   openPanel: boolean;
+  isFetching: boolean;
   onSetRecords: (records: Record[]) => void;
   onSetOpenPanel: (openPanel: boolean) => void;
+  onSetIsFetching: (isFetching: boolean) => void;
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -46,6 +49,9 @@ const useRecordStore = create<State>((set) => {
     },
     onSetOpenPanel(open: boolean) {
       set({ openPanel: open });
+    },
+    onSetIsFetching(isFetching: boolean) {
+      set({ isFetching });
     },
   };
 });

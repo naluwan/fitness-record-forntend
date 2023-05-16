@@ -4,8 +4,8 @@ import type { Record, SportCategory } from 'types';
 import Swal from 'sweetalert2';
 
 const JWT_TOKEN = 'JWT_TOKEN';
-// const API_URL = 'http://192.168.0.144:3000';
-const API_URL = 'http://172.20.10.11:3000';
+const API_URL = 'http://192.168.0.144:3000';
+// const API_URL = 'http://172.20.10.11:3000';
 const axiosInstance = axios.create();
 
 export const Toast = Swal.mixin({
@@ -94,19 +94,28 @@ export const deleteRecord = async (id: number): Promise<DeleteRecordResponse> =>
 export type RegisterInfo = {
   name: string;
   email: string;
+  weight: number | null;
+  waistline: number | null;
   password: string;
   passwordCheck: string;
-  avatar: string;
+  avatar: FileList | null;
 };
 
 export const fetchRegister = async (registerInfo: RegisterInfo) => {
   const formData = new FormData();
 
-  Object.entries(registerInfo).map(([key, value]) => {
-    if (key === 'avatar') {
-      return formData.append(key, value[0]);
+  Object.entries(registerInfo).forEach(([key, value]) => {
+    // 判斷體重或腰圍是否有填寫，沒有的話就不用加到formData中
+    if ((key === 'weight' || key === 'waistline') && value === null) return;
+
+    // 將使用者頭像檔案加到formData中
+    if (key === 'avatar' && value) {
+      const files = value as FileList;
+      formData.append(key, files[0]);
+      return;
     }
-    return formData.append(key, value);
+
+    formData.append(key, value as string);
   });
 
   try {
@@ -122,11 +131,12 @@ export const fetchRegister = async (registerInfo: RegisterInfo) => {
     return res.data;
   } catch (err: unknown) {
     if (axios.isAxiosError<{ message: string }>(err)) {
-      return Toast.fire({
+      Toast.fire({
         icon: 'error',
         title: '註冊失敗',
         text: err.response?.data.message,
       });
+      return err.response?.data;
     }
     return err as Error;
   }
