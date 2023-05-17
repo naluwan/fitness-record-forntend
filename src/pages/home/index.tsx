@@ -11,11 +11,13 @@ import FRRanking from 'components/FRRanking';
 import { SportCategory, User } from 'types';
 
 const Home: React.FC = () => {
-  const { records, onSetRecords, onSetOpenPanel } = useRecordStore((state) => {
+  const { user, records, onSetRecords, onSetOpenPanel } = useRecordStore((state) => {
     return {
+      user: state.user,
       records: state.records,
       onSetRecords: state.onSetRecords,
       onSetOpenPanel: state.onSetOpenPanel,
+      init: state.init,
     };
   }, shallow);
 
@@ -55,21 +57,22 @@ const Home: React.FC = () => {
             ) : (
               records.length > 0 &&
               records.map((record) => {
-                const user = record.User as User;
+                const postUserInfo = record.User as User;
                 const sportCategory = record.SportCategory as SportCategory;
                 return (
                   <FRPost
                     key={record.id}
-                    userId={user.id}
-                    recordId={record.id}
-                    name={user.name}
+                    postUserId={postUserInfo.id}
+                    postRecordId={record.id}
+                    postUserName={postUserInfo.name}
                     date={record.date}
-                    avatar={user.avatar}
+                    postUserAvatar={postUserInfo.avatar}
                     sportCategory={sportCategory.name}
                     weight={record.weight}
                     waistline={record.waistline}
                     description={record.description}
                     photo='https://i.imgur.com/pMVVEhb.jpeg'
+                    currentUserId={user ? user.id : null}
                     onRefetch={refetch}
                   />
                 );

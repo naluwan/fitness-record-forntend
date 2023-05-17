@@ -5,8 +5,11 @@ import {
   fetchLogin,
   cleanToken,
   LoginResponseType,
+  getJWTToken,
+  verifyToken,
   Toast,
 } from 'services/apis';
+
 import { setRecordsAction } from '../actions';
 import type { Record, User } from '../types';
 
@@ -15,6 +18,7 @@ const initialState = {
   user: null,
   openPanel: false,
   isFetching: false,
+  isAppInitializedComplete: false,
 };
 
 export type State = {
@@ -22,6 +26,7 @@ export type State = {
   user: User | null;
   openPanel: boolean;
   isFetching: boolean;
+  isAppInitializedComplete: boolean;
   onSetRecords: (records: Record[]) => void;
   onSetOpenPanel: (openPanel: boolean) => void;
   onSetIsFetching: (isFetching: boolean) => void;
@@ -53,6 +58,33 @@ const useRecordStore = create<State>((set) => {
   return {
     ...initialState,
     dispatch,
+    init() {
+      const token = getJWTToken();
+      if (token) {
+        verifyToken(token)
+          .then((res) => {
+            set({
+              user: res.user,
+            });
+          })
+          .catch((err) => {
+            Toast.fire({
+              icon: 'error',
+              title: '驗證錯誤',
+              text: err.message,
+            });
+          })
+          .finally(() => {
+            set({
+              isAppInitializedComplete: true,
+            });
+          });
+      } else {
+        set({
+          isAppInitializedComplete: true,
+        });
+      }
+    },
     onSetRecords(records: Record[]) {
       dispatch(setRecordsAction(records));
     },
