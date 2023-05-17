@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchRegister, RegisterInfo } from 'services/apis';
+import { fetchRegister, RegisterInfoType } from 'services/apis';
 import { useDropzone } from 'react-dropzone';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
@@ -20,7 +20,7 @@ const Register: React.FC = () => {
     };
   }, shallow);
 
-  const [registerInfo, setRegisterInfo] = React.useState<RegisterInfo>({
+  const [registerInfo, setRegisterInfo] = React.useState<RegisterInfoType>({
     name: '',
     email: '',
     weight: null,

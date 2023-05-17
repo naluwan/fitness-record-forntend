@@ -5,14 +5,16 @@ import FRHeader, { IRef } from 'components/FRHeader';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
 import FRContainer from 'components/FRContainer';
+import { Toast } from 'services/apis';
 
 const SignIn: React.FC = () => {
   const go = useNavigate();
   const [accountInfo, setAccountInfo] = React.useState({ email: '', password: '' });
 
-  const { onSetOpenPanel } = useRecordStore((state) => {
+  const { onSetOpenPanel, onLogin } = useRecordStore((state) => {
     return {
       onSetOpenPanel: state.onSetOpenPanel,
+      onLogin: state.onLogin,
     };
   }, shallow);
 
@@ -27,13 +29,31 @@ const SignIn: React.FC = () => {
     });
   }, []);
 
-  // 登入按鈕
+  // 登入按鈕點擊事件
   const atSubmit = React.useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      console.log('account info ==> ', accountInfo);
+      const { email, password } = accountInfo;
+      onLogin(email, password)
+        .then((res) => {
+          setAccountInfo({ email: '', password: '' });
+          Toast.fire({
+            icon: 'success',
+            title: '登入成功',
+            text: `${res.user?.name} 您好`,
+          });
+          go('/');
+        })
+        .catch((err) => {
+          setAccountInfo({ email: '', password: '' });
+          Toast.fire({
+            icon: 'error',
+            title: '登入失敗',
+            text: err.response.data.message,
+          });
+        });
     },
-    [accountInfo],
+    [accountInfo, onLogin, go],
   );
 
   // popover panel ref
@@ -66,14 +86,15 @@ const SignIn: React.FC = () => {
                     <input
                       type='email'
                       name='email'
-                      id={accountInfo.email}
+                      id='email'
+                      value={accountInfo.email}
                       placeholder='Email Address'
                       className='peer mt-1 w-full border-b-2 border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none'
                       autoComplete='NA'
                       onChange={(e) => atChangeInput(e)}
                     />
                     <label
-                      htmlFor={accountInfo.email}
+                      htmlFor='email'
                       className='pointer-events-none absolute left-0 top-0 origin-left -translate-y-1/2 transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800'
                     >
                       帳號
@@ -83,13 +104,14 @@ const SignIn: React.FC = () => {
                     <input
                       type='password'
                       name='password'
-                      id={accountInfo.password}
+                      id='password'
+                      value={accountInfo.password}
                       placeholder='Password'
                       className='peer peer mt-1 w-full border-b-2 border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none'
                       onChange={(e) => atChangeInput(e)}
                     />
                     <label
-                      htmlFor={accountInfo.password}
+                      htmlFor='password'
                       className='pointer-events-none absolute left-0 top-0 origin-left -translate-y-1/2 transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800'
                     >
                       密碼

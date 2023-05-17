@@ -3,43 +3,45 @@ import FRComment from './FRComment';
 import FRUser from './FRUser';
 
 type FRPostProps = {
-  name: string;
+  postUserName: string;
   date: string;
-  avatar: string;
+  postUserAvatar: string;
   photo: string;
   sportCategory: string;
   weight: number;
   waistline: number;
   description: string;
-  userId: number;
-  recordId: number;
+  postUserId: number;
+  postRecordId: number;
+  currentUserId: number | null;
   onRefetch: () => void;
 };
 
 const FRPost: React.FC<FRPostProps> = (props) => {
   const {
-    name,
+    postUserName,
     date,
-    avatar,
+    postUserAvatar,
     photo,
     sportCategory,
     weight,
     waistline,
     description,
-    userId,
-    recordId,
+    postUserId,
+    postRecordId,
+    currentUserId,
     onRefetch,
   } = props;
 
   return (
     <div className='pb-4 shadow-xl dark:shadow-gray-400/40 lg:my-8'>
       <FRUser
-        name={name}
+        name={postUserName}
         date={date}
-        avatar={avatar}
-        userId={userId}
-        recordId={recordId}
-        showMore
+        avatar={postUserAvatar}
+        userId={postUserId}
+        recordId={postRecordId}
+        showMore={currentUserId === postUserId}
         onRefetch={onRefetch}
       />
       <img src={photo} alt='post' className='max-h-[400px] w-full object-contain' />

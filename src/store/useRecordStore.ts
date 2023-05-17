@@ -1,6 +1,12 @@
 import { create } from 'zustand';
 import type { Action } from 'actions';
 
+import {
+  fetchLogin,
+  cleanToken,
+  LoginResponseType,
+  Toast,
+} from 'services/apis';
 import { setRecordsAction } from '../actions';
 import type { Record, User } from '../types';
 
@@ -19,6 +25,9 @@ export type State = {
   onSetRecords: (records: Record[]) => void;
   onSetOpenPanel: (openPanel: boolean) => void;
   onSetIsFetching: (isFetching: boolean) => void;
+  onLogin: (email: string, password: string) => Promise<LoginResponseType>;
+  onLogout: () => void;
+  init: () => void;
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -52,6 +61,20 @@ const useRecordStore = create<State>((set) => {
     },
     onSetIsFetching(isFetching: boolean) {
       set({ isFetching });
+    },
+    async onLogin(email: string, password: string) {
+      set({ isFetching: true });
+      try {
+        const res = await fetchLogin(email, password);
+        set({ user: res.user });
+        return res;
+      } finally {
+        set({ isFetching: false });
+      }
+    },
+    onLogout() {
+      cleanToken();
+      window.location.reload();
     },
   };
 });

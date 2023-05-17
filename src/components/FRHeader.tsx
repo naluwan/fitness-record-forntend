@@ -29,9 +29,11 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
     },
   }));
 
-  const { user } = useRecordStore((state) => {
+  const { user, onSetOpenPanel, onLogout } = useRecordStore((state) => {
     return {
       user: state.user,
+      onSetOpenPanel: state.onSetOpenPanel,
+      onLogout: state.onLogout,
     };
   }, shallow);
 
@@ -42,8 +44,6 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
       setIsDark(false);
     }
   }, [setIsDark]);
-
-  console.log(user);
 
   // header icon button mouse enter event
   const atIconBtnMouseEnterHandler = React.useCallback((e: React.MouseEvent) => {
@@ -182,7 +182,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
           </button>
 
           {/* more actions */}
-          <button
+          <div
             className='relative z-10 rounded-lg px-2 py-[0.3rem] hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
             onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
             onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
@@ -191,23 +191,62 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
             <FRHamburgerAnimated ref={buttonRef} />
             <FRPopoverPanel ref={divRef}>
               <>
-                {/* profile */}
-                <div className='mb-2 flex cursor-pointer items-center rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
-                  {/* left icon */}
-                  <div className='mr-3 h-[40px] w-[40px] overflow-hidden rounded-full'>
-                    <img
-                      src='https://i.imgur.com/sp1lzhg.jpeg'
-                      alt='avatar'
-                      className='h-full w-full object-cover'
-                    />
-                  </div>
+                {/* profile && user login */}
+                {user !== null ? (
+                  // profile
+                  <div className='mb-2'>
+                    <button className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
+                      {/* left icon */}
+                      <div className='mr-3 h-[40px] w-[40px] overflow-hidden rounded-full'>
+                        <img
+                          src={user.avatar}
+                          alt='avatar'
+                          className='h-full w-full object-cover'
+                        />
+                      </div>
 
-                  {/* right text */}
-                  <div className='flex-1'>
-                    <p className='mb-[2px] text-base text-black dark:text-white'>NaLuWan</p>
-                    <p className='hidden text-sm text-gray-400 lg:block'>查看你的個人檔案</p>
+                      {/* right text */}
+                      <div className='flex-1'>
+                        <p className='mb-[2px] text-base text-black dark:text-white'>{user.name}</p>
+                        <p className='hidden text-sm text-gray-400 lg:block'>查看你的個人檔案</p>
+                      </div>
+                    </button>
                   </div>
-                </div>
+                ) : (
+                  // user login
+                  <div className='mb-2'>
+                    <button
+                      className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+                      onClick={() => {
+                        onSetOpenPanel(false);
+                        go('/signin');
+                      }}
+                    >
+                      {/* left icon */}
+                      <div className='bg-fb-input mr-2 flex items-center justify-center rounded-full p-2'>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth={2}
+                          stroke='currentColor'
+                          className='h-7 w-7'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75'
+                          />
+                        </svg>
+                      </div>
+
+                      {/* right text */}
+                      <div className='flex-1'>
+                        <p className='mb-[2px] text-base text-black dark:text-white'>登入</p>
+                      </div>
+                    </button>
+                  </div>
+                )}
 
                 {/* theme change */}
                 <div className='mb-2 flex cursor-pointer items-center rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
@@ -250,34 +289,43 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                 </div>
 
                 {/* user logout */}
-                <div className='mb-2 flex cursor-pointer items-center rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
-                  {/* left icon */}
-                  <div className='bg-fb-input mr-2 flex items-center justify-center rounded-full p-2'>
-                    <svg
-                      xmlns='http://www.w3.org/2000/svg'
-                      fill='none'
-                      width='24'
-                      height='24'
-                      viewBox='0 0 24 24'
-                      stroke='currentColor'
+                {user !== null && (
+                  <div className='mb-2'>
+                    <button
+                      className='flex w-full items-center  rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+                      onClick={() => {
+                        onLogout();
+                        go('/');
+                      }}
                     >
-                      <path
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
-                        strokeWidth='2'
-                        d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1'
-                      />
-                    </svg>
-                  </div>
+                      {/* left icon */}
+                      <div className='bg-fb-input mr-2 flex items-center justify-center rounded-full p-2'>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth={2}
+                          stroke='currentColor'
+                          className='h-7 w-7'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9'
+                          />
+                        </svg>
+                      </div>
 
-                  {/* right icon */}
-                  <div className='flex-1'>
-                    <p className='mb-[2px] text-base text-black dark:text-white'>登出</p>
+                      {/* right icon */}
+                      <div className='flex-1'>
+                        <p className='mb-[2px] text-base text-black dark:text-white'>登出</p>
+                      </div>
+                    </button>
                   </div>
-                </div>
+                )}
               </>
             </FRPopoverPanel>
-          </button>
+          </div>
         </div>
       </div>
     </header>

@@ -26,4 +26,6 @@ export type User = {
   nowWaistline?: number;
   weightDiff?: number;
   waistlineDiff?: number;
+  createdAt?: string;
+  updatedAt?: string;
 };

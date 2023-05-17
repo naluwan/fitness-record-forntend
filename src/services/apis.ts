@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import type { Record, SportCategory } from 'types';
+import type { Record, SportCategory, User } from 'types';
 import Swal from 'sweetalert2';
 
 const JWT_TOKEN = 'JWT_TOKEN';
@@ -33,14 +33,14 @@ export const setToken = (token: string) => {
 };
 
 // 驗證token
-export const verifyToken = async (token: string) => {
+export const verifyToken = async (token: string): Promise<LoginResponseType> => {
   try {
     const { data } = await axios.get(`${API_URL}/auth`, {
       headers: {
         authorization: `Bearer ${token}`,
       },
     });
-    return data;
+    return data.data;
   } catch (err) {
     cleanToken();
     return Promise.reject(err);
@@ -72,26 +72,15 @@ type DeleteRecordResponse = {
 };
 
 export const deleteRecord = async (id: number): Promise<DeleteRecordResponse> => {
-  // try {
-  //   const { data } = await axiosInstance.delete(`${API_URL}/records/${id}`);
-  //   return data;
-  // } catch (err) {
-  //   return Promise.reject(err);
-  // }
   try {
-    const { data } = await axios.delete(`${API_URL}/records/${id}`, {
-      headers: {
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwibmFtZSI6Ik5hb21pIiwiZW1haWwiOiJuYW9taUBleGFtcGxlLmNvbSIsImF2YXRhciI6Imh0dHBzOi8vaS5pbWd1ci5jb20vM204bE1wai5qcGVnIiwid2VpZ2h0Ijo2NSwid2Fpc3RsaW5lIjo1MCwibm93V2VpZ2h0IjpudWxsLCJub3dXYWlzdGxpbmUiOm51bGwsIndlaWdodERpZmYiOm51bGwsIndhaXN0bGluZURpZmYiOm51bGwsImNyZWF0ZWRBdCI6IjIwMjMtMDUtMTBUMTM6Mjc6NDguMDAwWiIsInVwZGF0ZWRBdCI6IjIwMjMtMDUtMTBUMTM6Mjc6NDguMDAwWiIsImlhdCI6MTY4MzcyNjMzMCwiZXhwIjoxNjgzNzU1MTMwfQ.l2WbWqRl673gpsK1W3V4SoABEBhWsbYcLcE7jOZM3ec',
-      },
-    });
+    const { data } = await axiosInstance.delete(`${API_URL}/records/${id}`);
     return data;
   } catch (err) {
     return Promise.reject(err);
   }
 };
 
-export type RegisterInfo = {
+export type RegisterInfoType = {
   name: string;
   email: string;
   weight: number | null;
@@ -101,7 +90,8 @@ export type RegisterInfo = {
   avatar: FileList | null;
 };
 
-export const fetchRegister = async (registerInfo: RegisterInfo) => {
+// register
+export const fetchRegister = async (registerInfo: RegisterInfoType) => {
   const formData = new FormData();
 
   Object.entries(registerInfo).forEach(([key, value]) => {
@@ -139,5 +129,27 @@ export const fetchRegister = async (registerInfo: RegisterInfo) => {
       return err.response?.data;
     }
     return err as Error;
+  }
+};
+
+export type LoginResponseType = {
+  status?: string;
+  token?: string;
+  user?: User;
+};
+
+// login
+export const fetchLogin = async (email: string, password: string): Promise<LoginResponseType> => {
+  try {
+    const res = await axios.post(`${API_URL}/signin`, {
+      email,
+      password,
+      expiresIn: '8h', // 8 hours
+    });
+
+    setToken(res.data.token);
+    return res.data;
+  } catch (err) {
+    return Promise.reject(err);
   }
 };
