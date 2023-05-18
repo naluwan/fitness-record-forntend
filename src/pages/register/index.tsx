@@ -1,22 +1,22 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { fetchRegister, RegisterInfoType } from 'services/apis';
 import { useDropzone } from 'react-dropzone';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
 import Loading from 'components/Loading';
 import FRHeader, { IRef } from 'components/FRHeader';
 import FRContainer from 'components/FRContainer';
+import { RegisterInfoType, Toast } from 'services/apis';
 
 const Register: React.FC = () => {
   const go = useNavigate();
 
-  const { isFetching, onSetIsFetching, onSetOpenPanel } = useRecordStore((state) => {
+  const { isFetching, onSetOpenPanel, onRegister } = useRecordStore((state) => {
     return {
       isFetching: state.isFetching,
-      onSetIsFetching: state.onSetIsFetching,
       onSetOpenPanel: state.onSetOpenPanel,
+      onRegister: state.onRegister,
     };
   }, shallow);
 
@@ -87,29 +87,38 @@ const Register: React.FC = () => {
   const atSubmit = React.useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      Promise.all([fetchRegister(registerInfo), onSetIsFetching(true)])
-        .then(([res]) => {
-          if (res.status === 'success') {
-            setSelectedFiles(null);
-            setRegisterInfo({
-              name: '',
-              email: '',
-              weight: null,
-              waistline: null,
-              password: '',
-              passwordCheck: '',
-              avatar: null,
-            });
-            go('/signin');
-          }
-          if (res.message === '此帳號已註冊過') {
+      onRegister(registerInfo)
+        .then((res) => {
+          setRegisterInfo({
+            name: '',
+            email: '',
+            weight: null,
+            waistline: null,
+            password: '',
+            passwordCheck: '',
+            avatar: null,
+          });
+          Toast.fire({
+            icon: 'success',
+            title: '註冊成功',
+          });
+          go('/signin');
+        })
+        .catch((err) => {
+          const { message } = err.response.data;
+          Toast.fire({
+            icon: 'error',
+            title: '註冊失敗',
+            text: message,
+          });
+          if (message === '此帳號已註冊過') {
             setRegisterInfo((prev) => {
               return {
                 ...prev,
                 email: '',
               };
             });
-          } else if (res.message === '密碼與確認密碼不相符') {
+          } else if (message === '密碼與確認密碼不相符') {
             setRegisterInfo((prev) => {
               return {
                 ...prev,
@@ -118,42 +127,9 @@ const Register: React.FC = () => {
               };
             });
           }
-        })
-        .finally(() => onSetIsFetching(false))
-        .catch((err) => console.log(err));
-      // fetchRegister(registerInfo).then((res) => {
-      //   if (res.status === 'success') {
-      //     setSelectedFiles(null);
-      //     setRegisterInfo({
-      //       name: '',
-      //       email: '',
-      //       weight: null,
-      //       waistline: null,
-      //       password: '',
-      //       passwordCheck: '',
-      //       avatar: null,
-      //     });
-      //     go('/signin');
-      //   }
-      //   if (res.message === '此帳號已註冊過') {
-      //     setRegisterInfo((prev) => {
-      //       return {
-      //         ...prev,
-      //         email: '',
-      //       };
-      //     });
-      //   } else if (res.message === '密碼與確認密碼不相符') {
-      //     setRegisterInfo((prev) => {
-      //       return {
-      //         ...prev,
-      //         password: '',
-      //         passwordCheck: '',
-      //       };
-      //     });
-      //   }
-      // });
+        });
     },
-    [registerInfo, go, onSetIsFetching],
+    [registerInfo, go, onRegister],
   );
 
   // popover panel ref
@@ -178,6 +154,20 @@ const Register: React.FC = () => {
             <div className='w-full'>
               <div className='text-center'>
                 <h1 className='text-3xl font-semibold text-gray-900'>註冊</h1>
+                <p className='mb-2 text-left text-sm text-gray-500'>
+                  <span className='text-sm text-red-500'>*</span>
+                  為必填欄位
+                </p>
+                <p className='mb-2 text-left text-sm text-gray-500'>
+                  體重和腰圍非必填，但要發文則必須填寫(
+                  <span className='text-sm text-red-500'>
+                    如果連自己都欺騙，那你的人生還指望能活成什麼樣？
+                  </span>
+                  )
+                </p>
+                <p className='text-left text-sm text-gray-500'>
+                  沒有上傳使用者頭像，將會使用預設頭像
+                </p>
               </div>
               <div className='mt-5'>
                 <form onSubmit={(e) => atSubmit(e)} encType='multipart/form-data'>
@@ -197,6 +187,11 @@ const Register: React.FC = () => {
                       htmlFor={registerInfo.name}
                       className='pointer-events-none absolute left-0 top-0 origin-left -translate-y-1/2 transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800'
                     >
+                      <span
+                        className={`${registerInfo.name !== '' && 'hidden'} text-sm text-red-500`}
+                      >
+                        *
+                      </span>
                       使用者名稱
                     </label>
                   </div>
@@ -216,6 +211,11 @@ const Register: React.FC = () => {
                       htmlFor={registerInfo.email}
                       className='pointer-events-none absolute left-0 top-0 origin-left -translate-y-1/2 transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800'
                     >
+                      <span
+                        className={`${registerInfo.email !== '' && 'hidden'} text-sm text-red-500`}
+                      >
+                        *
+                      </span>
                       Email
                     </label>
                   </div>
@@ -235,6 +235,13 @@ const Register: React.FC = () => {
                       htmlFor={registerInfo.password}
                       className='pointer-events-none absolute left-0 top-0 origin-left -translate-y-1/2 transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800'
                     >
+                      <span
+                        className={`${
+                          registerInfo.password !== '' && 'hidden'
+                        } text-sm text-red-500`}
+                      >
+                        *
+                      </span>
                       密碼
                     </label>
                   </div>
@@ -254,8 +261,22 @@ const Register: React.FC = () => {
                       htmlFor={registerInfo.passwordCheck}
                       className='pointer-events-none absolute left-0 top-0 origin-left -translate-y-1/2 transform text-sm text-gray-800 opacity-75 transition-all duration-100 ease-in-out peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-500 peer-focus:top-0 peer-focus:pl-0 peer-focus:text-sm peer-focus:text-gray-800'
                     >
+                      <span
+                        className={`${
+                          registerInfo.passwordCheck !== '' && 'hidden'
+                        } text-sm text-red-500`}
+                      >
+                        *
+                      </span>
                       確認密碼
                     </label>
+                    <p
+                      className={`absolute top-10 text-sm text-red-500 ${
+                        registerInfo.password !== registerInfo.passwordCheck ? 'block' : 'hidden'
+                      }`}
+                    >
+                      密碼和確認密碼不相同
+                    </p>
                   </div>
 
                   {/* weight */}
@@ -364,8 +385,8 @@ const Register: React.FC = () => {
                   <div className='my-6'>
                     <button
                       type='submit'
-                      className='flex w-full justify-center rounded-md bg-black px-3 py-4 text-white focus:bg-gray-600 focus:outline-none'
-                      disabled={isFetching}
+                      className='flex w-full justify-center rounded-md bg-black px-3 py-4 text-white focus:bg-gray-600 focus:outline-none disabled:bg-gray-600'
+                      disabled={isFetching || registerInfo.password !== registerInfo.passwordCheck}
                     >
                       {isFetching ? <Loading /> : '註冊'}
                     </button>
