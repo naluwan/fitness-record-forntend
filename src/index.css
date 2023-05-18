@@ -12,6 +12,9 @@
   .popover-panel {
     @apply absolute right-0 top-10 w-[180px] rounded-lg border border-[#efefef] bg-white p-4  shadow-lg dark:bg-[#262626] lg:w-[250px];
   }
+  .signin-register-input {
+    @apply mt-1 w-full border-b-2 border-gray-300 px-0 py-1 text-black placeholder:text-transparent focus:border-gray-500 focus:outline-none;
+  }
 }
 
 body {
