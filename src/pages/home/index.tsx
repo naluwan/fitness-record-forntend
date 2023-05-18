@@ -17,7 +17,6 @@ const Home: React.FC = () => {
       records: state.records,
       onSetRecords: state.onSetRecords,
       onSetOpenPanel: state.onSetOpenPanel,
-      init: state.init,
     };
   }, shallow);
 

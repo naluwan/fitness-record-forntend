@@ -89,7 +89,7 @@ const SignIn: React.FC = () => {
                       id='email'
                       value={accountInfo.email}
                       placeholder='Email Address'
-                      className='peer mt-1 w-full border-b-2 border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none'
+                      className='signin-register-input peer'
                       autoComplete='NA'
                       onChange={(e) => atChangeInput(e)}
                     />
@@ -107,7 +107,7 @@ const SignIn: React.FC = () => {
                       id='password'
                       value={accountInfo.password}
                       placeholder='Password'
-                      className='peer peer mt-1 w-full border-b-2 border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none'
+                      className='signin-register-input peer'
                       onChange={(e) => atChangeInput(e)}
                     />
                     <label

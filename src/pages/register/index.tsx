@@ -189,7 +189,7 @@ const Register: React.FC = () => {
                       id='name'
                       value={registerInfo.name}
                       placeholder='使用者名稱'
-                      className='peer mt-1 w-full border-b-2 border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none'
+                      className='signin-register-input peer'
                       autoComplete='NA'
                       onChange={(e) => atChangeInput(e)}
                     />
@@ -208,7 +208,7 @@ const Register: React.FC = () => {
                       name='email'
                       value={registerInfo.email}
                       placeholder='Email Address'
-                      className='peer mt-1 w-full border-b-2 border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none'
+                      className='signin-register-input peer'
                       autoComplete='NA'
                       onChange={(e) => atChangeInput(e)}
                     />
@@ -227,7 +227,7 @@ const Register: React.FC = () => {
                       name='password'
                       value={registerInfo.password}
                       placeholder='password'
-                      className='peer mt-1 w-full border-b-2 border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none'
+                      className='signin-register-input peer'
                       autoComplete='NA'
                       onChange={(e) => atChangeInput(e)}
                     />
@@ -246,7 +246,7 @@ const Register: React.FC = () => {
                       name='passwordCheck'
                       value={registerInfo.passwordCheck}
                       placeholder='passwordCheck'
-                      className='peer mt-1 w-full border-b-2 border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none'
+                      className='signin-register-input peer'
                       autoComplete='NA'
                       onChange={(e) => atChangeInput(e)}
                     />
@@ -266,7 +266,7 @@ const Register: React.FC = () => {
                       id='weight'
                       value={registerInfo.weight ? registerInfo.weight : ''}
                       placeholder='weight'
-                      className='peer mt-1 w-full border-b-2 border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none'
+                      className='signin-register-input peer'
                       autoComplete='NA'
                       onChange={(e) => atChangeInput(e)}
                     />
@@ -286,7 +286,7 @@ const Register: React.FC = () => {
                       id='waistline'
                       value={registerInfo.waistline ? registerInfo.waistline : ''}
                       placeholder='waistline'
-                      className='peer mt-1 w-full border-b-2 border-gray-300 px-0 py-1 placeholder:text-transparent focus:border-gray-500 focus:outline-none'
+                      className='signin-register-input peer'
                       autoComplete='NA'
                       onChange={(e) => atChangeInput(e)}
                     />
