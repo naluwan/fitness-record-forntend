@@ -17,6 +17,7 @@ const initialState = {
   records: [],
   user: null,
   openPanel: false,
+  isDark: false,
   isFetching: false,
   isAppInitializedComplete: false,
 };
@@ -25,6 +26,7 @@ export type State = {
   records: Record[];
   user: User | null;
   openPanel: boolean;
+  isDark: boolean;
   isFetching: boolean;
   isAppInitializedComplete: boolean;
   onSetRecords: (records: Record[]) => void;
@@ -33,6 +35,7 @@ export type State = {
   onLogin: (email: string, password: string) => Promise<LoginResponseType>;
   onLogout: () => void;
   init: () => void;
+  onSetIsDark: (isDark: boolean) => void;
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -107,6 +110,10 @@ const useRecordStore = create<State>((set) => {
     onLogout() {
       cleanToken();
       window.location.reload();
+    },
+    onSetIsDark(isDark: boolean) {
+      set({ isDark });
+      localStorage.setItem('isDark', `${isDark}`);
     },
   };
 });
