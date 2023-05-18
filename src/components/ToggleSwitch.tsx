@@ -3,7 +3,7 @@ import cx from 'classnames';
 
 type ToggleSwitchProps = {
   isDark: boolean;
-  onSetIsDark: (isDark: React.SetStateAction<boolean>) => void;
+  onSetIsDark: (isDark: boolean) => void;
 };
 
 const ToggleSwitch: React.FC<ToggleSwitchProps> = (props) => {

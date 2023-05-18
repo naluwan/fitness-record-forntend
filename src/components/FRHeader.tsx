@@ -13,8 +13,6 @@ export interface IRef {
 }
 
 const FRHeader = React.forwardRef<IRef>((props, ref) => {
-  const [isDark, setIsDark] = React.useState<boolean>(false);
-
   // 分別設定div和button的ref
   const divRef = React.useRef<HTMLDivElement>(null);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
@@ -29,21 +27,15 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
     },
   }));
 
-  const { user, onSetOpenPanel, onLogout } = useRecordStore((state) => {
+  const { user, isDark, onSetIsDark, onSetOpenPanel, onLogout } = useRecordStore((state) => {
     return {
       user: state.user,
+      isDark: state.isDark,
+      onSetIsDark: state.onSetIsDark,
       onSetOpenPanel: state.onSetOpenPanel,
       onLogout: state.onLogout,
     };
   }, shallow);
-
-  React.useEffect(() => {
-    if (document.documentElement.classList.contains('dark')) {
-      setIsDark(true);
-    } else {
-      setIsDark(false);
-    }
-  }, [setIsDark]);
 
   // header icon button mouse enter event
   const atIconBtnMouseEnterHandler = React.useCallback((e: React.MouseEvent) => {
@@ -285,7 +277,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                   <div className='hidden flex-1 lg:block'>
                     <p className='mb-[2px] text-base text-black dark:text-white'>深色模式</p>
                   </div>
-                  <ToggleSwitch onSetIsDark={setIsDark} isDark={isDark} />
+                  <ToggleSwitch onSetIsDark={onSetIsDark} isDark={isDark} />
                 </div>
 
                 {/* user logout */}
