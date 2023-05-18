@@ -8,6 +8,7 @@ const API_URL = 'http://192.168.0.144:3000';
 // const API_URL = 'http://172.20.10.11:3000';
 const axiosInstance = axios.create();
 
+// sweet alert
 export const Toast = Swal.mixin({
   toast: true,
   position: 'top-end',
@@ -54,7 +55,7 @@ type RecordsResponse = {
   userId: string;
 };
 
-// 獲取記錄資訊
+// get records
 export const fetchRecords = async (): Promise<RecordsResponse> => {
   try {
     const { data } = await axios.get(`${API_URL}/records`);
@@ -71,6 +72,7 @@ type DeleteRecordResponse = {
   };
 };
 
+// delete record
 export const deleteRecord = async (id: number): Promise<DeleteRecordResponse> => {
   try {
     const { data } = await axiosInstance.delete(`${API_URL}/records/${id}`);
@@ -90,13 +92,24 @@ export type RegisterInfoType = {
   avatar: FileList | null;
 };
 
+export type RegisterResponseType = {
+  status: string;
+  data: User;
+};
+
 // register
-export const fetchRegister = async (registerInfo: RegisterInfoType) => {
+export const fetchRegister = async (
+  registerInfo: RegisterInfoType,
+): Promise<RegisterResponseType> => {
   const formData = new FormData();
 
   Object.entries(registerInfo).forEach(([key, value]) => {
     // 判斷體重或腰圍是否有填寫，沒有的話就不用加到formData中
-    if ((key === 'weight' || key === 'waistline') && value === null) return;
+    if (
+      (key === 'weight' || key === 'waistline') &&
+      (value === null || value === 0 || value === '')
+    )
+      return;
 
     // 將使用者頭像檔案加到formData中
     if (key === 'avatar' && value) {
@@ -114,28 +127,16 @@ export const fetchRegister = async (registerInfo: RegisterInfoType) => {
         'Content-type': 'multipart/form-data',
       },
     });
-    Toast.fire({
-      icon: 'success',
-      title: '註冊成功',
-    });
     return res.data;
   } catch (err: unknown) {
-    if (axios.isAxiosError<{ message: string }>(err)) {
-      Toast.fire({
-        icon: 'error',
-        title: '註冊失敗',
-        text: err.response?.data.message,
-      });
-      return err.response?.data;
-    }
-    return err as Error;
+    return Promise.reject(err);
   }
 };
 
 export type LoginResponseType = {
-  status?: string;
-  token?: string;
-  user?: User;
+  status: string;
+  token: string;
+  user: User;
 };
 
 // login
