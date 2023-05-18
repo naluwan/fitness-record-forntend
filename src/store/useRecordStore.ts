@@ -8,6 +8,9 @@ import {
   getJWTToken,
   verifyToken,
   Toast,
+  RegisterInfoType,
+  fetchRegister,
+  RegisterResponseType,
 } from 'services/apis';
 
 import { setRecordsAction } from '../actions';
@@ -33,6 +36,7 @@ export type State = {
   onSetOpenPanel: (openPanel: boolean) => void;
   onSetIsFetching: (isFetching: boolean) => void;
   onLogin: (email: string, password: string) => Promise<LoginResponseType>;
+  onRegister: (registerInfo: RegisterInfoType) => Promise<RegisterResponseType>;
   onLogout: () => void;
   init: () => void;
   onSetIsDark: (isDark: boolean) => void;
@@ -96,6 +100,15 @@ const useRecordStore = create<State>((set) => {
     },
     onSetIsFetching(isFetching: boolean) {
       set({ isFetching });
+    },
+    async onRegister(registerInfo: RegisterInfoType) {
+      set({ isFetching: true });
+      try {
+        const res = await fetchRegister(registerInfo);
+        return res;
+      } finally {
+        set({ isFetching: false });
+      }
     },
     async onLogin(email: string, password: string) {
       set({ isFetching: true });
