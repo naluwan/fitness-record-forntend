@@ -1,5 +1,7 @@
 import React from 'react';
-import { deleteRecord } from '../services/apis';
+import { shallow } from 'zustand/shallow';
+import useRecordStore from 'store/useRecordStore';
+import { Toast } from 'services/apis';
 
 type FRUserProps = {
   size?: 'medium' | 'small';
@@ -45,17 +47,34 @@ const FRUser: React.FC<FRUserProps> = (props) => {
     }
   });
 
+  const { isFetching, onDeleteRecord } = useRecordStore((state) => {
+    return {
+      isFetching: state.isFetching,
+      onDeleteRecord: state.onDeleteRecord,
+    };
+  }, shallow);
+
   const atDeleteRecord = React.useCallback(
     (id: number) => {
-      deleteRecord(id)
+      onDeleteRecord(id)
         .then(() => {
           if (typeof onRefetch === 'function') {
             onRefetch();
           }
+          Toast.fire({
+            icon: 'success',
+            title: '刪除記錄成功',
+          });
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          Toast.fire({
+            icon: 'error',
+            title: '刪除記錄失敗',
+            text: err.response.data.message,
+          });
+        });
     },
-    [onRefetch],
+    [onRefetch, onDeleteRecord],
   );
 
   // TODO: user id
