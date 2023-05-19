@@ -187,7 +187,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                 {user !== null ? (
                   // profile
                   <div className='mb-2'>
-                    <button className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
+                    <button className='flex w-full items-center rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
                       {/* left icon */}
                       <div className='mr-3 h-[40px] w-[40px] overflow-hidden rounded-full'>
                         <img
@@ -215,7 +215,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                       }}
                     >
                       {/* left icon */}
-                      <div className='bg-fb-input mr-2 flex items-center justify-center rounded-full p-2'>
+                      <div className='bg-fb-input flex items-center justify-center rounded-full p-2'>
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
                           fill='none'
@@ -291,7 +291,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                       }}
                     >
                       {/* left icon */}
-                      <div className='bg-fb-input mr-2 flex items-center justify-center rounded-full p-2'>
+                      <div className='bg-fb-input flex items-center justify-center rounded-full p-2'>
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
                           fill='none'
