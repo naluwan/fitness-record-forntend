@@ -11,8 +11,11 @@ import {
   RegisterInfoType,
   fetchRegister,
   RegisterResponseType,
+  DeleteRecordResponse,
+  fetchDeleteRecord,
 } from 'services/apis';
 
+import axios from 'axios';
 import { setRecordsAction } from '../actions';
 import type { Record, User } from '../types';
 
@@ -40,6 +43,7 @@ export type State = {
   onLogout: () => void;
   init: () => void;
   onSetIsDark: (isDark: boolean) => void;
+  onDeleteRecord: (id: number) => Promise<DeleteRecordResponse>;
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -78,8 +82,9 @@ const useRecordStore = create<State>((set) => {
             Toast.fire({
               icon: 'error',
               title: '驗證錯誤',
-              text: err.message,
+              text: '無效Token，請重新登入',
             });
+            set({ user: null, isAppInitializedComplete: true });
           })
           .finally(() => {
             set({
@@ -127,6 +132,25 @@ const useRecordStore = create<State>((set) => {
     onSetIsDark(isDark: boolean) {
       set({ isDark });
       localStorage.setItem('isDark', `${isDark}`);
+    },
+    async onDeleteRecord(id: number) {
+      set({ isFetching: true });
+      try {
+        const res = await fetchDeleteRecord(id);
+        return res;
+      } catch (err: unknown) {
+        if (axios.isAxiosError(err)) {
+          // token過期，直接將user設為空並reload頁面
+          if (err.response?.status === 401) {
+            set({ user: null });
+            window.location.reload();
+          }
+        }
+        // 一般錯誤，如找不到記錄等...
+        return Promise.reject(err);
+      } finally {
+        set({ isFetching: false });
+      }
     },
   };
 });
