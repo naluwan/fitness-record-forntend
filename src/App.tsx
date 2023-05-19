@@ -2,21 +2,21 @@ import { useRoutes } from 'react-router-dom';
 import React from 'react';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
+import { useQuery } from 'react-query';
 import routes from './routes';
 
 const App: React.FC = () => {
-  const { isAppInitializedComplete, onSetIsDark, init } = useRecordStore((state) => {
+  const { onSetIsDark, init } = useRecordStore((state) => {
     return {
-      isAppInitializedComplete: state.isAppInitializedComplete,
       onSetIsDark: state.onSetIsDark,
       init: state.init,
     };
   }, shallow);
 
+  // 只要進到這個網站，就會檢查token是否有效
+  useQuery('auth', init);
+
   React.useEffect(() => {
-    if (!isAppInitializedComplete) {
-      init();
-    }
     const isDarkMode = localStorage.getItem('isDark') || 'false';
     if (isDarkMode === 'true') {
       onSetIsDark(true);
@@ -25,7 +25,8 @@ const App: React.FC = () => {
       onSetIsDark(false);
       document.documentElement.classList.remove('dark');
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const element = useRoutes(routes);
   return element;
