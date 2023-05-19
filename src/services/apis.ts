@@ -65,7 +65,7 @@ export const fetchRecords = async (): Promise<RecordsResponse> => {
   }
 };
 
-type DeleteRecordResponse = {
+export type DeleteRecordResponse = {
   status: string;
   data: {
     deleteRecord: Record;
@@ -73,7 +73,7 @@ type DeleteRecordResponse = {
 };
 
 // delete record
-export const deleteRecord = async (id: number): Promise<DeleteRecordResponse> => {
+export const fetchDeleteRecord = async (id: number): Promise<DeleteRecordResponse> => {
   try {
     const { data } = await axiosInstance.delete(`${API_URL}/records/${id}`);
     return data;
