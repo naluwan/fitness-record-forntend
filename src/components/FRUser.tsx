@@ -117,9 +117,9 @@ const FRUser: React.FC<FRUserProps> = (props) => {
 
           {/* more popover panel */}
           <div
-            className={`lg:w-[250px]; duration-5000 absolute left-6 top-0 w-[110px] rounded-lg border border-[#efefef]  bg-white p-2 shadow-lg transition ease-in-out dark:bg-[#262626] ${
+            className={`lg:w-[250px]; duration-5000 absolute right-0 top-8 w-[110px] rounded-lg border border-[#efefef]  bg-white p-2 shadow-lg transition ease-in-out dark:bg-[#262626] ${
               openPanel ? 'block' : 'hidden'
-            }`}
+            } lg:left-7 lg:top-0`}
             ref={panelRef}
           >
             {/* 編輯 */}
