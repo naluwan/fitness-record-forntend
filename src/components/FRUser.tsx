@@ -105,7 +105,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
               viewBox='0 0 24 24'
               strokeWidth={1.5}
               stroke='currentColor'
-              className='h-6 w-6 hover:text-[#e6e6e6] dark:hover:text-[#1c1c1c]'
+              className='h-6 w-6 hover:text-[#e6e6e6] dark:hover:text-gray-500'
             >
               <path
                 strokeLinecap='round'

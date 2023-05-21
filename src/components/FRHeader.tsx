@@ -284,7 +284,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                 {user !== null && (
                   <div className='mb-2'>
                     <button
-                      className='flex w-full items-center  rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+                      className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                       onClick={() => {
                         onLogout();
                         go('/');
