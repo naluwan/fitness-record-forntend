@@ -4,13 +4,16 @@ import FRContainer from 'components/FRContainer';
 import { useQuery } from 'react-query';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
-import { fetchRecords } from 'services/apis';
+import { fetchRecords, fetchWaistlineRankUsers, fetchWeightRankUsers } from 'services/apis';
 import Loading from 'components/Loading';
 import FRPost from 'components/FRPost';
 import FRRanking from 'components/FRRanking';
 import { SportCategory, User } from 'types';
 
 const Home: React.FC = () => {
+  const [weightRankUsers, setWeightRankUsers] = React.useState<User[] | []>([]);
+  const [waistlineRankUsers, setWaistlineRankUsers] = React.useState<User[] | []>([]);
+
   const { user, records, onSetRecords, onSetOpenPanel } = useRecordStore((state) => {
     return {
       user: state.user,
@@ -20,13 +23,32 @@ const Home: React.FC = () => {
     };
   }, shallow);
 
-  const { data, isSuccess, isLoading, isError, refetch } = useQuery('allRecords', fetchRecords);
+  const allRecords = useQuery('allRecords', fetchRecords);
+
+  const weightRank = useQuery('weightRank', fetchWeightRankUsers);
+
+  const waistlineRank = useQuery('waistlineRank', fetchWaistlineRankUsers);
 
   React.useEffect(() => {
-    if (isSuccess && !isLoading && !isError) {
-      onSetRecords(data.records);
+    if (allRecords.isSuccess && !allRecords.isLoading && !allRecords.isError) {
+      onSetRecords(allRecords.data.records);
     }
-  });
+
+    if (weightRank.isSuccess && !weightRank.isLoading && !weightRank.isError) {
+      setWeightRankUsers(weightRank.data.users);
+    }
+
+    if (waistlineRank.isSuccess && !waistlineRank.isLoading && !waistlineRank.isError) {
+      setWaistlineRankUsers(waistlineRank.data.users);
+    }
+  }, [
+    allRecords,
+    onSetRecords,
+    weightRank,
+    setWeightRankUsers,
+    waistlineRank,
+    setWaistlineRankUsers,
+  ]);
 
   // popover panel ref
   const panelRef = React.useRef<IRef>(null);
@@ -49,7 +71,7 @@ const Home: React.FC = () => {
         <div className='flex lg:justify-center'>
           {/* left */}
           <div className='w-full lg:w-[600px]'>
-            {isLoading ? (
+            {allRecords.isLoading ? (
               <div className='mt-20 flex w-full justify-center'>
                 <Loading />
               </div>
@@ -72,7 +94,7 @@ const Home: React.FC = () => {
                     description={record.description}
                     photo='https://i.imgur.com/pMVVEhb.jpeg'
                     currentUserId={user ? user.id : null}
-                    onRefetch={refetch}
+                    onRefetch={allRecords.refetch}
                   />
                 );
               })
@@ -82,20 +104,14 @@ const Home: React.FC = () => {
           <div className='hidden lg:block lg:w-[424px]'>
             <FRRanking
               title='減重'
-              users={[
-                {
-                  id: 4,
-                  name: 'naluwan',
-                  email: 'example@example.com',
-                  avatar: 'https://i.imgur.com/pMVVEhb.jpeg',
-                },
-                {
-                  id: 5,
-                  name: 'Nonna',
-                  email: 'nonna@example.com',
-                  avatar: 'https://i.imgur.com/8lvq2X8.jpeg',
-                },
-              ]}
+              users={weightRankUsers as User[]}
+              isLoading={weightRank.isLoading}
+            />
+
+            <FRRanking
+              title='腰瘦'
+              users={waistlineRankUsers as User[]}
+              isLoading={waistlineRank.isLoading}
             />
           </div>
         </div>
