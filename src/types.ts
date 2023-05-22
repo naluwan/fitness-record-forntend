@@ -8,6 +8,7 @@ export type Record = {
   SportCategory?: SportCategory;
   userId: number;
   sportCategoryId: number;
+  sportCategories?: SportCategory[];
 };
 
 export type SportCategory = {
