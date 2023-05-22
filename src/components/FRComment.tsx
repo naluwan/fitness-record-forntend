@@ -24,7 +24,7 @@ const FRComment: React.FC<FRCommentProps> = (props) => {
         <span>{waistline}</span>
       </p>
       <p className='text-base'>
-        <span className=' mr-1 inline-block font-bold'>心得：</span>
+        <span className=' mr-1 inline-block font-bold'>運動心得：</span>
         <span>{description}</span>
       </p>
     </div>
