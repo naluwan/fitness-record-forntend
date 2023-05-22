@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 const JWT_TOKEN = 'JWT_TOKEN';
 const API_URL = 'http://192.168.0.144:3000';
 // const API_URL = 'http://172.20.10.11:3000';
+// const API_URL = 'http://10.0.0.192:3000';
 const axiosInstance = axios.create();
 
 // sweet alert
@@ -16,7 +17,7 @@ export const Toast = Swal.mixin({
   timer: 3000,
 });
 
-// 驗證token
+// 獲取token
 export const getJWTToken = () => {
   return Cookies.get(JWT_TOKEN);
 };
@@ -41,6 +42,7 @@ export const verifyToken = async (token: string): Promise<LoginResponseType> => 
         authorization: `Bearer ${token}`,
       },
     });
+    axiosInstance.defaults.headers.authorization = `Bearer ${token}`;
     return data.data;
   } catch (err) {
     cleanToken();
@@ -59,6 +61,45 @@ type RecordsResponse = {
 export const fetchRecords = async (): Promise<RecordsResponse> => {
   try {
     const { data } = await axios.get(`${API_URL}/records`);
+    return data.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
+export type RecordResponse = {
+  record: Record;
+  sportCategories: SportCategory[];
+};
+
+// get record for edit component
+export const fetchRecord = async (id: number): Promise<RecordResponse> => {
+  try {
+    const { data } = await axiosInstance.get(`${API_URL}/records/${id}/edit`);
+    return data.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
+type RankUsersResponse = {
+  users: User[];
+};
+
+// get weight rank
+export const fetchWeightRankUsers = async (): Promise<RankUsersResponse> => {
+  try {
+    const { data } = await axios.get(`${API_URL}/rank/weight`);
+    return data.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
+// get waistline rank
+export const fetchWaistlineRankUsers = async (): Promise<RankUsersResponse> => {
+  try {
+    const { data } = await axios.get(`${API_URL}/rank/waistline`);
     return data.data;
   } catch (err) {
     return Promise.reject(err);
