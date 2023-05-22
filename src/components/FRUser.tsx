@@ -1,7 +1,10 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
-import { Toast } from 'services/apis';
+import { fetchRecord, RecordResponse, Toast } from 'services/apis';
+import FRModal from './FRModal';
+import FRPostFrom from './FRPostFrom';
 
 type FRUserProps = {
   size?: 'medium' | 'small';
@@ -32,6 +35,9 @@ const FRUser: React.FC<FRUserProps> = (props) => {
 
   const [openPanel, setOpenPanel] = React.useState(false);
 
+  const [editing, setEditing] = React.useState(false);
+  const [editRecord, setEditRecord] = React.useState<RecordResponse | null>(null);
+
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const panelRef = React.useRef<HTMLDivElement>(null);
 
@@ -54,6 +60,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
     };
   }, shallow);
 
+  // 刪除記錄
   const atDeleteRecord = React.useCallback(
     (id: number) => {
       onDeleteRecord(id)
@@ -76,6 +83,22 @@ const FRUser: React.FC<FRUserProps> = (props) => {
     },
     [onRefetch, onDeleteRecord],
   );
+
+  // 顯示編輯紀錄modal和獲取該筆記錄資料
+  const atEditRecord = React.useCallback((id: number) => {
+    setEditing(true);
+    fetchRecord(id)
+      .then((res) => {
+        setEditRecord(res);
+      })
+      .catch((err) => {
+        Toast.fire({
+          icon: 'error',
+          title: '獲取記錄資料失敗',
+          text: err.response.data.message,
+        });
+      });
+  }, []);
 
   // TODO: user id
   console.log('user id ==> ', userId);
@@ -124,7 +147,10 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           >
             {/* 編輯 */}
             <div className='mb-1 rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
-              <button className='flex w-full items-center'>
+              <button
+                className='flex w-full items-center'
+                onClick={() => atEditRecord(recordId as number)}
+              >
                 {/* left icon */}
                 <div className='bg-fb-input flex items-center justify-center rounded-full p-1'>
                   <svg
@@ -190,6 +216,11 @@ const FRUser: React.FC<FRUserProps> = (props) => {
         >
           {isFollowing ? '追蹤中' : '追蹤'}
         </button>
+      )}
+      {editRecord && (
+        <FRModal open={editing} onClose={() => setEditing(false)}>
+          <FRPostFrom record={editRecord.record} sportCategories={editRecord.sportCategories} />
+        </FRModal>
       )}
     </div>
   );
