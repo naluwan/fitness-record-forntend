@@ -2,6 +2,8 @@
 import React from 'react';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
+import { fetchRecord, RecordResponse } from 'services/apis';
+import { Record } from 'types';
 import { Confirm, Toast } from 'utils/swal';
 import FRModal from './FRModal';
 import FRPostFrom from './FRPostFrom';
@@ -37,6 +39,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
 
   const [editing, setEditing] = React.useState(false);
   const [editRecord, setEditRecord] = React.useState<RecordResponse | null>(null);
+  const [newRecord, setNewRecord] = React.useState<Record | null>(null);
 
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const panelRef = React.useRef<HTMLDivElement>(null);
@@ -90,6 +93,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
     fetchRecord(id)
       .then((res) => {
         setEditRecord(res);
+        setNewRecord(res.record);
       })
       .catch((err) => {
         Toast.fire({
@@ -99,6 +103,22 @@ const FRUser: React.FC<FRUserProps> = (props) => {
         });
       });
   }, []);
+
+  // 確認關閉 和 關閉modal
+  const atClickCloseBtn = React.useCallback(async () => {
+    const beforeEdit = JSON.stringify(editRecord?.record);
+    const afterEdit = JSON.stringify(newRecord);
+
+    if (beforeEdit === afterEdit) {
+      setEditing(false);
+    } else {
+      const res = await Confirm('取消編輯？', '如果離開，將不會更新你的記錄內容');
+      if (res.isConfirmed) {
+        setEditing(false);
+        setNewRecord(editRecord?.record as Record);
+      }
+    }
+  }, [editRecord, newRecord]);
 
   // TODO: user id
   console.log('user id ==> ', userId);
@@ -217,9 +237,13 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           {isFollowing ? '追蹤中' : '追蹤'}
         </button>
       )}
-      {editRecord && (
-        <FRModal open={editing} onClose={() => setEditing(false)}>
-          <FRPostFrom record={editRecord.record} sportCategories={editRecord.sportCategories} />
+      {editRecord && newRecord && (
+        <FRModal open={editing} onClose={() => atClickCloseBtn()}>
+          <FRPostFrom
+            record={newRecord}
+            onSetNewRecord={setNewRecord as (record: React.SetStateAction<Record>) => void}
+            sportCategories={editRecord.sportCategories}
+          />
         </FRModal>
       )}
     </div>
