@@ -7,7 +7,6 @@ import {
   LoginResponseType,
   getJWTToken,
   verifyToken,
-  Toast,
   RegisterInfoType,
   fetchRegister,
   RegisterResponseType,
@@ -16,6 +15,7 @@ import {
 } from 'services/apis';
 
 import axios from 'axios';
+import { Toast } from 'utils/swal';
 import { setRecordsAction } from '../actions';
 import type { Record, User } from '../types';
 

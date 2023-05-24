@@ -2,7 +2,7 @@
 import React from 'react';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
-import { fetchRecord, RecordResponse, Toast } from 'services/apis';
+import { Confirm, Toast } from 'utils/swal';
 import FRModal from './FRModal';
 import FRPostFrom from './FRPostFrom';
 

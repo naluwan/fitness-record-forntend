@@ -7,7 +7,8 @@ import useRecordStore from 'store/useRecordStore';
 import Loading from 'components/Loading';
 import FRHeader, { IRef } from 'components/FRHeader';
 import FRContainer from 'components/FRContainer';
-import { RegisterInfoType, Toast } from 'services/apis';
+import { RegisterInfoType } from 'services/apis';
+import { Toast } from 'utils/swal';
 
 const Register: React.FC = () => {
   const go = useNavigate();

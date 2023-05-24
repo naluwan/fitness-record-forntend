@@ -5,7 +5,7 @@ import FRHeader, { IRef } from 'components/FRHeader';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
 import FRContainer from 'components/FRContainer';
-import { Toast } from 'services/apis';
+import { Toast } from 'utils/swal';
 
 const SignIn: React.FC = () => {
   const go = useNavigate();
