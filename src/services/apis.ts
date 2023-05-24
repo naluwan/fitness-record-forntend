@@ -73,6 +73,16 @@ export const fetchRecord = async (id: number): Promise<RecordResponse> => {
   }
 };
 
+// put record
+export const fetchPutRecord = async (newRecord: Record): Promise<RecordResponse> => {
+  try {
+    const { data } = await axiosInstance.put(`${API_URL}/records/${newRecord.id}`, newRecord);
+    return data.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
 type RankUsersResponse = {
   users: User[];
 };
