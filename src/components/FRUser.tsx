@@ -2,7 +2,7 @@
 import React from 'react';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
-import { fetchRecord, RecordResponse } from 'services/apis';
+import { fetchPutRecord, fetchRecord, RecordResponse } from 'services/apis';
 import { Record } from 'types';
 import { Confirm, Toast } from 'utils/swal';
 import FRModal from './FRModal';
@@ -119,6 +119,33 @@ const FRUser: React.FC<FRUserProps> = (props) => {
       }
     }
   }, [editRecord, newRecord]);
+
+  // 送出編輯紀錄
+  const atSubmitEditRecord = React.useCallback(
+    (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      fetchPutRecord(newRecord as Record)
+        .then((res) => {
+          setEditing(false);
+          if (typeof onRefetch === 'function') {
+            onRefetch();
+          }
+          setNewRecord(null);
+          Toast.fire({
+            icon: 'success',
+            title: '更新記錄成功',
+          });
+        })
+        .catch((err) => {
+          Toast.fire({
+            icon: 'error',
+            title: '更新記錄失敗',
+            text: err.response.data.message,
+          });
+        });
+    },
+    [newRecord, onRefetch],
+  );
 
   // TODO: user id
   console.log('user id ==> ', userId);
@@ -243,6 +270,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
             record={newRecord}
             onSetNewRecord={setNewRecord as (record: React.SetStateAction<Record>) => void}
             sportCategories={editRecord.sportCategories}
+            onSubmit={atSubmitEditRecord}
           />
         </FRModal>
       )}
