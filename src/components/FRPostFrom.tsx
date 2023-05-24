@@ -8,10 +8,11 @@ type FRPostFormProps = {
   record: Record;
   sportCategories: SportCategory[];
   onSetNewRecord: (record: React.SetStateAction<Record>) => void;
+  onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
 const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
-  const { record, sportCategories, onSetNewRecord } = props;
+  const { record, sportCategories, onSetNewRecord, onSubmit } = props;
 
   // record有更新，就更新記錄日期
   React.useEffect(() => {
@@ -70,7 +71,7 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
         />
       </div>
       {/* 編輯資訊區 */}
-      <form className='w-full lg:w-[424px]'>
+      <form className='w-full lg:w-[424px]' onSubmit={(e) => onSubmit(e)}>
         {/* 時間 */}
         <div className='pb-2'>
           <label htmlFor='weight' className='mb-2 block text-sm font-medium text-gray-900'>
