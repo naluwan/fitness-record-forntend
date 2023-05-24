@@ -23,7 +23,7 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
         <div>
           {users.length > 0 &&
             users.map((user, idx) => {
-              const { id, name, avatar, weight, weightDiff, waistline, waistlineDiff } = user;
+              const { id, name, avatar, nowWeight, nowWaistline, weightDiff, waistlineDiff } = user;
               let currentClass;
               if (title === '減重') {
                 currentClass = (weightDiff as number) > 0 ? 'text-red-500' : 'text-green-500';
@@ -59,8 +59,8 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
                     <span className='flex-1'>
                       <p className='text-xs'>
                         {title === '減重'
-                          ? `目前體重：${weight}公斤`
-                          : `目前腰圍：${waistline}公分`}
+                          ? `目前體重：${nowWeight}公斤`
+                          : `目前腰圍：${nowWaistline}公分`}
                       </p>
                       <p className={`font-bold ${currentClass}`}>
                         {title === '減重' ? weightDiff : waistlineDiff}%
