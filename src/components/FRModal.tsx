@@ -13,7 +13,7 @@ const FRModal: React.FC<FRModalProps> = (props) => {
     // backdrop
     <div
       onClick={onClose}
-      className={`fixed inset-0 flex items-center justify-center transition-colors ${
+      className={`fixed inset-0 z-50 flex items-center justify-center transition-colors ${
         open ? 'visible bg-black/20 dark:bg-black/70' : 'invisible'
       }`}
       role='button'
