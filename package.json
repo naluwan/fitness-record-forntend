@@ -23,6 +23,7 @@
     "react-scripts": "5.0.1",
     "react-tailwindcss-datepicker": "^1.6.1",
     "sweetalert2": "^11.7.5",
+    "swiper": "^9.3.2",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4",
     "zustand": "^4.3.7"
