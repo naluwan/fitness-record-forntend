@@ -64,6 +64,12 @@ const Home: React.FC = () => {
     }
   });
 
+  // 重新獲取rank資料 function
+  const atRefetchRankInfo = React.useCallback(() => {
+    weightRank.refetch();
+    waistlineRank.refetch();
+  }, [weightRank, waistlineRank]);
+
   return (
     <>
       <FRHeader ref={panelRef} />
@@ -80,6 +86,7 @@ const Home: React.FC = () => {
               records.map((record) => {
                 const postUserInfo = record.User as User;
                 const sportCategory = record.SportCategory as SportCategory;
+                console.log('record ==> ', record);
                 return (
                   <FRPost
                     key={record.id}
@@ -92,9 +99,10 @@ const Home: React.FC = () => {
                     weight={record.weight}
                     waistline={record.waistline}
                     description={record.description}
-                    photo='https://i.imgur.com/pMVVEhb.jpeg'
+                    images={record.Images}
                     currentUserId={user ? user.id : null}
                     onRefetch={allRecords.refetch}
+                    onRefetchRank={atRefetchRankInfo}
                   />
                 );
               })
