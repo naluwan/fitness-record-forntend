@@ -19,6 +19,7 @@ type FRUserProps = {
   recordId?: number;
   showMore?: boolean;
   onRefetch?: () => void;
+  onRefetchRank?: () => void;
 };
 
 const FRUser: React.FC<FRUserProps> = (props) => {
@@ -33,6 +34,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
     recordId,
     showMore = false,
     onRefetch,
+    onRefetchRank,
   } = props;
 
   const [openPanel, setOpenPanel] = React.useState(false);
@@ -71,6 +73,9 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           if (typeof onRefetch === 'function') {
             onRefetch();
           }
+          if (typeof onRefetchRank === 'function') {
+            onRefetchRank();
+          }
           Toast.fire({
             icon: 'success',
             title: '刪除記錄成功',
@@ -84,7 +89,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           });
         });
     },
-    [onRefetch, onDeleteRecord],
+    [onRefetch, onDeleteRecord, onRefetchRank],
   );
 
   // 顯示編輯紀錄modal和獲取該筆記錄資料
@@ -130,6 +135,9 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           if (typeof onRefetch === 'function') {
             onRefetch();
           }
+          if (typeof onRefetchRank === 'function') {
+            onRefetchRank();
+          }
           setNewRecord(null);
           Toast.fire({
             icon: 'success',
@@ -144,7 +152,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           });
         });
     },
-    [newRecord, onRefetch],
+    [newRecord, onRefetch, onRefetchRank],
   );
 
   // TODO: user id
@@ -187,7 +195,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
 
           {/* more popover panel */}
           <div
-            className={`lg:w-[250px]; duration-5000 absolute right-0 top-8 w-[110px] rounded-lg border border-[#efefef]  bg-white p-2 shadow-lg transition ease-in-out dark:bg-[#262626] ${
+            className={`lg:w-[250px]; duration-5000 absolute right-0 top-8 z-50 w-[110px] rounded-lg border  border-[#efefef] bg-white p-2 shadow-lg transition ease-in-out dark:bg-[#262626] ${
               openPanel ? 'block' : 'hidden'
             } lg:left-7 lg:top-0`}
             ref={panelRef}

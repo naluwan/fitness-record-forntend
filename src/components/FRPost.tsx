@@ -1,12 +1,14 @@
 import React from 'react';
+import { Images } from 'types';
 import FRComment from './FRComment';
+import FRSlides from './FRSlides';
 import FRUser from './FRUser';
 
 type FRPostProps = {
   postUserName: string;
   date: string;
   postUserAvatar: string;
-  photo: string;
+  images: Images[];
   sportCategory: string;
   weight: number;
   waistline: number;
@@ -15,6 +17,7 @@ type FRPostProps = {
   postRecordId: number;
   currentUserId: number | null;
   onRefetch: () => void;
+  onRefetchRank: () => void;
 };
 
 const FRPost: React.FC<FRPostProps> = (props) => {
@@ -22,7 +25,7 @@ const FRPost: React.FC<FRPostProps> = (props) => {
     postUserName,
     date,
     postUserAvatar,
-    photo,
+    images,
     sportCategory,
     weight,
     waistline,
@@ -31,6 +34,7 @@ const FRPost: React.FC<FRPostProps> = (props) => {
     postRecordId,
     currentUserId,
     onRefetch,
+    onRefetchRank,
   } = props;
 
   return (
@@ -43,8 +47,9 @@ const FRPost: React.FC<FRPostProps> = (props) => {
         recordId={postRecordId}
         showMore={currentUserId === postUserId}
         onRefetch={onRefetch}
+        onRefetchRank={onRefetchRank}
       />
-      <img src={photo} alt='post' className='max-h-[400px] w-full object-contain' />
+      <FRSlides images={images} />
       <FRComment
         sportCategory={sportCategory}
         weight={weight}
