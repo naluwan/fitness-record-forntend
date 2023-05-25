@@ -75,7 +75,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
           <div className='mr-4 flex h-[48px] w-[48px] items-center'>
             <img src='images/logo.png' alt='logo' />
           </div>
-          <h1 className='hidden font-bold dark:text-white lg:block'>Fitness Record</h1>
+          <h1 className='hidden font-bold dark:text-white lg:block'>健人日記</h1>
         </Link>
         {/* right nav  */}
         <div className='relative flex items-center'>
