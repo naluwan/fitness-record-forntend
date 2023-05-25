@@ -35,3 +35,30 @@ body {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.swiper-slide {
+  z-index: 1 !important;
+}
+
+.swiper-button-next {
+  color: white !important;
+  opacity: 0.8 !important;
+}
+
+.swiper-button-prev {
+  color: white !important;
+  opacity: 0.8 !important;
+}
+
+.swiper-button-disabled {
+  opacity: 0 !important;
+}
+
+.swiper-pagination-bullet {
+  background: white !important;
+  opacity: 0.5 !important;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1 !important;
+}
