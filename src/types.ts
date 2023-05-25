@@ -1,3 +1,10 @@
+export type Images = {
+  id: number;
+  recordId: number;
+  userId: number;
+  url: string;
+};
+
 export type Record = {
   id: number;
   date: string;
@@ -9,6 +16,7 @@ export type Record = {
   userId: number;
   sportCategoryId: number;
   sportCategories?: SportCategory[];
+  Images: Images[];
 };
 
 export type SportCategory = {
