@@ -38,6 +38,8 @@ const Register: React.FC = () => {
   // 拖拉檔案區域設定
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
+    accept: { 'image/*': [] },
+    multiple: false,
     // 當圖片被選取或拖拉進區塊的時候執行
     onDrop: (acceptedFile) => {
       // 設定預覽圖片檔案
