@@ -14,14 +14,14 @@ const FRModal: React.FC<FRModalProps> = (props) => {
     <div
       onClick={onClose}
       className={`fixed inset-0 z-50 flex items-center justify-center transition-colors ${
-        open ? 'visible bg-black/20 dark:bg-black/70' : 'invisible'
+        open ? 'visible bg-black/20 dark:bg-black/40' : 'invisible'
       }`}
       role='button'
       tabIndex={-1}
     >
       {/* modal */}
       <div
-        className={`mt-[70px] h-[80%] w-full cursor-default overflow-auto rounded-lg bg-white p-6 shadow-lg transition-all duration-500 lg:h-auto lg:w-[924px] ${
+        className={`mt-[70px] h-[80%] w-full cursor-default overflow-auto rounded-lg bg-white p-6 transition-all duration-500 dark:bg-black lg:h-auto lg:w-[924px] ${
           open ? 'scale-100 opacity-100' : 'scale-125  opacity-0'
         }`}
         onClick={(e) => e.stopPropagation()}
@@ -29,14 +29,14 @@ const FRModal: React.FC<FRModalProps> = (props) => {
       >
         {/* 關閉 X按鈕 */}
         <button
-          className='absolute right-1 top-2 rounded-lg bg-white p-1 text-gray-400 hover:bg-gray-50 hover:text-gray-600 lg:right-2'
+          className='absolute right-1 top-2 rounded-full bg-white p-1 text-gray-400 hover:bg-gray-50 hover:text-gray-600 lg:right-2'
           onClick={onClose}
         >
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
             viewBox='0 0 24 24'
-            strokeWidth={1.5}
+            strokeWidth={2.5}
             stroke='currentColor'
             className='h-6 w-6'
           >
