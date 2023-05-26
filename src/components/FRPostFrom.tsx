@@ -3,6 +3,7 @@ import React from 'react';
 import { Record, SportCategory } from 'types';
 import Datepicker from 'react-tailwindcss-datepicker';
 import { DateType, DateValueType } from 'react-tailwindcss-datepicker/dist/types';
+import FRSlides from './FRSlides';
 
 type FRPostFormProps = {
   record: Record;
@@ -61,20 +62,27 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
   );
 
   return (
-    <div className='lg:flex lg:items-start lg:justify-between'>
+    <div className='lg:flex lg:items-stretch lg:justify-between'>
       {/* 預覽圖片 */}
-      <div className='flex w-full items-center justify-center py-4 lg:w-[600px] lg:py-0 lg:pr-6'>
-        <img
+      <div className='w-full py-4 lg:w-[600px] lg:py-0 lg:pr-6'>
+        {/* <img
           src='https://i.imgur.com/pMVVEhb.jpeg'
           alt='post-img'
           className='w-full object-contain'
-        />
+        /> */}
+        <FRSlides images={record.Images} currentPage='edit' />
       </div>
       {/* 編輯資訊區 */}
-      <form className='w-full lg:w-[424px]' onSubmit={(e) => onSubmit(e)}>
+      <form
+        className='flex w-full flex-col justify-between lg:w-[424px]'
+        onSubmit={(e) => onSubmit(e)}
+      >
         {/* 時間 */}
         <div className='pb-2'>
-          <label htmlFor='weight' className='mb-2 block text-sm font-medium text-gray-900'>
+          <label
+            htmlFor='date'
+            className='mb-2 block text-sm font-medium text-gray-900 dark:text-white'
+          >
             日期
           </label>
           <Datepicker
@@ -90,7 +98,10 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
 
         {/* 運動 select */}
         <div className='pb-2'>
-          <label htmlFor='sportCategoryId' className='mb-2 block text-sm font-medium text-gray-900'>
+          <label
+            htmlFor='sportCategoryId'
+            className='mb-2 block text-sm font-medium text-gray-900 dark:text-white'
+          >
             運動
           </label>
           <select
@@ -115,7 +126,10 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
 
         {/* 體重 input */}
         <div className='pb-2'>
-          <label htmlFor='weight' className='mb-2 block text-sm font-medium text-gray-900'>
+          <label
+            htmlFor='weight'
+            className='mb-2 block text-sm font-medium text-gray-900 dark:text-white'
+          >
             體重
           </label>
           <input
@@ -132,7 +146,10 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
 
         {/* 腰圍 input */}
         <div className='pb-2'>
-          <label htmlFor='waistline' className='mb-2 block text-sm font-medium text-gray-900'>
+          <label
+            htmlFor='waistline'
+            className='mb-2 block text-sm font-medium text-gray-900 dark:text-white'
+          >
             腰圍
           </label>
           <input
@@ -149,7 +166,10 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
 
         {/* 運動心得 textarea */}
         <div className='pb-2'>
-          <label htmlFor='description' className='mb-2 block text-sm font-medium text-gray-900'>
+          <label
+            htmlFor='description'
+            className='mb-2 block text-sm font-medium text-gray-900 dark:text-white'
+          >
             運動心得
           </label>
           <textarea
@@ -164,7 +184,7 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
         </div>
 
         {/* 儲存按鈕 */}
-        <div className='flex justify-end pt-2 lg:absolute lg:bottom-6 lg:right-6'>
+        <div className='flex justify-end pt-2'>
           <button className='rounded-lg border border-transparent bg-blue-500 px-4 py-2 transition-all hover:bg-blue-600 focus:ring-offset-2 active:outline-none active:ring-2 active:ring-blue-500 lg:bottom-5'>
             <p className='text-sm font-medium text-white'>儲存</p>
           </button>
