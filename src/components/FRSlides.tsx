@@ -8,10 +8,12 @@ import 'swiper/css/pagination';
 
 type FRSlidesProps = {
   images: Images[];
+  currentPage: 'edit' | 'post';
 };
 
 const FRSlides: React.FC<FRSlidesProps> = (props) => {
-  const { images } = props;
+  const { images, currentPage } = props;
+
   return (
     <Swiper
       modules={[Navigation, Pagination, A11y]}
@@ -24,7 +26,13 @@ const FRSlides: React.FC<FRSlidesProps> = (props) => {
       {images.map((image) => {
         return (
           <SwiperSlide key={image.id}>
-            <img src={image.url} alt='post' className='max-h-[600px] w-full object-contain' />
+            <img
+              src={image.url}
+              alt='post'
+              className={`w-full object-contain lg:w-[600px] ${
+                currentPage === 'edit' && 'lg:min-h-[490px]'
+              }`}
+            />
           </SwiperSlide>
         );
       })}

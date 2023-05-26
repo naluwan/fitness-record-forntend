@@ -49,7 +49,7 @@ const FRPost: React.FC<FRPostProps> = (props) => {
         onRefetch={onRefetch}
         onRefetchRank={onRefetchRank}
       />
-      <FRSlides images={images} />
+      <FRSlides images={images} currentPage='post' />
       <FRComment
         sportCategory={sportCategory}
         weight={weight}
