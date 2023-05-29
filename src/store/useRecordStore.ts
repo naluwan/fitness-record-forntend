@@ -12,6 +12,8 @@ import {
   RegisterResponseType,
   DeleteRecordResponse,
   fetchDeleteRecord,
+  fetchLineLogin,
+  IdTokenType,
 } from 'services/apis';
 
 import axios from 'axios';
@@ -44,6 +46,7 @@ export type State = {
   init: () => void;
   onSetIsDark: (isDark: boolean) => void;
   onDeleteRecord: (id: number) => Promise<DeleteRecordResponse>;
+  onLineLogin: (idToken: IdTokenType) => Promise<LoginResponseType>;
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -119,6 +122,18 @@ const useRecordStore = create<State>((set) => {
       set({ isFetching: true });
       try {
         const res = await fetchLogin(email, password);
+        set({ user: res.user });
+        return res;
+      } finally {
+        set({ isFetching: false });
+      }
+    },
+    async onLineLogin(idToken: IdTokenType) {
+      set({ isFetching: true });
+      try {
+        const res = await fetchLineLogin(idToken);
+        console.log('store res ==> ', res);
+        console.log('store user ==> ', res.user);
         set({ user: res.user });
         return res;
       } finally {
