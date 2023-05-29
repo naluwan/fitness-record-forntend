@@ -150,7 +150,7 @@ const SignIn: React.FC = () => {
                       <div
                         className='mx-2 h-12 w-12'
                         style={{
-                          backgroundImage: 'url(/images/btn_base.png)',
+                          backgroundImage: 'url(images/btn_base.png)',
                           backgroundPosition: 'center',
                           backgroundSize: 'contain',
                           backgroundRepeat: 'no-repeat',
