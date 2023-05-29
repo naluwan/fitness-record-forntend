@@ -56,6 +56,21 @@ const SignIn: React.FC = () => {
     [accountInfo, onLogin, go],
   );
 
+  // line登入按鈕點擊事件，點擊後開啟
+  const lineLoginClick = React.useCallback(() => {
+    let URL = 'https://access.line.me/oauth2/v2.1/authorize?';
+    // 必填
+    URL += 'response_type=code';
+    URL += `&client_id=${process.env.REACT_APP_LINE_LOGIN_CHANNEL_ID}`;
+    URL += `&redirect_uri=${process.env.REACT_APP_LINE_LOGIN_REDIRECT_URL}`;
+    URL += '&state=PPcWFJFWTCsZpU0JCVgnqi3C';
+    URL += '&scope=email%20profile%20openid';
+    // 選填
+    URL += '&ui_locales=zh-TW';
+    // 轉跳到該網址
+    window.open(URL, '_self');
+  }, []);
+
   // popover panel ref
   const panelRef = React.useRef<IRef>(null);
 
@@ -117,12 +132,32 @@ const SignIn: React.FC = () => {
                       密碼
                     </label>
                   </div>
-                  <div className='my-6'>
+                  <div className='my-6 flex flex-col items-center'>
                     <button
                       type='submit'
-                      className='w-full rounded-md bg-black px-3 py-4 text-white focus:bg-gray-600 focus:outline-none'
+                      className='mb-3 w-full rounded-xl bg-black px-3 py-4 font-medium text-white focus:bg-gray-600 focus:outline-none'
                     >
                       登入
+                    </button>
+                    <div className='mb-3 w-full text-center text-black'>
+                      <p className='font-normal'>or</p>
+                    </div>
+                    <button
+                      onClick={lineLoginClick}
+                      className='flex w-full items-center rounded-xl bg-[#06c755] py-1'
+                      type='button'
+                    >
+                      <div
+                        className='mx-2 h-12 w-12'
+                        style={{
+                          backgroundImage: 'url(/images/btn_base.png)',
+                          backgroundPosition: 'center',
+                          backgroundSize: 'contain',
+                          backgroundRepeat: 'no-repeat',
+                        }}
+                      />
+                      <div className='h-12 border-l-[1.5px] border-[#E5E5E5] opacity-60' />
+                      <p className='mr-14 w-full flex-1 font-medium'>Login In</p>
                     </button>
                   </div>
                   <p className='text-center text-sm text-gray-500'>
