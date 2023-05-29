@@ -3,6 +3,16 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --swiper-pagination-color: black;
+    --swiper-pagination-bullet-inactive-color: black;
+    --swiper-pagination-bullet-inactive-opacity: 0.3;
+  }
+  :root.dark {
+    --swiper-pagination-color: white;
+    --swiper-pagination-bullet-inactive-color: white;
+    --swiper-pagination-bullet-inactive-opacity: 0.3;
+  }
   body {
     @apply dark:bg-black dark:text-white;
   }
@@ -53,13 +63,4 @@ body {
 
 .swiper-button-disabled {
   opacity: 0 !important;
-}
-
-.swiper-pagination-bullet {
-  background: white !important;
-  opacity: 0.5 !important;
-}
-
-.swiper-pagination-bullet-active {
-  opacity: 1 !important;
 }
