@@ -179,6 +179,7 @@ export type LoginResponseType = {
   status: string;
   token: string;
   user: User;
+  idToken?: string;
 };
 
 // login
@@ -189,6 +190,22 @@ export const fetchLogin = async (email: string, password: string): Promise<Login
       password,
       expiresIn: '8h', // 8 hours
     });
+
+    setToken(res.data.token);
+    return res.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
+export type IdTokenType = {
+  id_token: string;
+};
+
+// line login
+export const fetchLineLogin = async (idToken: IdTokenType): Promise<LoginResponseType> => {
+  try {
+    const res = await axios.post(`${API_URL}/login/line/return`, idToken);
 
     setToken(res.data.token);
     return res.data;
