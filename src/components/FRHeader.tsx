@@ -79,99 +79,103 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
         </Link>
         {/* right nav  */}
         <div className='relative flex items-center'>
-          {/* home */}
-          <button
-            className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
-            onClick={() => go('/')}
-            onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
-            onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
-          >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth={2}
-              stroke='currentColor'
-              className='z-20 h-6 w-6 duration-500'
+          <div className='hidden lg:block'>
+            {/* home */}
+            <button
+              className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+              onClick={() => go('/')}
+              onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
+              onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
             >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                d='M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25'
-              />
-            </svg>
-          </button>
-
-          {/* following */}
-          <button
-            className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
-            onClick={() => go('/following')}
-            onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
-            onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
-          >
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              className='z-20 h-6 w-6 duration-500'
-              fill='none'
-              viewBox='0 0 24 24'
-              stroke='currentColor'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
                 strokeWidth={2}
-                d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
-              />
-            </svg>
-          </button>
+                stroke='currentColor'
+                className='z-20 h-6 w-6 duration-500'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  d='M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25'
+                />
+              </svg>
+            </button>
 
-          {/* new post */}
-          <button
-            className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
-            onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
-            onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
-          >
-            <svg
-              className='z-20 h-6 w-6 duration-500 dark:text-white'
-              color='rgb(0, 0, 0)'
-              fill='rgb(0, 0, 0)'
-              height='24'
-              role='img'
-              viewBox='0 0 24 24'
-              width='24'
+            {/* following */}
+            <button
+              className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+              onClick={() => go('/following')}
+              onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
+              onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
             >
-              <path
-                d='M2 12v3.45c0 2.849.698 4.005 1.606 4.944.94.909 2.098 1.608 4.946 1.608h6.896c2.848 0 4.006-.7 4.946-1.608C21.302 19.455 22 18.3 22 15.45V8.552c0-2.849-.698-4.006-1.606-4.945C19.454 2.7 18.296 2 15.448 2H8.552c-2.848 0-4.006.699-4.946 1.607C2.698 4.547 2 5.703 2 8.552Z'
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                className='z-20 h-6 w-6 duration-500'
                 fill='none'
+                viewBox='0 0 24 24'
                 stroke='currentColor'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-              />
-              <line
-                fill='none'
-                stroke='currentColor'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                x1='6.545'
-                x2='17.455'
-                y1='12.001'
-                y2='12.001'
-              />
-              <line
-                fill='none'
-                stroke='currentColor'
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                x1='12.003'
-                x2='12.003'
-                y1='6.545'
-                y2='17.455'
-              />
-            </svg>
-          </button>
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth={2}
+                  d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
+                />
+              </svg>
+            </button>
+
+            {/* new post */}
+            {user !== null && (
+              <button
+                className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+                onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
+                onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
+              >
+                <svg
+                  className='z-20 h-6 w-6 duration-500 dark:text-white'
+                  color='rgb(0, 0, 0)'
+                  fill='rgb(0, 0, 0)'
+                  height='24'
+                  role='img'
+                  viewBox='0 0 24 24'
+                  width='24'
+                >
+                  <path
+                    d='M2 12v3.45c0 2.849.698 4.005 1.606 4.944.94.909 2.098 1.608 4.946 1.608h6.896c2.848 0 4.006-.7 4.946-1.608C21.302 19.455 22 18.3 22 15.45V8.552c0-2.849-.698-4.006-1.606-4.945C19.454 2.7 18.296 2 15.448 2H8.552c-2.848 0-4.006.699-4.946 1.607C2.698 4.547 2 5.703 2 8.552Z'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
+                  />
+                  <line
+                    fill='none'
+                    stroke='currentColor'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
+                    x1='6.545'
+                    x2='17.455'
+                    y1='12.001'
+                    y2='12.001'
+                  />
+                  <line
+                    fill='none'
+                    stroke='currentColor'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    strokeWidth='2'
+                    x1='12.003'
+                    x2='12.003'
+                    y1='6.545'
+                    y2='17.455'
+                  />
+                </svg>
+              </button>
+            )}
+          </div>
 
           {/* more actions */}
           <div
@@ -239,6 +243,138 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                     </button>
                   </div>
                 )}
+
+                <div className='block lg:hidden'>
+                  {/* 首頁 */}
+                  <div className='mb-2'>
+                    <button
+                      className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+                      onClick={() => {
+                        onSetOpenPanel(false);
+                        go('/');
+                      }}
+                    >
+                      {/* left icon */}
+                      <div className='bg-fb-input flex items-center justify-center rounded-full p-2'>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          strokeWidth={2}
+                          stroke='currentColor'
+                          className='h-7 w-7'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            d='M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25'
+                          />
+                        </svg>
+                      </div>
+
+                      {/* right icon */}
+                      <div className='flex-1'>
+                        <p className='mb-[2px] text-base text-black dark:text-white'>首頁</p>
+                      </div>
+                    </button>
+                  </div>
+
+                  {/* following */}
+                  <div className='mb-2'>
+                    <button
+                      className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+                      onClick={() => {
+                        onSetOpenPanel(false);
+                        go('/following');
+                      }}
+                    >
+                      {/* left icon */}
+                      <div className='bg-fb-input flex items-center justify-center rounded-full p-2'>
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          className='h-7 w-7'
+                          fill='none'
+                          viewBox='0 0 24 24'
+                          stroke='currentColor'
+                        >
+                          <path
+                            strokeLinecap='round'
+                            strokeLinejoin='round'
+                            strokeWidth={2}
+                            d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
+                          />
+                        </svg>
+                      </div>
+
+                      {/* right icon */}
+                      <div className='flex-1'>
+                        <p className='mb-[2px] text-base text-black dark:text-white'>好友</p>
+                      </div>
+                    </button>
+                  </div>
+
+                  {/* new post */}
+                  {user !== null && (
+                    <div className='mb-2'>
+                      <button
+                        className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+                        onClick={() => {
+                          onSetOpenPanel(false);
+                        }}
+                      >
+                        {/* left icon */}
+                        <div className='bg-fb-input flex items-center justify-center rounded-full p-2'>
+                          <svg
+                            className='h-7 w-7 dark:text-white'
+                            color='rgb(0, 0, 0)'
+                            fill='rgb(0, 0, 0)'
+                            height='24'
+                            role='img'
+                            viewBox='0 0 24 24'
+                            width='24'
+                            stroke='currentColor'
+                          >
+                            <path
+                              d='M2 12v3.45c0 2.849.698 4.005 1.606 4.944.94.909 2.098 1.608 4.946 1.608h6.896c2.848 0 4.006-.7 4.946-1.608C21.302 19.455 22 18.3 22 15.45V8.552c0-2.849-.698-4.006-1.606-4.945C19.454 2.7 18.296 2 15.448 2H8.552c-2.848 0-4.006.699-4.946 1.607C2.698 4.547 2 5.703 2 8.552Z'
+                              fill='none'
+                              stroke='currentColor'
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              strokeWidth='2'
+                            />
+                            <line
+                              fill='none'
+                              stroke='currentColor'
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              strokeWidth='2'
+                              x1='6.545'
+                              x2='17.455'
+                              y1='12.001'
+                              y2='12.001'
+                            />
+                            <line
+                              fill='none'
+                              stroke='currentColor'
+                              strokeLinecap='round'
+                              strokeLinejoin='round'
+                              strokeWidth='2'
+                              x1='12.003'
+                              x2='12.003'
+                              y1='6.545'
+                              y2='17.455'
+                            />
+                          </svg>
+                        </div>
+
+                        {/* right icon */}
+                        <div className='flex-1'>
+                          <p className='mb-[2px] text-base text-black dark:text-white'>發佈貼文</p>
+                        </div>
+                      </button>
+                    </div>
+                  )}
+                </div>
 
                 {/* theme change */}
                 <div className='mb-2 flex cursor-pointer items-center rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
