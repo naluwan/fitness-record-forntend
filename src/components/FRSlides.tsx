@@ -7,8 +7,8 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
 type FRSlidesProps = {
-  images: Images[];
-  currentPage: 'edit' | 'post';
+  images: Images[] | { preview: string; name: string }[];
+  currentPage: 'edit' | 'post' | 'newPost';
 };
 
 const FRSlides: React.FC<FRSlidesProps> = (props) => {
@@ -23,19 +23,33 @@ const FRSlides: React.FC<FRSlidesProps> = (props) => {
       navigation
       pagination={{ clickable: false }}
     >
-      {images.map((image) => {
-        return (
-          <SwiperSlide key={image.id}>
-            <img
-              src={image.url}
-              alt='post'
-              className={`w-full object-contain lg:w-[600px] ${
-                currentPage === 'edit' && 'lg:min-h-[490px]'
-              }`}
-            />
-          </SwiperSlide>
-        );
-      })}
+      {currentPage === 'edit' || currentPage === 'post'
+        ? images.map((image) => {
+            const currentImage = image as Images;
+            return (
+              <SwiperSlide key={currentImage.id}>
+                <img
+                  src={currentImage.url}
+                  alt='post'
+                  className={`w-full object-contain lg:w-[600px] ${
+                    currentPage === 'edit' && 'lg:h-[490px]'
+                  }`}
+                />
+              </SwiperSlide>
+            );
+          })
+        : images.map((image) => {
+            const currentImage = image as { preview: string; name: string };
+            return (
+              <SwiperSlide key={currentImage.name}>
+                <img
+                  src={currentImage.preview}
+                  alt='post'
+                  className='w-full object-contain lg:h-[490px]'
+                />
+              </SwiperSlide>
+            );
+          })}
     </Swiper>
   );
 };
