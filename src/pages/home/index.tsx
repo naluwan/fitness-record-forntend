@@ -8,7 +8,7 @@ import { fetchRecords, fetchWaistlineRankUsers, fetchWeightRankUsers } from 'ser
 import Loading from 'components/Loading';
 import FRPost from 'components/FRPost';
 import FRRanking from 'components/FRRanking';
-import { SportCategory, User } from 'types';
+import { Images, SportCategory, User } from 'types';
 
 const Home: React.FC = () => {
   const [weightRankUsers, setWeightRankUsers] = React.useState<User[] | []>([]);
@@ -86,12 +86,12 @@ const Home: React.FC = () => {
               records.map((record) => {
                 const postUserInfo = record.User as User;
                 const sportCategory = record.SportCategory as SportCategory;
-                console.log('record ==> ', record);
+
                 return (
                   <FRPost
                     key={record.id}
                     postUserId={postUserInfo.id}
-                    postRecordId={record.id}
+                    postRecordId={record.id as number}
                     postUserName={postUserInfo.name}
                     date={record.date}
                     postUserAvatar={postUserInfo.avatar}
@@ -99,7 +99,7 @@ const Home: React.FC = () => {
                     weight={record.weight}
                     waistline={record.waistline}
                     description={record.description}
-                    images={record.Images}
+                    images={record.Images as Images[]}
                     currentUserId={user ? user.id : null}
                     onRefetch={allRecords.refetch}
                     onRefetchRank={atRefetchRankInfo}
