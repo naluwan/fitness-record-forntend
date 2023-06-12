@@ -135,7 +135,8 @@ const SignIn: React.FC = () => {
                   <div className='my-6 flex flex-col items-center'>
                     <button
                       type='submit'
-                      className='mb-3 w-full rounded-xl bg-black px-3 py-4 font-medium text-white focus:bg-gray-600 focus:outline-none'
+                      className='mb-3 w-full rounded-xl bg-black px-3 py-4 font-medium text-white focus:bg-gray-600 focus:outline-none disabled:opacity-25'
+                      disabled={accountInfo.email === '' || accountInfo.password === ''}
                     >
                       登入
                     </button>
