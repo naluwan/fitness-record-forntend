@@ -51,13 +51,9 @@ body {
   align-items: center !important;
 }
 
-.swiper-button-next {
-  color: white !important;
-  opacity: 0.8 !important;
-}
-
+.swiper-button-next,
 .swiper-button-prev {
-  color: white !important;
+  color: gray !important;
   opacity: 0.8 !important;
 }
 
