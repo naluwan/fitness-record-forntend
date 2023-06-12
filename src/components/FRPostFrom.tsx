@@ -1,19 +1,22 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
-import { Record, SportCategory } from 'types';
+import { Images, Record, SportCategory } from 'types';
 import Datepicker from 'react-tailwindcss-datepicker';
 import { DateType, DateValueType } from 'react-tailwindcss-datepicker/dist/types';
+import { useDropzone } from 'react-dropzone';
 import FRSlides from './FRSlides';
 
 type FRPostFormProps = {
   record: Record;
   sportCategories: SportCategory[];
+  currentPage: 'edit' | 'post' | 'newPost';
+  openModal: boolean;
   onSetNewRecord: (record: React.SetStateAction<Record>) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 };
 
 const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
-  const { record, sportCategories, onSetNewRecord, onSubmit } = props;
+  const { record, sportCategories, currentPage, openModal, onSetNewRecord, onSubmit } = props;
 
   // record有更新，就更新記錄日期
   React.useEffect(() => {
@@ -21,7 +24,10 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
       startDate: record.date as unknown as DateType,
       endDate: record.date as unknown as DateType,
     });
-  }, [record]);
+    if (!openModal) {
+      setSelectedFiles(null);
+    }
+  }, [record, openModal]);
 
   // update record info
   const atChangeRecord = React.useCallback(
@@ -61,16 +67,78 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
     [onSetNewRecord],
   );
 
+  const [selectedFiles, setSelectedFiles] = React.useState<
+    { preview: string; name: string }[] | null
+  >(null);
+
+  // 拖拉檔案區域設定
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: { 'image/*': [] },
+    // 當圖片被選取或拖拉進區塊的時候執行
+    onDrop: (acceptedFile) => {
+      // 設定預覽圖片檔案
+      setSelectedFiles(
+        acceptedFile.map((file, idx) =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+            // 設定照片排序
+            order: idx,
+          }),
+        ),
+      );
+    },
+  });
+
+  // 新增Record時，判斷使用者是否選取圖片，如果已經選取圖片，就顯示圖片預覽，否則顯示圖片上傳畫面
+  const NewPostImagesBlock =
+    selectedFiles && selectedFiles.length > 0 ? (
+      <FRSlides
+        images={selectedFiles as { preview: string; name: string }[]}
+        currentPage={currentPage}
+      />
+    ) : (
+      <div className='flex h-full w-full items-center justify-center py-4 lg:w-[600px] lg:py-0 lg:pr-6'>
+        <div
+          className='dark:hover:bg-bray-800 flex h-full w-full cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100 dark:border-gray-600 dark:bg-gray-700 dark:hover:border-gray-500 dark:hover:bg-gray-600'
+          {...getRootProps()}
+        >
+          <div className='flex flex-col items-center justify-center pb-6 pt-5'>
+            <svg
+              aria-hidden='true'
+              className='mb-3 h-10 w-10 text-gray-400'
+              fill='none'
+              stroke='currentColor'
+              viewBox='0 0 24 24'
+              xmlns='http://www.w3.org/2000/svg'
+            >
+              <path
+                strokeLinecap='round'
+                strokeLinejoin='round'
+                strokeWidth='2'
+                d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
+              />
+            </svg>
+            <p className='mb-2 text-sm text-gray-500 dark:text-gray-400'>
+              <span className='font-semibold'>點擊上傳頭像圖片</span> 或將圖片拖拉至此
+            </p>
+            <p className='text-xs text-gray-500 dark:text-gray-400'>
+              使用者頭像 (如沒有上傳，將使用預設頭像)
+            </p>
+          </div>
+          <input id='dropzone-file' type='file' className='hidden' {...getInputProps()} />
+        </div>
+      </div>
+    );
+
   return (
     <div className='lg:flex lg:items-stretch lg:justify-between'>
       {/* 預覽圖片 */}
       <div className='w-full py-4 lg:w-[600px] lg:py-0 lg:pr-6'>
-        {/* <img
-          src='https://i.imgur.com/pMVVEhb.jpeg'
-          alt='post-img'
-          className='w-full object-contain'
-        /> */}
-        <FRSlides images={record.Images} currentPage='edit' />
+        {record.Images !== null && record.Images.length > 0 ? (
+          <FRSlides images={record.Images as Images[]} currentPage={currentPage} />
+        ) : (
+          NewPostImagesBlock
+        )}
       </div>
       {/* 編輯資訊區 */}
       <form
@@ -111,7 +179,7 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
             value={record.sportCategoryId}
             onChange={(e) => atChangeRecord(e)}
           >
-            <option value='' hidden disabled>
+            <option value='0' hidden disabled>
               選擇一個運動
             </option>
             {sportCategories?.map((item) => {
