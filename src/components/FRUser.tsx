@@ -277,6 +277,8 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           <FRPostFrom
             record={newRecord}
             onSetNewRecord={setNewRecord as (record: React.SetStateAction<Record>) => void}
+            openModal={editing}
+            currentPage='edit'
             sportCategories={editRecord.sportCategories}
             onSubmit={atSubmitEditRecord}
           />
