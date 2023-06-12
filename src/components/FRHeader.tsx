@@ -2,9 +2,12 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
+import type { Record } from 'types';
 import FRHamburgerAnimated from './FRHamburgerAnimated';
 import FRPopoverPanel from './FRPopoverPanel';
 import ToggleSwitch from './ToggleSwitch';
+import FRModal from './FRModal';
+import FRPostFrom from './FRPostFrom';
 
 // 設定多個ref的type
 export interface IRef {
@@ -26,6 +29,18 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
       return buttonRef.current as HTMLButtonElement;
     },
   }));
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [newRecord, setNewRecord] = React.useState<Record>({
+    date: new Date().toDateString(),
+    weight: 0,
+    waistline: 0,
+    description: '',
+    sportCategoryId: 0,
+    Images: null,
+  });
+
+  const [openModal, setOpenModal] = React.useState(false);
 
   const { user, isDark, onSetIsDark, onSetOpenPanel, onLogout } = useRecordStore((state) => {
     return {
@@ -132,6 +147,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                 className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                 onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
                 onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
+                onClick={() => setOpenModal(true)}
               >
                 <svg
                   className='z-20 h-6 w-6 duration-500 dark:text-white'
@@ -319,6 +335,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
                       <button
                         className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                         onClick={() => {
+                          setOpenModal(true);
                           onSetOpenPanel(false);
                         }}
                       >
@@ -456,6 +473,16 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
           </div>
         </div>
       </div>
+      <FRModal open={openModal} onClose={() => setOpenModal(false)}>
+        <FRPostFrom
+          record={newRecord}
+          sportCategories={[]}
+          currentPage='newPost'
+          openModal={openModal}
+          onSubmit={() => console.log('new post submit')}
+          onSetNewRecord={() => console.log('update new record')}
+        />
+      </FRModal>
     </header>
   );
 });
