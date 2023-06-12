@@ -6,17 +6,17 @@ export type Images = {
 };
 
 export type Record = {
-  id: number;
+  id?: number;
   date: string;
   weight: number;
   waistline: number;
   description: string;
   User?: User;
   SportCategory?: SportCategory;
-  userId: number;
+  userId?: number;
   sportCategoryId: number;
   sportCategories?: SportCategory[];
-  Images: Images[];
+  Images: Images[] | FileList | null;
 };
 
 export type SportCategory = {
