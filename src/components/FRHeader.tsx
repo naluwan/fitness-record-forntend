@@ -2,12 +2,14 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
-import type { Record } from 'types';
+import type { Record, SportCategory } from 'types';
+import { useQuery } from 'react-query';
 import FRHamburgerAnimated from './FRHamburgerAnimated';
 import FRPopoverPanel from './FRPopoverPanel';
 import ToggleSwitch from './ToggleSwitch';
 import FRModal from './FRModal';
 import FRPostFrom from './FRPostFrom';
+import { fetchAllSportCategories } from '../services/apis';
 
 // 設定多個ref的type
 export interface IRef {
@@ -16,6 +18,21 @@ export interface IRef {
 }
 
 const FRHeader = React.forwardRef<IRef>((props, ref) => {
+  // 獲取所有運動類別
+  const getAllSportCategories = useQuery('getAllSportCategories', fetchAllSportCategories);
+
+  const [allSportCategories, setAllSportCategories] = React.useState<SportCategory[]>([]);
+
+  React.useEffect(() => {
+    if (
+      getAllSportCategories.isSuccess &&
+      !getAllSportCategories.isLoading &&
+      !getAllSportCategories.isError
+    ) {
+      setAllSportCategories(getAllSportCategories.data);
+    }
+  }, [getAllSportCategories]);
+
   // 分別設定div和button的ref
   const divRef = React.useRef<HTMLDivElement>(null);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
@@ -476,11 +493,14 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
       <FRModal open={openModal} onClose={() => setOpenModal(false)}>
         <FRPostFrom
           record={newRecord}
-          sportCategories={[]}
+          sportCategories={allSportCategories}
           currentPage='newPost'
           openModal={openModal}
-          onSubmit={() => console.log('new post submit')}
-          onSetNewRecord={() => console.log('update new record')}
+          onSubmit={(e) => {
+            e.preventDefault();
+            console.log('newRecord ==> ', newRecord);
+          }}
+          onSetNewRecord={setNewRecord}
         />
       </FRModal>
     </header>
