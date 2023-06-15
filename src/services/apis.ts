@@ -214,3 +214,13 @@ export const fetchLineLogin = async (idToken: IdTokenType): Promise<LoginRespons
     return Promise.reject(err);
   }
 };
+
+// get all sport categories
+export const fetchAllSportCategories = async (): Promise<SportCategory[]> => {
+  try {
+    const { data } = await axios.get(`${API_URL}/sportCategory/`);
+    return data.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
