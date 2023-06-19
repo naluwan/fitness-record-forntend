@@ -8,8 +8,8 @@ export type Images = {
 export type Record = {
   id?: number;
   date: string;
-  weight: number;
-  waistline: number;
+  weight: number | null;
+  waistline: number | null;
   description: string;
   User?: User;
   SportCategory?: SportCategory;
