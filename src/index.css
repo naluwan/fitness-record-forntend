@@ -29,6 +29,8 @@
 
 body {
   margin: 0;
+  /* 取消sweetAlert2 popup為scrollbar預留的padding */
+  padding-right: 0 !important;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
     'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
