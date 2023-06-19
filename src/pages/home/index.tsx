@@ -4,7 +4,12 @@ import FRContainer from 'components/FRContainer';
 import { useQuery } from 'react-query';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
-import { fetchRecords, fetchWaistlineRankUsers, fetchWeightRankUsers } from 'services/apis';
+import {
+  fetchAllSportCategories,
+  fetchRecords,
+  fetchWaistlineRankUsers,
+  fetchWeightRankUsers,
+} from 'services/apis';
 import Loading from 'components/Loading';
 import FRPost from 'components/FRPost';
 import FRRanking from 'components/FRRanking';
@@ -22,6 +27,21 @@ const Home: React.FC = () => {
       onSetOpenPanel: state.onSetOpenPanel,
     };
   }, shallow);
+
+  // 獲取所有運動類別
+  const getAllSportCategories = useQuery('getAllSportCategories', fetchAllSportCategories);
+
+  const [allSportCategories, setAllSportCategories] = React.useState<SportCategory[]>([]);
+
+  React.useEffect(() => {
+    if (
+      getAllSportCategories.isSuccess &&
+      !getAllSportCategories.isLoading &&
+      !getAllSportCategories.isError
+    ) {
+      setAllSportCategories(getAllSportCategories.data);
+    }
+  }, [getAllSportCategories]);
 
   const allRecords = useQuery('allRecords', fetchRecords);
 
@@ -74,6 +94,7 @@ const Home: React.FC = () => {
     <>
       <FRHeader
         ref={panelRef}
+        allSportCategories={allSportCategories}
         refreshAllRecord={allRecords.refetch}
         refreshWeightRank={weightRank.refetch}
         refreshWaistlineRank={waistlineRank.refetch}
