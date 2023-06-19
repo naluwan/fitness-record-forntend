@@ -3,10 +3,10 @@ import Cookies from 'js-cookie';
 import type { Images, Record, SportCategory, User } from 'types';
 
 const JWT_TOKEN = 'JWT_TOKEN';
-const API_URL = 'http://192.168.0.144:3000';
+// const API_URL = 'http://192.168.0.144:3000';
 // const API_URL = 'http://172.20.10.11:3000';
 // const API_URL = 'http://10.0.0.192:3000';
-// const API_URL = 'https://fitness-record-backend.herokuapp.com';
+const API_URL = 'https://fitness-record-backend.herokuapp.com';
 const axiosInstance = axios.create();
 
 // 獲取token
