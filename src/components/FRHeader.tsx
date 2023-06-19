@@ -3,14 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
 import type { Record, SportCategory } from 'types';
-import { useQuery } from 'react-query';
 import { Confirm, Toast } from 'utils/swal';
 import FRHamburgerAnimated from './FRHamburgerAnimated';
 import FRPopoverPanel from './FRPopoverPanel';
 import ToggleSwitch from './ToggleSwitch';
 import FRModal from './FRModal';
 import FRPostFrom from './FRPostFrom';
-import { fetchAllSportCategories, fetchPostRecord } from '../services/apis';
+import { fetchPostRecord } from '../services/apis';
 import Loading from './Loading';
 
 // 設定多個ref的type
@@ -20,6 +19,7 @@ export interface IRef {
 }
 
 type FRHeaderProps = {
+  allSportCategories?: SportCategory[];
   refreshAllRecord?: () => void;
   refreshWeightRank?: () => void;
   refreshWaistlineRank?: () => void;
@@ -27,11 +27,7 @@ type FRHeaderProps = {
 
 const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
   const go = useNavigate();
-  const { refreshAllRecord, refreshWeightRank, refreshWaistlineRank } = props;
-  // 獲取所有運動類別
-  const getAllSportCategories = useQuery('getAllSportCategories', fetchAllSportCategories);
-
-  const [allSportCategories, setAllSportCategories] = React.useState<SportCategory[]>([]);
+  const { allSportCategories, refreshAllRecord, refreshWeightRank, refreshWaistlineRank } = props;
 
   const [openModal, setOpenModal] = React.useState(false);
 
@@ -47,16 +43,6 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
         onSetIsFetching: state.onSetIsFetching,
       };
     }, shallow);
-
-  React.useEffect(() => {
-    if (
-      getAllSportCategories.isSuccess &&
-      !getAllSportCategories.isLoading &&
-      !getAllSportCategories.isError
-    ) {
-      setAllSportCategories(getAllSportCategories.data);
-    }
-  }, [getAllSportCategories]);
 
   // 分別設定div和button的ref
   const divRef = React.useRef<HTMLDivElement>(null);
@@ -588,7 +574,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
         ) : (
           <FRPostFrom
             record={newRecord}
-            sportCategories={allSportCategories}
+            sportCategories={allSportCategories as SportCategory[]}
             currentPage='newPost'
             openModal={openModal}
             onSubmit={atSubmitNewRecord}
