@@ -18,8 +18,8 @@ const FRSlides: React.FC<FRSlidesProps> = (props) => {
     <Swiper
       modules={[Navigation, Pagination, A11y]}
       slidesPerView={1}
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
+      // onSlideChange={() => console.log('slide change')}
+      // onSwiper={(swiper) => console.log(swiper)}
       navigation
       pagination={{ clickable: false }}
     >

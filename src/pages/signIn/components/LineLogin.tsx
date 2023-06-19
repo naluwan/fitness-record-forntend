@@ -48,7 +48,6 @@ const LineLogin = () => {
   // 當options中的code被更新後，將options拿去line token api要token，並更新result的值
   React.useEffect(() => {
     if (getToken) {
-      console.log('options ==> ', options);
       axios
         .post('https://api.line.me/oauth2/v2.1/token', Qs.stringify(options), {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },

@@ -132,8 +132,6 @@ const useRecordStore = create<State>((set) => {
       set({ isFetching: true });
       try {
         const res = await fetchLineLogin(idToken);
-        console.log('store res ==> ', res);
-        console.log('store user ==> ', res.user);
         set({ user: res.user });
         return res;
       } finally {
