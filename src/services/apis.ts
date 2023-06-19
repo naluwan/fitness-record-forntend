@@ -224,3 +224,24 @@ export const fetchAllSportCategories = async (): Promise<SportCategory[]> => {
     return Promise.reject(err);
   }
 };
+
+// post record
+export const fetchPostRecord = async (newRecord: Record): Promise<RecordResponse> => {
+  const formData = new FormData();
+  Object.entries(newRecord).forEach(([key, value]) => {
+    if (key === 'Images' && value) {
+      const files = value as Images[];
+      files.forEach((file) => {
+        const image = file as unknown as File;
+        formData.append(key, image);
+      });
+    }
+    formData.append(key, value as string);
+  });
+  try {
+    const { data } = await axiosInstance.post(`${API_URL}/records`, formData);
+    return data.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
