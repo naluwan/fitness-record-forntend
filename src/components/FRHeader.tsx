@@ -4,12 +4,14 @@ import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
 import type { Record, SportCategory } from 'types';
 import { useQuery } from 'react-query';
+import { Confirm, Toast } from 'utils/swal';
 import FRHamburgerAnimated from './FRHamburgerAnimated';
 import FRPopoverPanel from './FRPopoverPanel';
 import ToggleSwitch from './ToggleSwitch';
 import FRModal from './FRModal';
 import FRPostFrom from './FRPostFrom';
-import { fetchAllSportCategories } from '../services/apis';
+import { fetchAllSportCategories, fetchPostRecord } from '../services/apis';
+import Loading from './Loading';
 
 // 設定多個ref的type
 export interface IRef {
@@ -17,11 +19,34 @@ export interface IRef {
   getButton: () => HTMLButtonElement;
 }
 
-const FRHeader = React.forwardRef<IRef>((props, ref) => {
+type FRHeaderProps = {
+  refreshAllRecord?: () => void;
+  refreshWeightRank?: () => void;
+  refreshWaistlineRank?: () => void;
+};
+
+const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
+  const go = useNavigate();
+  const { refreshAllRecord, refreshWeightRank, refreshWaistlineRank } = props;
   // 獲取所有運動類別
   const getAllSportCategories = useQuery('getAllSportCategories', fetchAllSportCategories);
 
   const [allSportCategories, setAllSportCategories] = React.useState<SportCategory[]>([]);
+
+  const [openModal, setOpenModal] = React.useState(false);
+
+  const { user, isDark, isFetching, onSetIsDark, onSetOpenPanel, onLogout, onSetIsFetching } =
+    useRecordStore((state) => {
+      return {
+        user: state.user,
+        isDark: state.isDark,
+        isFetching: state.isFetching,
+        onSetIsDark: state.onSetIsDark,
+        onSetOpenPanel: state.onSetOpenPanel,
+        onLogout: state.onLogout,
+        onSetIsFetching: state.onSetIsFetching,
+      };
+    }, shallow);
 
   React.useEffect(() => {
     if (
@@ -47,7 +72,7 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
     },
   }));
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // new record
   const [newRecord, setNewRecord] = React.useState<Record>({
     date: new Date().toDateString(),
     weight: 0,
@@ -57,17 +82,79 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
     Images: null,
   });
 
-  const [openModal, setOpenModal] = React.useState(false);
+  // submit new record event
+  const atSubmitNewRecord = React.useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      onSetIsFetching(true);
+      fetchPostRecord(newRecord)
+        .then((res) => {
+          setNewRecord({
+            date: new Date().toDateString(),
+            weight: 0,
+            waistline: 0,
+            description: '',
+            sportCategoryId: 0,
+            Images: null,
+          });
+          Toast.fire({
+            icon: 'success',
+            title: '新增記錄成功',
+          });
+          setOpenModal(false);
+          if (
+            typeof refreshAllRecord === 'function' &&
+            typeof refreshWeightRank === 'function' &&
+            typeof refreshWaistlineRank === 'function'
+          ) {
+            refreshAllRecord();
+            refreshWeightRank();
+            refreshWaistlineRank();
+          }
+        })
+        .catch((err) => {
+          const { message } = err.response.data;
+          Toast.fire({
+            icon: 'error',
+            title: '新增記錄失敗',
+            text: message,
+          });
+        })
+        .finally(() => {
+          onSetIsFetching(false);
+        });
+    },
+    [newRecord, refreshAllRecord, refreshWeightRank, refreshWaistlineRank, onSetIsFetching],
+  );
 
-  const { user, isDark, onSetIsDark, onSetOpenPanel, onLogout } = useRecordStore((state) => {
-    return {
-      user: state.user,
-      isDark: state.isDark,
-      onSetIsDark: state.onSetIsDark,
-      onSetOpenPanel: state.onSetOpenPanel,
-      onLogout: state.onLogout,
-    };
-  }, shallow);
+  // close post new record modal
+  const atCloseNewPostModal = React.useCallback(async () => {
+    // 資料沒更新過就直接關閉
+    if (
+      newRecord.date === new Date().toDateString() &&
+      !newRecord.weight &&
+      !newRecord.waistline &&
+      newRecord.description === '' &&
+      !newRecord.sportCategoryId &&
+      !newRecord.Images
+    ) {
+      setOpenModal(false);
+      return;
+    }
+    // 資料有更新過就詢問是否離開
+    const res = await Confirm('取消新增？', '如果離開，將不會新增你的記錄內容');
+    if (res.isConfirmed) {
+      setOpenModal(false);
+      setNewRecord({
+        date: new Date().toDateString(),
+        weight: 0,
+        waistline: 0,
+        description: '',
+        sportCategoryId: 0,
+        Images: null,
+      });
+    }
+  }, [newRecord]);
 
   // header icon button mouse enter event
   const atIconBtnMouseEnterHandler = React.useCallback((e: React.MouseEvent) => {
@@ -96,8 +183,6 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
       );
     }
   }, []);
-
-  const go = useNavigate();
 
   return (
     <header className='sticky top-0 z-50 border-b-[1px] border-gray-300 bg-white dark:bg-black'>
@@ -490,18 +575,26 @@ const FRHeader = React.forwardRef<IRef>((props, ref) => {
           </div>
         </div>
       </div>
-      <FRModal open={openModal} onClose={() => setOpenModal(false)}>
-        <FRPostFrom
-          record={newRecord}
-          sportCategories={allSportCategories}
-          currentPage='newPost'
-          openModal={openModal}
-          onSubmit={(e) => {
-            e.preventDefault();
-            console.log('newRecord ==> ', newRecord);
-          }}
-          onSetNewRecord={setNewRecord}
-        />
+      <FRModal open={openModal} onClose={() => atCloseNewPostModal()}>
+        {isFetching ? (
+          <div className='flex h-[80%] flex-col items-center justify-center lg:h-[544px]'>
+            <Loading />
+            <div className='relative flex w-[68%] justify-center pt-4 text-start sm:mx-auto sm:max-w-lg sm:rounded-lg sm:px-10 lg:w-[35%]'>
+              <p className='w-[34ch] animate-typing overflow-hidden whitespace-nowrap font-mono text-xl font-semibold text-gray-900 dark:text-white'>
+                記錄上傳中，請稍候...
+              </p>
+            </div>
+          </div>
+        ) : (
+          <FRPostFrom
+            record={newRecord}
+            sportCategories={allSportCategories}
+            currentPage='newPost'
+            openModal={openModal}
+            onSubmit={atSubmitNewRecord}
+            onSetNewRecord={setNewRecord}
+          />
+        )}
       </FRModal>
     </header>
   );
