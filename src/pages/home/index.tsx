@@ -72,7 +72,12 @@ const Home: React.FC = () => {
 
   return (
     <>
-      <FRHeader ref={panelRef} />
+      <FRHeader
+        ref={panelRef}
+        refreshAllRecord={allRecords.refetch}
+        refreshWeightRank={weightRank.refetch}
+        refreshWaistlineRank={waistlineRank.refetch}
+      />
       <FRContainer>
         <div className='flex lg:justify-center'>
           {/* left */}
@@ -96,8 +101,8 @@ const Home: React.FC = () => {
                     date={record.date}
                     postUserAvatar={postUserInfo.avatar}
                     sportCategory={sportCategory.name}
-                    weight={record.weight}
-                    waistline={record.waistline}
+                    weight={record.weight as number}
+                    waistline={record.waistline as number}
                     description={record.description}
                     images={record.Images as Images[]}
                     currentUserId={user ? user.id : null}
