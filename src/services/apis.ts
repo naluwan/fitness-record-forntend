@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import type { Record, SportCategory, User } from 'types';
+import type { Images, Record, SportCategory, User } from 'types';
 
 const JWT_TOKEN = 'JWT_TOKEN';
 // const API_URL = 'http://192.168.0.144:3000';
