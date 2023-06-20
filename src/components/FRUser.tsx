@@ -82,6 +82,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           });
         })
         .catch((err) => {
+          console.log('err data ==> ', err);
           Toast.fire({
             icon: 'error',
             title: '刪除記錄失敗',
