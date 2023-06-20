@@ -18,6 +18,7 @@ import { Images, SportCategory, User } from 'types';
 const Home: React.FC = () => {
   const [weightRankUsers, setWeightRankUsers] = React.useState<User[] | []>([]);
   const [waistlineRankUsers, setWaistlineRankUsers] = React.useState<User[] | []>([]);
+  const [allSportCategories, setAllSportCategories] = React.useState<SportCategory[]>([]);
 
   const { user, records, onSetRecords, onSetOpenPanel } = useRecordStore((state) => {
     return {
@@ -30,18 +31,6 @@ const Home: React.FC = () => {
 
   // 獲取所有運動類別
   const getAllSportCategories = useQuery('getAllSportCategories', fetchAllSportCategories);
-
-  const [allSportCategories, setAllSportCategories] = React.useState<SportCategory[]>([]);
-
-  React.useEffect(() => {
-    if (
-      getAllSportCategories.isSuccess &&
-      !getAllSportCategories.isLoading &&
-      !getAllSportCategories.isError
-    ) {
-      setAllSportCategories(getAllSportCategories.data);
-    }
-  }, [getAllSportCategories]);
 
   const allRecords = useQuery('allRecords', fetchRecords);
 
@@ -61,6 +50,14 @@ const Home: React.FC = () => {
     if (waistlineRank.isSuccess && !waistlineRank.isLoading && !waistlineRank.isError) {
       setWaistlineRankUsers(waistlineRank.data.users);
     }
+
+    if (
+      getAllSportCategories.isSuccess &&
+      !getAllSportCategories.isLoading &&
+      !getAllSportCategories.isError
+    ) {
+      setAllSportCategories(getAllSportCategories.data);
+    }
   }, [
     allRecords,
     onSetRecords,
@@ -68,6 +65,7 @@ const Home: React.FC = () => {
     setWeightRankUsers,
     waistlineRank,
     setWaistlineRankUsers,
+    getAllSportCategories,
   ]);
 
   // popover panel ref

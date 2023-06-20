@@ -31,18 +31,17 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
 
   const [openModal, setOpenModal] = React.useState(false);
 
-  const { user, isDark, isFetching, onSetIsDark, onSetOpenPanel, onLogout, onSetIsFetching } =
-    useRecordStore((state) => {
-      return {
-        user: state.user,
-        isDark: state.isDark,
-        isFetching: state.isFetching,
-        onSetIsDark: state.onSetIsDark,
-        onSetOpenPanel: state.onSetOpenPanel,
-        onLogout: state.onLogout,
-        onSetIsFetching: state.onSetIsFetching,
-      };
-    }, shallow);
+  const [isFetching, setIsFetching] = React.useState(false);
+
+  const { user, isDark, onSetIsDark, onSetOpenPanel, onLogout } = useRecordStore((state) => {
+    return {
+      user: state.user,
+      isDark: state.isDark,
+      onSetIsDark: state.onSetIsDark,
+      onSetOpenPanel: state.onSetOpenPanel,
+      onLogout: state.onLogout,
+    };
+  }, shallow);
 
   // 分別設定div和button的ref
   const divRef = React.useRef<HTMLDivElement>(null);
@@ -72,7 +71,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
   const atSubmitNewRecord = React.useCallback(
     (e: React.FormEvent) => {
       e.preventDefault();
-      onSetIsFetching(true);
+      setIsFetching(true);
       fetchPostRecord(newRecord)
         .then((res) => {
           setNewRecord({
@@ -107,10 +106,10 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
           });
         })
         .finally(() => {
-          onSetIsFetching(false);
+          setIsFetching(false);
         });
     },
-    [newRecord, refreshAllRecord, refreshWeightRank, refreshWaistlineRank, onSetIsFetching],
+    [newRecord, refreshAllRecord, refreshWeightRank, refreshWaistlineRank, setIsFetching],
   );
 
   // close post new record modal
