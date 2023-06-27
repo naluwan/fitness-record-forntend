@@ -1,4 +1,4 @@
-import { useRoutes } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import React from 'react';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
@@ -28,8 +28,13 @@ const App: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const element = useRoutes(routes);
-  return element;
+  // 解決hashBrowser的url有#號的問題
+  const router = createBrowserRouter(routes);
+
+  return <RouterProvider router={router} />;
+
+  // const element = useRoutes(routes);
+  // return element;
 };
 
 export default App;

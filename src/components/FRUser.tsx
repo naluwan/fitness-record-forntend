@@ -5,6 +5,7 @@ import useRecordStore from 'store/useRecordStore';
 import { fetchPutRecord, fetchRecord, RecordResponse } from 'services/apis';
 import { Record } from 'types';
 import { Confirm, Toast } from 'utils/swal';
+import { Link } from 'react-router-dom';
 import FRModal from './FRModal';
 import FRPostFrom from './FRPostFrom';
 
@@ -156,12 +157,9 @@ const FRUser: React.FC<FRUserProps> = (props) => {
     [newRecord, onRefetch, onRefetchRank],
   );
 
-  // TODO: user id
-  console.log('user id ==> ', userId);
-
   return (
     <div className='box-border flex h-[70px] items-center px-4'>
-      <div
+      <Link
         className={`${
           size === 'small' ? 'h-[40px] w-[40px]' : 'h-[60px] w-[60px]'
         } overflow-hidden rounded-full`}
@@ -170,9 +168,12 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           backgroundPosition: 'center',
           backgroundSize: 'cover',
         }}
+        to={`/${userId}`}
       />
       <div className='ml-4'>
-        <p className='text-sm font-bold'>{name}</p>
+        <Link className='text-sm font-bold' to={`/${userId}`}>
+          {name}
+        </Link>
         <p className='text-xs text-gray-400'>{date}</p>
       </div>
       {showMore && (
