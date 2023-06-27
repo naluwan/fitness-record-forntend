@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/fitness_record_frontend/static/css/main.6d44f0a7.css",
-    "main.js": "/fitness_record_frontend/static/js/main.855a3fff.js",
+    "main.js": "/fitness_record_frontend/static/js/main.87e1df0c.js",
     "index.html": "/fitness_record_frontend/index.html",
     "main.6d44f0a7.css.map": "/fitness_record_frontend/static/css/main.6d44f0a7.css.map",
-    "main.855a3fff.js.map": "/fitness_record_frontend/static/js/main.855a3fff.js.map"
+    "main.87e1df0c.js.map": "/fitness_record_frontend/static/js/main.87e1df0c.js.map"
   },
   "entrypoints": [
     "static/css/main.6d44f0a7.css",
-    "static/js/main.855a3fff.js"
+    "static/js/main.87e1df0c.js"
   ]
 }
