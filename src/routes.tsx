@@ -9,7 +9,7 @@ import NotFound from './pages/notFound';
 
 const routes: RouteObject[] = [
   {
-    path: '/fitness_record_frontend',
+    path: '/fitness_record_frontend/',
     element: <Home />,
     children: [],
   },

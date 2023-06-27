@@ -174,7 +174,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
     <header className='sticky top-0 z-50 border-b-[1px] border-gray-300 bg-white dark:bg-black'>
       <div className='box-border flex h-[60px] items-center justify-between px-2 lg:mx-auto lg:max-w-[1024px] lg:px-0'>
         {/* left logo */}
-        <Link className='flex items-center' to='/'>
+        <Link className='flex items-center' to='/fitness_record_frontend/'>
           <div className='mr-4 flex h-[48px] w-[48px] items-center'>
             <img src='images/logo.png' alt='logo' />
           </div>
@@ -186,7 +186,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
             {/* home */}
             <button
               className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
-              onClick={() => go('/')}
+              onClick={() => go('/fitness_record_frontend/')}
               onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
               onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
             >
@@ -209,7 +209,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
             {/* following */}
             <button
               className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
-              onClick={() => go('/following')}
+              onClick={() => go('/fitness_record_frontend/following')}
               onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
               onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
             >
@@ -319,7 +319,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                       className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                       onClick={() => {
                         onSetOpenPanel(false);
-                        go('/signin');
+                        go('/fitness_record_frontend/signin');
                       }}
                     >
                       {/* left icon */}
@@ -355,7 +355,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                       className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                       onClick={() => {
                         onSetOpenPanel(false);
-                        go('/');
+                        go('/fitness_record_frontend/');
                       }}
                     >
                       {/* left icon */}
@@ -389,7 +389,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                       className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                       onClick={() => {
                         onSetOpenPanel(false);
-                        go('/following');
+                        go('/fitness_record_frontend/following');
                       }}
                     >
                       {/* left icon */}
@@ -528,7 +528,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                       className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                       onClick={() => {
                         onLogout();
-                        go('/');
+                        go('/fitness_record_frontend/');
                       }}
                     >
                       {/* left icon */}
