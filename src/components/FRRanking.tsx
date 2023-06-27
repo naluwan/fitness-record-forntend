@@ -52,7 +52,7 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
                       backgroundSize: 'contain',
                       backgroundRepeat: 'no-repeat',
                     }}
-                    to={`/fitness_record_frontend/profile/${id}`}
+                    to={`/profile/${id}`}
                   />
                   <div className='flex grow items-center'>
                     <div className='flex-1'>

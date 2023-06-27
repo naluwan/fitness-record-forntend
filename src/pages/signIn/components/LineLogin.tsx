@@ -77,7 +77,7 @@ const LineLogin = () => {
             title: '登入成功',
             text: `${res.user?.name} 您好`,
           });
-          go('/fitness_record_frontend/');
+          go('/');
         })
         .catch((err) => {
           Toast.fire({

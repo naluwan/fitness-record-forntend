@@ -168,10 +168,10 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           backgroundPosition: 'center',
           backgroundSize: 'cover',
         }}
-        to={`/fitness_record_frontend/profile/${userId}`}
+        to={`/profile/${userId}`}
       />
       <div className='ml-4'>
-        <Link className='text-sm font-bold' to={`/fitness_record_frontend/profile/${userId}`}>
+        <Link className='text-sm font-bold' to={`/profile/${userId}`}>
           {name}
         </Link>
         <p className='text-xs text-gray-400'>{date}</p>
