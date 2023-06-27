@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { User } from 'types';
 import FRUser from './FRUser';
 import Loading from './Loading';
@@ -43,7 +44,7 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
               }
               return (
                 <div className='flex items-center' key={id}>
-                  <div
+                  <Link
                     className='h-[60px] w-[60px] overflow-hidden rounded-full'
                     style={{
                       backgroundImage: `url(${ranking})`,
@@ -51,10 +52,11 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
                       backgroundSize: 'contain',
                       backgroundRepeat: 'no-repeat',
                     }}
+                    to={`/profile/${id}`}
                   />
                   <div className='flex grow items-center'>
                     <div className='flex-1'>
-                      <FRUser name={name} avatar={avatar} />
+                      <FRUser name={name} avatar={avatar} userId={id} />
                     </div>
                     <span className='flex-1'>
                       <p className='text-xs'>
