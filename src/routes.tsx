@@ -9,32 +9,32 @@ import NotFound from './pages/notFound';
 
 const routes: RouteObject[] = [
   {
-    path: '/',
+    path: '/fitness_record_frontend',
     element: <Home />,
     children: [],
   },
   {
-    path: '/following',
+    path: '/fitness_record_frontend/following',
     element: <Following />,
     children: [],
   },
   {
-    path: '/signin/line',
+    path: '/fitness_record_frontend/signin/line',
     element: <LineLogin />,
     children: [],
   },
   {
-    path: '/signin',
+    path: '/fitness_record_frontend/signin',
     element: <SignIn />,
     children: [],
   },
   {
-    path: '/register',
+    path: '/fitness_record_frontend/register',
     element: <Register />,
     children: [],
   },
   {
-    path: '/profile/:userId',
+    path: '/fitness_record_frontend/profile/:userId',
     element: <Profile />,
     children: [],
   },
