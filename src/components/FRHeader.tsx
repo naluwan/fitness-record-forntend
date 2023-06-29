@@ -295,7 +295,13 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                 {user !== null ? (
                   // profile
                   <div className='mb-2'>
-                    <button className='flex w-full items-center rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
+                    <button
+                      className='flex w-full items-center rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+                      onClick={() => {
+                        onSetOpenPanel(false);
+                        go(`/profile/${user.id}`);
+                      }}
+                    >
                       {/* left icon */}
                       <div className='mr-3 h-[40px] w-[40px] overflow-hidden rounded-full'>
                         <img
