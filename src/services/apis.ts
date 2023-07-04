@@ -245,3 +245,19 @@ export const fetchPostRecord = async (newRecord: Record): Promise<RecordResponse
     return Promise.reject(err);
   }
 };
+
+export type UserProfileResponse = {
+  user: User;
+  records: Record[];
+};
+
+export const fetchGetUser = async (
+  userId: string | string[] | undefined,
+): Promise<UserProfileResponse> => {
+  try {
+    const { data } = await axios.get(`${API_URL}/getUser/${userId}`);
+    return data.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
