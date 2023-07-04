@@ -567,7 +567,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
           </div>
         </div>
       </div>
-      <FRModal open={openModal} onClose={() => atCloseNewPostModal()}>
+      <FRModal open={openModal} currentPage='post' onClose={() => atCloseNewPostModal()}>
         {isFetching ? (
           <div className='flex h-[80%] flex-col items-center justify-center lg:h-[544px]'>
             <Loading />
