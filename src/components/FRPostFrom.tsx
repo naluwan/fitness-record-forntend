@@ -140,7 +140,7 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
   return (
     <div className='lg:flex lg:items-stretch lg:justify-between'>
       {/* 預覽圖片 */}
-      <div className='w-full py-4 lg:w-[600px] lg:py-0 lg:pr-6'>
+      <div className='w-full py-4 lg:min-w-[600px] lg:py-0 lg:pr-6'>
         {record.Images !== null && record.Images.length > 0 ? (
           <FRSlides images={record.Images as Images[]} currentPage={currentPage} />
         ) : (
