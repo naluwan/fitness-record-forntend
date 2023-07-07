@@ -22,6 +22,7 @@ type FRUserProps = {
   target?: boolean;
   onRefetch?: () => void;
   onRefetchRank?: () => void;
+  onCloseModal?: () => void;
 };
 
 const FRUser: React.FC<FRUserProps> = (props) => {
@@ -38,6 +39,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
     showMore = false,
     onRefetch,
     onRefetchRank,
+    onCloseModal,
   } = props;
 
   const [openPanel, setOpenPanel] = React.useState(false);
@@ -73,6 +75,10 @@ const FRUser: React.FC<FRUserProps> = (props) => {
     (id: number) => {
       onDeleteRecord(id)
         .then(() => {
+          setOpenPanel(false);
+          if (typeof onCloseModal === 'function') {
+            onCloseModal();
+          }
           if (typeof onRefetch === 'function') {
             onRefetch();
           }
@@ -92,7 +98,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           });
         });
     },
-    [onRefetch, onDeleteRecord, onRefetchRank],
+    [onRefetch, onDeleteRecord, onRefetchRank, onCloseModal],
   );
 
   // 顯示編輯紀錄modal和獲取該筆記錄資料
@@ -135,6 +141,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
       fetchPutRecord(newRecord as Record)
         .then((res) => {
           setEditing(false);
+          setOpenPanel(false);
           if (typeof onRefetch === 'function') {
             onRefetch();
           }
