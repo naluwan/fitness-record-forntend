@@ -5,7 +5,12 @@ import FRHeader, { IRef } from 'components/FRHeader';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
 import FRProfilePosts from 'pages/profile/componsnts/FRProfilePosts';
-import { fetchGetUser, UserProfileResponse } from 'services/apis';
+import {
+  fetchGetUser,
+  fetchWaistlineRankUsers,
+  fetchWeightRankUsers,
+  UserProfileResponse,
+} from 'services/apis';
 import { useQuery } from 'react-query';
 import Loading from 'components/Loading';
 import FRUser from 'components/FRUser';
@@ -44,8 +49,9 @@ const Profile: React.FC = () => {
   }, [selectedRecord]);
 
   // fetch user info
-  const { data, isError, isLoading, isFetching, isSuccess } = useQuery(['getUser', userId], () =>
-    fetchGetUser(userId),
+  const { data, isError, isLoading, isFetching, isSuccess, refetch } = useQuery(
+    ['getUser', userId],
+    () => fetchGetUser(userId),
   );
 
   // set user info
@@ -68,6 +74,16 @@ const Profile: React.FC = () => {
       onSetOpenPanel(false);
     }
   });
+
+  const weightRank = useQuery('weightRank', fetchWeightRankUsers);
+
+  const waistlineRank = useQuery('waistlineRank', fetchWaistlineRankUsers);
+
+  // 重新獲取rank資料 function
+  const atRefetchRankInfo = React.useCallback(() => {
+    weightRank.refetch();
+    waistlineRank.refetch();
+  }, [weightRank, waistlineRank]);
 
   return (
     <>
