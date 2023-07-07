@@ -11,6 +11,7 @@ import Loading from 'components/Loading';
 import FRUser from 'components/FRUser';
 import FRModal from 'components/FRModal';
 import type { Images, Record } from 'types';
+import FRComment from 'components/FRComment';
 
 const Profile: React.FC = () => {
   const { userId } = useParams();
@@ -126,9 +127,9 @@ const Profile: React.FC = () => {
                 className='h-full w-full'
               />
             </div>
-            <div className='col-span-2'>
-              <div className='flex items-center'>
-                <div className='flex-1'>
+            <div className='col-span-2 h-full max-h-[500px]'>
+              <div className='flex h-full flex-col'>
+                <div>
                   <FRUser
                     size='small'
                     userId={userInfo.user.id}
@@ -137,9 +138,19 @@ const Profile: React.FC = () => {
                     avatar={userInfo.user.avatar}
                     target
                     showMore={user?.id === selectedRecord?.userId}
+                    onRefetch={refetch}
+                    onRefetchRank={atRefetchRankInfo}
+                    onCloseModal={() => setOpenModal(false)}
                   />
                 </div>
-                <div className='pr-5' />
+                <div className='no-scrollbar flex items-start overflow-auto'>
+                  <FRComment
+                    sportCategory={selectedRecord?.SportCategory?.name as string}
+                    weight={selectedRecord?.weight as number}
+                    waistline={selectedRecord?.waistline as number}
+                    description={selectedRecord?.description as string}
+                  />
+                </div>
               </div>
             </div>
           </div>
