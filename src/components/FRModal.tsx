@@ -12,6 +12,11 @@ type FRModalProps = {
 const FRModal: React.FC<FRModalProps> = (props) => {
   const { open, onClose, target, currentPage, children } = props;
 
+  const setModalStyle =
+    currentPage === 'FRUser'
+      ? 'h-auto lg:w-[40%] bg-[#1c1c1c]'
+      : 'lg:w-[924px] bg-white dark:bg-[#1c1c1c]';
+
   return target ? (
     ReactDOM.createPortal(
       // backdrop
@@ -43,11 +48,10 @@ const FRModal: React.FC<FRModalProps> = (props) => {
         </button>
         {/* modal */}
         <div
-          className={`mt-[70px] h-[80%] w-full cursor-default overflow-auto rounded-lg  transition-all duration-500 lg:h-auto ${
-            open ? 'scale-100 opacity-100' : 'scale-125  opacity-0'
+          className={`no-scrollbar mt-[70px] h-[80%] w-full cursor-default overflow-auto rounded-lg transition-all duration-500 lg:h-auto  ${
+            open ? `scale-100 opacity-100 ${setModalStyle}` : 'scale-125 opacity-0 lg:w-0'
           } ${(currentPage === 'edit' || currentPage === 'post') && 'p-6'}
-        ${currentPage === 'FRUser' ? 'h-auto lg:w-[40%]' : 'lg:w-[924px]'}
-        ${currentPage === 'FRUser' ? 'bg-[#1c1c1c]' : 'bg-white dark:bg-black'}
+
         `}
           onClick={(e) => e.stopPropagation()}
           role='contentinfo'
@@ -86,8 +90,8 @@ const FRModal: React.FC<FRModalProps> = (props) => {
       </button>
       {/* modal */}
       <div
-        className={`mt-[70px] h-[80%] w-full cursor-default overflow-auto rounded-lg  transition-all duration-500 lg:h-auto  ${
-          open ? 'scale-100 opacity-100' : 'scale-125  opacity-0'
+        className={`mt-[70px] h-[80%] w-full cursor-default overflow-auto rounded-lg  transition-all duration-500 lg:h-auto ${
+          open ? 'scale-100 opacity-100' : 'scale-125 opacity-0'
         } ${(currentPage === 'edit' || currentPage === 'post') && 'p-6'}
         ${currentPage === 'FRUser' ? 'h-auto lg:w-[40%]' : 'lg:w-[924px]'}
         ${currentPage === 'FRUser' ? 'bg-[#1c1c1c]' : 'bg-white dark:bg-black'}
