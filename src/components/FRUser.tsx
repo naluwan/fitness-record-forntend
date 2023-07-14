@@ -138,31 +138,37 @@ const FRUser: React.FC<FRUserProps> = (props) => {
   const atSubmitEditRecord = React.useCallback(
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      fetchPutRecord(newRecord as Record)
-        .then((res) => {
-          setEditing(false);
-          setOpenPanel(false);
-          if (typeof onRefetch === 'function') {
-            onRefetch();
-          }
-          if (typeof onRefetchRank === 'function') {
-            onRefetchRank();
-          }
-          setNewRecord(null);
-          Toast.fire({
-            icon: 'success',
-            title: '更新記錄成功',
+      const beforeEdit = JSON.stringify(editRecord?.record);
+      const afterEdit = JSON.stringify(newRecord);
+      if (beforeEdit === afterEdit) {
+        setEditing(false);
+      } else {
+        fetchPutRecord(newRecord as Record)
+          .then((res) => {
+            setEditing(false);
+            setOpenPanel(false);
+            if (typeof onRefetch === 'function') {
+              onRefetch();
+            }
+            if (typeof onRefetchRank === 'function') {
+              onRefetchRank();
+            }
+            setNewRecord(null);
+            Toast.fire({
+              icon: 'success',
+              title: '更新記錄成功',
+            });
+          })
+          .catch((err) => {
+            Toast.fire({
+              icon: 'error',
+              title: '更新記錄失敗',
+              text: err.response.data.message,
+            });
           });
-        })
-        .catch((err) => {
-          Toast.fire({
-            icon: 'error',
-            title: '更新記錄失敗',
-            text: err.response.data.message,
-          });
-        });
+      }
     },
-    [newRecord, onRefetch, onRefetchRank],
+    [newRecord, onRefetch, onRefetchRank, editRecord],
   );
 
   return (
