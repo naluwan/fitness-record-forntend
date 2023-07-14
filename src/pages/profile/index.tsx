@@ -6,6 +6,7 @@ import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
 import FRProfilePosts from 'pages/profile/componsnts/FRProfilePosts';
 import {
+  fetchAllSportCategories,
   fetchGetUser,
   fetchWaistlineRankUsers,
   fetchWeightRankUsers,
@@ -15,7 +16,7 @@ import { useQuery } from 'react-query';
 import Loading from 'components/Loading';
 import FRUser from 'components/FRUser';
 import FRModal from 'components/FRModal';
-import type { Images, Record } from 'types';
+import type { Images, Record, SportCategory } from 'types';
 import FRComment from 'components/FRComment';
 
 const Profile: React.FC = () => {
@@ -41,6 +42,18 @@ const Profile: React.FC = () => {
     records: [],
   });
 
+  const [allSportCategories, setAllSportCategories] = React.useState<SportCategory[]>([]);
+
+  React.useEffect(() => {
+    if (selectedRecord !== null) {
+      userInfo.records.forEach((record) => {
+        if (record.id === selectedRecord.id) {
+          setSelectedRecord(record);
+        }
+      });
+    }
+  }, [userInfo.records, selectedRecord]);
+
   // set images of selected record
   React.useEffect(() => {
     if (selectedRecord !== null) {
@@ -48,18 +61,28 @@ const Profile: React.FC = () => {
     }
   }, [selectedRecord]);
 
+  const getAllSportCategories = useQuery('getAllSportCategories', fetchAllSportCategories);
+
   // fetch user info
   const { data, isError, isLoading, isFetching, isSuccess, refetch } = useQuery(
     ['getUser', userId],
     () => fetchGetUser(userId),
   );
 
-  // set user info
+  // set user info & set all sport categories
   React.useEffect(() => {
     if (isSuccess && !isError && !isFetching && !isLoading) {
       setUserInfo(data);
     }
-  }, [isSuccess, isError, isFetching, isLoading, data]);
+
+    if (
+      getAllSportCategories.isSuccess &&
+      !getAllSportCategories.isLoading &&
+      !getAllSportCategories.isError
+    ) {
+      setAllSportCategories(getAllSportCategories.data);
+    }
+  }, [isSuccess, isError, isFetching, isLoading, data, getAllSportCategories]);
 
   // popover panel ref
   const panelRef = React.useRef<IRef>(null);
@@ -87,7 +110,7 @@ const Profile: React.FC = () => {
 
   return (
     <>
-      <FRHeader ref={panelRef} />
+      <FRHeader ref={panelRef} allSportCategories={allSportCategories} />
       <FRContainer>
         <div className='box-border flex h-[180px] items-center px-4'>
           {isLoading ? (
