@@ -158,17 +158,31 @@ const Profile: React.FC = () => {
         </div>
 
         <FRModal open={openModal} currentPage='profilePost' onClose={() => setOpenModal(false)}>
-          <div className='grid grid-cols-5'>
-            <div className='col-span-3'>
+          <div className='flex flex-col lg:grid lg:grid-cols-5'>
+            <div className='sticky top-0 bg-white dark:bg-black lg:hidden'>
+              <FRUser
+                size='small'
+                userId={userInfo.user.id}
+                recordId={selectedRecord?.id}
+                name={userInfo.user.name}
+                avatar={userInfo.user.avatar}
+                target
+                showMore={user?.id === selectedRecord?.userId}
+                onRefetch={refetch}
+                onRefetchRank={atRefetchRankInfo}
+                onCloseModal={() => setOpenModal(false)}
+              />
+            </div>
+            <div className='w-full lg:col-span-3'>
               <img
                 src={selectedRecord && recordImages?.length ? recordImages[0]?.url : ''}
                 alt=''
                 className='h-full w-full'
               />
             </div>
-            <div className='col-span-2 h-full max-h-[500px]'>
-              <div className='flex h-full flex-col'>
-                <div>
+            <div className='lg:col-span-2 lg:h-full lg:max-h-[500px]'>
+              <div className='flex flex-col lg:h-full'>
+                <div className='hidden lg:block'>
                   <FRUser
                     size='small'
                     userId={userInfo.user.id}
