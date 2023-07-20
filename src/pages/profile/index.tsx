@@ -18,6 +18,7 @@ import FRUser from 'components/FRUser';
 import FRModal from 'components/FRModal';
 import type { Images, Record, SportCategory } from 'types';
 import FRComment from 'components/FRComment';
+import FRSlides from 'components/FRSlides';
 
 const Profile: React.FC = () => {
   const { userId } = useParams();
@@ -173,11 +174,10 @@ const Profile: React.FC = () => {
                 onCloseModal={() => setOpenModal(false)}
               />
             </div>
-            <div className='w-full lg:col-span-3'>
-              <img
-                src={selectedRecord && recordImages?.length ? recordImages[0]?.url : ''}
-                alt=''
-                className='h-full w-full'
+            <div className='aspect-1 h-full w-full lg:col-span-3'>
+              <FRSlides
+                images={selectedRecord && recordImages?.length ? (recordImages as Images[]) : []}
+                currentPage='profilePost'
               />
             </div>
             <div className='lg:col-span-2 lg:h-full lg:max-h-[500px]'>
