@@ -17,7 +17,7 @@ const FRModal: React.FC<FRModalProps> = (props) => {
       ? 'h-auto lg:w-[40%] bg-[#1c1c1c]'
       : 'lg:w-[924px] bg-white dark:bg-[#1c1c1c]';
 
-  const setModalHeight = currentPage === 'profilePost' ? 'h-auto max-h-[80%]' : 'h-[80%]';
+  // const setModalHeight = currentPage === 'profilePost' ? 'h-auto max-h-[80%]' : 'h-[80%]';
 
   return target ? (
     ReactDOM.createPortal(
@@ -50,7 +50,7 @@ const FRModal: React.FC<FRModalProps> = (props) => {
         </button>
         {/* modal */}
         <div
-          className={`no-scrollbar mt-[70px] h-[80%] w-full cursor-default overflow-auto rounded-lg transition-all duration-500 lg:h-auto  ${
+          className={`no-scrollbar h-[80%] w-full cursor-default overflow-auto rounded-lg transition-all duration-500 lg:h-auto ${
             open ? `scale-100 opacity-100 ${setModalStyle}` : 'scale-125 opacity-0 lg:w-0'
           } ${(currentPage === 'edit' || currentPage === 'post') && 'p-6'}
 
@@ -92,7 +92,7 @@ const FRModal: React.FC<FRModalProps> = (props) => {
       </button>
       {/* modal */}
       <div
-        className={`mt-[70px] ${setModalHeight} w-full cursor-default overflow-auto rounded-lg  transition-all duration-500 lg:h-auto ${
+        className={`no-scrollbar h-[80%] w-full cursor-default overflow-auto rounded-lg  transition-all duration-500 lg:h-auto lg:max-h-[80%] ${
           open ? 'scale-100 opacity-100' : 'scale-125 opacity-0'
         } ${(currentPage === 'edit' || currentPage === 'post') && 'p-6'}
         ${currentPage === 'FRUser' ? 'h-auto lg:w-[40%]' : 'lg:w-[924px]'}
