@@ -111,7 +111,13 @@ const Profile: React.FC = () => {
 
   return (
     <>
-      <FRHeader ref={panelRef} allSportCategories={allSportCategories} />
+      <FRHeader
+        ref={panelRef}
+        allSportCategories={allSportCategories}
+        refreshAllRecord={refetch}
+        refreshWaistlineRank={waistlineRank.refetch}
+        refreshWeightRank={weightRank.refetch}
+      />
       <FRContainer>
         <div className='box-border flex h-[180px] items-center px-4'>
           {isLoading ? (
