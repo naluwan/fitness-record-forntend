@@ -88,7 +88,7 @@ const SignIn: React.FC = () => {
     <>
       <FRHeader ref={panelRef} />
       <FRContainer>
-        <div className='flex min-h-screen flex-col justify-center overflow-hidden bg-white py-6 dark:bg-black sm:py-12'>
+        <div className='flex h-full w-full flex-col justify-center overflow-hidden bg-white py-6 dark:bg-black sm:py-20'>
           <div className='mx-auto w-full max-w-md bg-white px-6 pb-8 pt-10 shadow-xl ring-1 ring-gray-900/5 sm:rounded-xl sm:px-10'>
             <div className='w-full'>
               <div className='text-center'>
