@@ -4,7 +4,7 @@ import type { Images, Record, SportCategory, User } from 'types';
 
 const JWT_TOKEN = 'JWT_TOKEN';
 const API_URL = 'http://192.168.0.144:3000';
-// const API_URL = 'http://172.20.10.11:3000';
+// const API_URL = 'http://192.168.0.20:3000';
 // const API_URL = 'http://10.0.0.192:3000';
 // const API_URL = 'https://fitness-record-backend.herokuapp.com';
 const axiosInstance = axios.create();
@@ -42,18 +42,31 @@ export const verifyToken = async (token: string): Promise<LoginResponseType> => 
   }
 };
 
+type Pagination = {
+  currentPage: number;
+  hasNextPage: boolean;
+  hasPrevPage: boolean;
+  page: number[];
+  totalPage: number;
+};
+
 type RecordsResponse = {
   records: Record[];
   sportCategories: SportCategory[];
   sportCategoryId: string;
   userId: string;
+  pagination: Pagination;
 };
 
 // get records
 export const fetchRecords = async (): Promise<RecordsResponse> => {
   try {
     const { data } = await axios.get(`${API_URL}/records`);
-    return data.data;
+    const newData = {
+      ...data.data,
+      records: data.data.records.rows,
+    };
+    return newData;
   } catch (err) {
     return Promise.reject(err);
   }
