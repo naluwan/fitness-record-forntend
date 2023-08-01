@@ -1,7 +1,7 @@
 import React from 'react';
 import FRHeader, { IRef } from 'components/FRHeader';
 import FRContainer from 'components/FRContainer';
-import { useQuery } from 'react-query';
+import { useQuery, useInfiniteQuery } from 'react-query';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
 import {
@@ -20,10 +20,9 @@ const Home: React.FC = () => {
   const [waistlineRankUsers, setWaistlineRankUsers] = React.useState<User[] | []>([]);
   const [allSportCategories, setAllSportCategories] = React.useState<SportCategory[]>([]);
 
-  const { user, records, onSetRecords, onSetOpenPanel } = useRecordStore((state) => {
+  const { user, onSetRecords, onSetOpenPanel } = useRecordStore((state) => {
     return {
       user: state.user,
-      records: state.records,
       onSetRecords: state.onSetRecords,
       onSetOpenPanel: state.onSetOpenPanel,
     };
@@ -32,17 +31,41 @@ const Home: React.FC = () => {
   // 獲取所有運動類別
   const getAllSportCategories = useQuery('getAllSportCategories', fetchAllSportCategories);
 
-  const allRecords = useQuery('allRecords', fetchRecords);
+  // 使用react-query useInfiniteQuery來實現無限下拉載入資料的方式
+  const allRecords = useInfiniteQuery(
+    'allRecords',
+    ({ pageParam = 1 }, limit = 5) => fetchRecords(pageParam, limit),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.length ? allPages.length + 1 : undefined;
+      },
+    },
+  );
+
+  // 新增Intersection Observer(交叉觀察者)
+  const intObserver = React.useRef<IntersectionObserver>();
+  const lastPostRef = React.useCallback(
+    (lastRecordElement: HTMLElement) => {
+      if (allRecords.isFetchingNextPage) return;
+      if (intObserver.current) intObserver.current.disconnect();
+
+      intObserver.current = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
+        if (entries[0].isIntersecting && allRecords.hasNextPage) {
+          console.log('載入更多資料');
+          allRecords.fetchNextPage();
+        }
+      });
+
+      if (lastRecordElement) intObserver.current.observe(lastRecordElement);
+    },
+    [allRecords],
+  );
 
   const weightRank = useQuery('weightRank', fetchWeightRankUsers);
 
   const waistlineRank = useQuery('waistlineRank', fetchWaistlineRankUsers);
 
   React.useEffect(() => {
-    if (allRecords.isSuccess && !allRecords.isLoading && !allRecords.isError) {
-      onSetRecords(allRecords.data.records);
-    }
-
     if (weightRank.isSuccess && !weightRank.isLoading && !weightRank.isError) {
       setWeightRankUsers(weightRank.data.users);
     }
@@ -88,6 +111,51 @@ const Home: React.FC = () => {
     waistlineRank.refetch();
   }, [weightRank, waistlineRank]);
 
+  const content = allRecords.data?.pages.map((pg) => {
+    return pg.map((record, i) => {
+      // 如果record是最後一筆，就加上lastPostRef，讓最後一筆記錄加上交叉觀察者以便載入後面資料
+      if (pg.length === i + 1) {
+        return (
+          <FRPost
+            ref={lastPostRef}
+            key={record.id}
+            postUserId={record.User?.id as number}
+            postRecordId={record.id as number}
+            postUserName={record.User?.name as string}
+            date={record.date}
+            postUserAvatar={record.User?.avatar as string}
+            sportCategory={record.SportCategory?.name as string}
+            weight={record.weight as number}
+            waistline={record.waistline as number}
+            description={record.description}
+            images={record.Images as Images[]}
+            currentUserId={user ? user.id : null}
+            onRefetch={allRecords.refetch}
+            onRefetchRank={atRefetchRankInfo}
+          />
+        );
+      }
+      return (
+        <FRPost
+          key={record.id}
+          postUserId={record.User?.id as number}
+          postRecordId={record.id as number}
+          postUserName={record.User?.name as string}
+          date={record.date}
+          postUserAvatar={record.User?.avatar as string}
+          sportCategory={record.SportCategory?.name as string}
+          weight={record.weight as number}
+          waistline={record.waistline as number}
+          description={record.description}
+          images={record.Images as Images[]}
+          currentUserId={user ? user.id : null}
+          onRefetch={allRecords.refetch}
+          onRefetchRank={atRefetchRankInfo}
+        />
+      );
+    });
+  });
+
   return (
     <>
       <FRHeader
@@ -101,36 +169,13 @@ const Home: React.FC = () => {
         <div className='flex lg:justify-center'>
           {/* left */}
           <div className='w-full lg:w-[600px]'>
-            {allRecords.isLoading ? (
+            {content}
+            {allRecords.isLoading && (
               <div className='mt-20 flex w-full justify-center'>
                 <Loading />
               </div>
-            ) : (
-              records.length > 0 &&
-              records.map((record) => {
-                const postUserInfo = record.User as User;
-                const sportCategory = record.SportCategory as SportCategory;
-
-                return (
-                  <FRPost
-                    key={record.id}
-                    postUserId={postUserInfo.id}
-                    postRecordId={record.id as number}
-                    postUserName={postUserInfo.name}
-                    date={record.date}
-                    postUserAvatar={postUserInfo.avatar}
-                    sportCategory={sportCategory.name}
-                    weight={record.weight as number}
-                    waistline={record.waistline as number}
-                    description={record.description}
-                    images={record.Images as Images[]}
-                    currentUserId={user ? user.id : null}
-                    onRefetch={allRecords.refetch}
-                    onRefetchRank={atRefetchRankInfo}
-                  />
-                );
-              })
             )}
+            <h1>沒有更多紀錄了！！！</h1>
           </div>
           {/* right */}
           <div className='hidden lg:block lg:w-[424px]'>

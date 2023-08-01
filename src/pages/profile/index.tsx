@@ -8,11 +8,12 @@ import FRProfilePosts from 'pages/profile/componsnts/FRProfilePosts';
 import {
   fetchAllSportCategories,
   fetchGetUser,
+  fetchRecords,
   fetchWaistlineRankUsers,
   fetchWeightRankUsers,
   UserProfileResponse,
 } from 'services/apis';
-import { useQuery } from 'react-query';
+import { useQuery, useInfiniteQuery } from 'react-query';
 import Loading from 'components/Loading';
 import FRUser from 'components/FRUser';
 import FRModal from 'components/FRModal';
@@ -69,6 +70,74 @@ const Profile: React.FC = () => {
     ['getUser', userId],
     () => fetchGetUser(userId),
   );
+
+  // 使用react-query useInfiniteQuery來實現無限下拉載入資料的方式
+  const allRecords = useInfiniteQuery(
+    'allRecords',
+    ({ pageParam = 1 }, limit = 9, id = Number(userId)) => fetchRecords(pageParam, limit, id),
+    {
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.length ? allPages.length + 1 : undefined;
+      },
+      structuralSharing: true,
+    },
+  );
+
+  // 新增Intersection Observer(交叉觀察者)
+  const intObserver = React.useRef<IntersectionObserver>();
+  const lastPostRef = React.useCallback(
+    (lastRecordElement: HTMLElement) => {
+      if (allRecords.isFetchingNextPage) return;
+      if (intObserver.current) intObserver.current.disconnect();
+
+      intObserver.current = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
+        if (entries[0].isIntersecting && allRecords.hasNextPage) {
+          console.log('載入更多資料');
+          allRecords.fetchNextPage();
+        }
+      });
+
+      if (lastRecordElement) intObserver.current.observe(lastRecordElement);
+    },
+    [allRecords],
+  );
+
+  const content = allRecords.data?.pages.map((pg, i) => {
+    return (
+      <div
+        className='grid grid-cols-3 gap-1'
+        key={
+          allRecords.data.pageParams[i] === undefined
+            ? 1
+            : (allRecords.data.pageParams[i] as number)
+        }
+      >
+        {pg.map((record, j) => {
+          if (pg.length === j + 1) {
+            return (
+              <FRProfilePosts
+                key={record.id}
+                ref={lastPostRef}
+                record={record}
+                images={record.Images as Images[]}
+                onSetOpenModal={setOpenModal}
+                onSetSelectedRecord={setSelectedRecord}
+              />
+            );
+          }
+          return (
+            <FRProfilePosts
+              key={record.id}
+              record={record}
+              images={record.Images as Images[]}
+              onSetOpenModal={setOpenModal}
+              onSetSelectedRecord={setSelectedRecord}
+            />
+          );
+        })}
+      </div>
+    );
+  });
 
   // set user info & set all sport categories
   React.useEffect(() => {
@@ -153,18 +222,15 @@ const Profile: React.FC = () => {
         </div>
 
         <div className='mx-0 box-border border-t-2 border-t-gray-800 pt-2 lg:mx-4'>
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <FRProfilePosts
-              records={userInfo?.records}
-              onSetOpenModal={setOpenModal}
-              onSetSelectedRecord={setSelectedRecord}
-            />
-          )}
+          {allRecords.isFetching ? <Loading /> : content}
         </div>
 
-        <FRModal open={openModal} currentPage='profilePost' onClose={() => setOpenModal(false)}>
+        <FRModal
+          key={selectedRecord?.id}
+          open={openModal}
+          currentPage='profilePost'
+          onClose={() => setOpenModal(false)}
+        >
           <div className='flex flex-col lg:grid lg:grid-cols-5'>
             <div className='sticky top-0 bg-white dark:bg-black lg:hidden'>
               <FRUser
