@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import React from 'react';
 import { Images } from 'types';
 import FRComment from './FRComment';
@@ -20,7 +21,7 @@ type FRPostProps = {
   onRefetchRank: () => void;
 };
 
-const FRPost: React.FC<FRPostProps> = (props) => {
+const FRPost = React.forwardRef<HTMLElement, FRPostProps>((props, ref) => {
   const {
     postUserName,
     date,
@@ -37,7 +38,7 @@ const FRPost: React.FC<FRPostProps> = (props) => {
     onRefetchRank,
   } = props;
 
-  return (
+  const postBody = (
     <div className='pb-4 shadow-xl dark:shadow-gray-400/40 lg:my-8'>
       <FRUser
         name={postUserName}
@@ -58,6 +59,10 @@ const FRPost: React.FC<FRPostProps> = (props) => {
       />
     </div>
   );
-};
+
+  const content = ref ? <article ref={ref}>{postBody}</article> : <article>{postBody}</article>;
+
+  return content;
+});
 
 export default React.memo(FRPost);
