@@ -4,7 +4,7 @@ import FRContainer from 'components/FRContainer';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
 
-const Following: React.FC = () => {
+const Ranking: React.FC = () => {
   const { onSetOpenPanel } = useRecordStore((state) => {
     return {
       onSetOpenPanel: state.onSetOpenPanel,
@@ -28,10 +28,10 @@ const Following: React.FC = () => {
     <>
       <FRHeader ref={panelRef} />
       <FRContainer>
-        <div>following</div>
+        <div>ranking</div>
       </FRContainer>
     </>
   );
 };
 
-export default Following;
+export default Ranking;

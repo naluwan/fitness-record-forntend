@@ -3,7 +3,7 @@ import SignIn from 'pages/signIn';
 import Register from 'pages/register';
 import LineLogin from 'pages/signIn/components/LineLogin';
 import Profile from 'pages/profile';
-import Following from './pages/following';
+import Ranking from './pages/ranking';
 import Home from './pages/home';
 import NotFound from './pages/notFound';
 
@@ -14,8 +14,8 @@ const routes: RouteObject[] = [
     children: [],
   },
   {
-    path: '/following',
-    element: <Following />,
+    path: '/ranking',
+    element: <Ranking />,
     children: [],
   },
   {
