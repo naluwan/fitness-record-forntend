@@ -20,6 +20,7 @@ const FRSlides: React.FC<FRSlidesProps> = (props) => {
       slidesPerView={1}
       navigation
       pagination={{ clickable: false }}
+      initialSlide={0}
     >
       {currentPage === 'edit' || currentPage === 'post' || currentPage === 'profilePost'
         ? images.map((image) => {
