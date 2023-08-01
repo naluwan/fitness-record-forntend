@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { User } from 'types';
 import FRUser from './FRUser';
 import Loading from './Loading';
@@ -8,10 +7,13 @@ type FRRankingProps = {
   users: User[];
   title: '減重' | '腰瘦';
   isLoading: boolean;
+  limit: number;
 };
 
 const FRRanking: React.FC<FRRankingProps> = (props) => {
-  const { users, title, isLoading } = props;
+  const { users, title, limit, isLoading } = props;
+
+  const currentUsers = limit === 0 ? users : users.slice(0, limit);
 
   return (
     <div className='ml-8 mt-8 box-border p-2 shadow-xl dark:shadow-gray-400/40'>
@@ -22,8 +24,8 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
         </div>
       ) : (
         <div>
-          {users.length > 0 &&
-            users.map((user, idx) => {
+          {currentUsers.length > 0 &&
+            currentUsers.map((user, idx) => {
               const { id, name, avatar, nowWeight, nowWaistline, weightDiff, waistlineDiff } = user;
               let currentClass;
               if (title === '減重') {
@@ -31,7 +33,7 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
               } else if (title === '腰瘦') {
                 currentClass = (waistlineDiff as number) > 0 ? 'text-red-500' : 'text-green-500';
               }
-              let ranking = '';
+              let ranking: number | string = '';
               switch (idx) {
                 case 0:
                   ranking = 'https://i.imgur.com/PltVgVY.png';
@@ -39,21 +41,25 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
                 case 1:
                   ranking = 'https://i.imgur.com/tDlT93s.png';
                   break;
-                default:
+                case 2:
                   ranking = 'https://i.imgur.com/36VoOCY.png';
+                  break;
+                default:
+                  ranking = idx + 1;
               }
               return (
                 <div className='flex items-center' key={id}>
-                  <Link
-                    className='h-[60px] w-[60px] overflow-hidden rounded-full'
-                    style={{
-                      backgroundImage: `url(${ranking})`,
-                      backgroundPosition: 'center',
-                      backgroundSize: 'contain',
-                      backgroundRepeat: 'no-repeat',
-                    }}
-                    to={`/profile/${id}`}
-                  />
+                  {typeof ranking === 'string' ? (
+                    <img
+                      src={ranking}
+                      alt='ranking img'
+                      className='lazy h-[60px] w-[60px] overflow-hidden rounded-full object-contain'
+                    />
+                  ) : (
+                    <div className='flex h-[60px] w-[60px] items-center justify-center'>
+                      <h1 className='text-2xl font-bold'>{ranking}</h1>
+                    </div>
+                  )}
                   <div className='flex grow items-center'>
                     <div className='flex-1'>
                       <FRUser name={name} avatar={avatar} userId={id} />

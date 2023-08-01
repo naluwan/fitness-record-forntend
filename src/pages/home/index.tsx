@@ -183,12 +183,14 @@ const Home: React.FC = () => {
               title='減重'
               users={weightRankUsers as User[]}
               isLoading={weightRank.isLoading}
+              limit={3}
             />
 
             <FRRanking
               title='腰瘦'
               users={waistlineRankUsers as User[]}
               isLoading={waistlineRank.isLoading}
+              limit={3}
             />
           </div>
         </div>
