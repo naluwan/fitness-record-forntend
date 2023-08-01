@@ -42,31 +42,23 @@ export const verifyToken = async (token: string): Promise<LoginResponseType> => 
   }
 };
 
-type Pagination = {
-  currentPage: number;
-  hasNextPage: boolean;
-  hasPrevPage: boolean;
-  page: number[];
-  totalPage: number;
-};
-
 type RecordsResponse = {
   records: Record[];
-  sportCategories: SportCategory[];
-  sportCategoryId: string;
-  userId: string;
-  pagination: Pagination;
 };
 
 // get records
-export const fetchRecords = async (): Promise<RecordsResponse> => {
+export const fetchRecords = async (
+  pageParam = 1,
+  limit = 5,
+  userId: number | null = null,
+  options = {},
+) => {
   try {
-    const { data } = await axios.get(`${API_URL}/records`);
-    const newData = {
-      ...data.data,
-      records: data.data.records.rows,
-    };
-    return newData;
+    const { data } = await axios.get<RecordsResponse>(
+      `${API_URL}/records?page=${pageParam}&limit=${limit}&userId=${userId}`,
+      options,
+    );
+    return data.records;
   } catch (err) {
     return Promise.reject(err);
   }
