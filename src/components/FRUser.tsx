@@ -63,12 +63,34 @@ const FRUser: React.FC<FRUserProps> = (props) => {
     }
   });
 
-  const { isFetching, onDeleteRecord } = useRecordStore((state) => {
-    return {
-      isFetching: state.isFetching,
-      onDeleteRecord: state.onDeleteRecord,
-    };
-  }, shallow);
+  const { isFetching, socket, needUpdateRanking, onSetNeedUpdateRanking, onDeleteRecord } =
+    useRecordStore((state) => {
+      return {
+        isFetching: state.isFetching,
+        socket: state.socket,
+        needUpdateRanking: state.needUpdateRanking,
+        onSetNeedUpdateRanking: state.onSetNeedUpdateRanking,
+        onDeleteRecord: state.onDeleteRecord,
+      };
+    }, shallow);
+
+  // refetch all info and set need update ranking to false
+  const refetchAll = React.useCallback(() => {
+    if (typeof onRefetch === 'function') {
+      onRefetch();
+    }
+    if (typeof onRefetchRank === 'function') {
+      onRefetchRank();
+    }
+    onSetNeedUpdateRanking(false);
+  }, [onRefetch, onRefetchRank, onSetNeedUpdateRanking]);
+
+  // refetchAll when needUpdateRanking is true
+  React.useEffect(() => {
+    if (needUpdateRanking) {
+      refetchAll();
+    }
+  }, [needUpdateRanking, refetchAll]);
 
   // 刪除記錄
   const atDeleteRecord = React.useCallback(
@@ -79,12 +101,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           if (typeof onCloseModal === 'function') {
             onCloseModal();
           }
-          if (typeof onRefetch === 'function') {
-            onRefetch();
-          }
-          if (typeof onRefetchRank === 'function') {
-            onRefetchRank();
-          }
+          socket?.emit('updateRanking', true);
           Toast.fire({
             icon: 'success',
             title: '刪除記錄成功',
@@ -98,7 +115,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           });
         });
     },
-    [onRefetch, onDeleteRecord, onRefetchRank, onCloseModal],
+    [onDeleteRecord, onCloseModal, socket],
   );
 
   // 顯示編輯紀錄modal和獲取該筆記錄資料
@@ -147,12 +164,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           .then((res) => {
             setEditing(false);
             setOpenPanel(false);
-            if (typeof onRefetch === 'function') {
-              onRefetch();
-            }
-            if (typeof onRefetchRank === 'function') {
-              onRefetchRank();
-            }
+            socket?.emit('updateRanking', true);
             setNewRecord(null);
             Toast.fire({
               icon: 'success',
@@ -168,7 +180,7 @@ const FRUser: React.FC<FRUserProps> = (props) => {
           });
       }
     },
-    [newRecord, onRefetch, onRefetchRank, editRecord],
+    [newRecord, editRecord, socket],
   );
 
   return (

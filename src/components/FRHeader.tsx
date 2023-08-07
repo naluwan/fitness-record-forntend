@@ -31,18 +31,31 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
 
   const [openModal, setOpenModal] = React.useState(false);
 
-  const { user, isDark, isFetching, onSetIsDark, onSetOpenPanel, onLogout, onSetIsFetching } =
-    useRecordStore((state) => {
-      return {
-        user: state.user,
-        isDark: state.isDark,
-        isFetching: state.isFetching,
-        onSetIsDark: state.onSetIsDark,
-        onSetOpenPanel: state.onSetOpenPanel,
-        onLogout: state.onLogout,
-        onSetIsFetching: state.onSetIsFetching,
-      };
-    }, shallow);
+  const {
+    user,
+    isDark,
+    isFetching,
+    socket,
+    needUpdateRanking,
+    onSetNeedUpdateRanking,
+    onSetIsDark,
+    onSetOpenPanel,
+    onLogout,
+    onSetIsFetching,
+  } = useRecordStore((state) => {
+    return {
+      user: state.user,
+      isDark: state.isDark,
+      isFetching: state.isFetching,
+      socket: state.socket,
+      needUpdateRanking: state.needUpdateRanking,
+      onSetNeedUpdateRanking: state.onSetNeedUpdateRanking,
+      onSetIsDark: state.onSetIsDark,
+      onSetOpenPanel: state.onSetOpenPanel,
+      onLogout: state.onLogout,
+      onSetIsFetching: state.onSetIsFetching,
+    };
+  }, shallow);
 
   // 分別設定div和button的ref
   const divRef = React.useRef<HTMLDivElement>(null);
@@ -68,6 +81,25 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
     Images: null,
   });
 
+  const refetchAll = React.useCallback(() => {
+    if (
+      typeof refreshAllRecord === 'function' &&
+      typeof refreshWeightRank === 'function' &&
+      typeof refreshWaistlineRank === 'function'
+    ) {
+      refreshAllRecord();
+      refreshWeightRank();
+      refreshWaistlineRank();
+    }
+    onSetNeedUpdateRanking(false);
+  }, [refreshAllRecord, refreshWeightRank, refreshWaistlineRank, onSetNeedUpdateRanking]);
+
+  React.useEffect(() => {
+    if (needUpdateRanking) {
+      refetchAll();
+    }
+  }, [needUpdateRanking, refetchAll]);
+
   // submit new record event
   const atSubmitNewRecord = React.useCallback(
     (e: React.FormEvent) => {
@@ -88,15 +120,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
             title: '新增記錄成功',
           });
           setOpenModal(false);
-          if (
-            typeof refreshAllRecord === 'function' &&
-            typeof refreshWeightRank === 'function' &&
-            typeof refreshWaistlineRank === 'function'
-          ) {
-            refreshAllRecord();
-            refreshWeightRank();
-            refreshWaistlineRank();
-          }
+          socket?.emit('updateRanking', true);
         })
         .catch((err) => {
           const { message } = err.response.data;
@@ -110,7 +134,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
           onSetIsFetching(false);
         });
     },
-    [newRecord, refreshAllRecord, refreshWeightRank, refreshWaistlineRank, onSetIsFetching],
+    [newRecord, socket, onSetIsFetching],
   );
 
   // close post new record modal
