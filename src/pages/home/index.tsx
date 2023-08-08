@@ -175,23 +175,26 @@ const Home: React.FC = () => {
                 <Loading />
               </div>
             )}
-            <h1>沒有更多紀錄了！！！</h1>
           </div>
           {/* right */}
           <div className='hidden lg:block lg:w-[424px]'>
-            <FRRanking
-              title='減重'
-              users={weightRankUsers as User[]}
-              isLoading={weightRank.isLoading}
-              limit={3}
-            />
+            <div className='ml-8 mt-8 box-border p-2 shadow-xl dark:shadow-gray-400/40'>
+              <FRRanking
+                title='減重'
+                users={weightRankUsers as User[]}
+                isLoading={weightRank.isLoading}
+                limit={3}
+              />
+            </div>
 
-            <FRRanking
-              title='腰瘦'
-              users={waistlineRankUsers as User[]}
-              isLoading={waistlineRank.isLoading}
-              limit={3}
-            />
+            <div className='ml-8 mt-8 box-border p-2 shadow-xl dark:shadow-gray-400/40'>
+              <FRRanking
+                title='腰瘦'
+                users={waistlineRankUsers as User[]}
+                isLoading={waistlineRank.isLoading}
+                limit={3}
+              />
+            </div>
           </div>
         </div>
       </FRContainer>

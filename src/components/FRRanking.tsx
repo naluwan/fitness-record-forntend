@@ -16,7 +16,7 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
   const currentUsers = limit === 0 ? users : users.slice(0, limit);
 
   return (
-    <div className='ml-8 mt-8 box-border p-2 shadow-xl dark:shadow-gray-400/40'>
+    <>
       <p className='text-center text-base font-bold'>{title}排行榜</p>
       {isLoading ? (
         <div className='my-10 flex w-full justify-center'>
@@ -80,7 +80,7 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
             })}
         </div>
       )}
-    </div>
+    </>
   );
 };
 
