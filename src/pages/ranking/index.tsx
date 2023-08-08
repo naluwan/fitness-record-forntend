@@ -3,6 +3,12 @@ import FRHeader, { IRef } from 'components/FRHeader';
 import FRContainer from 'components/FRContainer';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
+import FRRanking from 'components/FRRanking';
+import { useQuery } from 'react-query';
+import { fetchGetUsers, fetchWaistlineRankUsers, fetchWeightRankUsers } from 'services/apis';
+import { User } from 'types';
+import FRSearchBar from 'components/FRSearchBar';
+import FRUsersList from 'components/FRUsersList';
 
 const Ranking: React.FC = () => {
   const { onSetOpenPanel } = useRecordStore((state) => {
@@ -10,6 +16,10 @@ const Ranking: React.FC = () => {
       onSetOpenPanel: state.onSetOpenPanel,
     };
   }, shallow);
+
+  const [weightRankUsers, setWeightRankUsers] = React.useState<User[] | []>([]);
+  const [waistlineRankUsers, setWaistlineRankUsers] = React.useState<User[] | []>([]);
+  const [users, setUsers] = React.useState<User[] | []>([]);
 
   // popover panel ref
   const panelRef = React.useRef<IRef>(null);
@@ -24,14 +34,70 @@ const Ranking: React.FC = () => {
       onSetOpenPanel(false);
     }
   });
+
+  const weightRank = useQuery('weightRank', fetchWeightRankUsers);
+
+  const waistlineRank = useQuery('waistlineRank', fetchWaistlineRankUsers);
+
+  const getAllUsers = useQuery('getAllUsers', fetchGetUsers);
+
+  React.useEffect(() => {
+    if (getAllUsers.isSuccess && !getAllUsers.isLoading && !getAllUsers.isError) {
+      setUsers(getAllUsers.data);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getAllUsers.data]);
+
+  React.useEffect(() => {
+    if (weightRank.isSuccess && !weightRank.isLoading && !weightRank.isError) {
+      setWeightRankUsers(weightRank.data.users);
+    }
+
+    if (waistlineRank.isSuccess && !waistlineRank.isLoading && !waistlineRank.isError) {
+      setWaistlineRankUsers(waistlineRank.data.users);
+    }
+  }, [weightRank, setWeightRankUsers, waistlineRank, setWaistlineRankUsers]);
+
+  console.log('page users ===> ', users);
+
   return (
     <>
       <FRHeader ref={panelRef} />
       <FRContainer>
-        <div>ranking</div>
+        {/* search */}
+        <div className='my-4 flex w-full justify-center lg:my-8 lg:justify-start'>
+          <FRSearchBar
+            users={users}
+            onSetUsers={setUsers}
+            onReSetUsers={() => setUsers(getAllUsers.data)}
+          />
+        </div>
+        <FRUsersList users={users} />
+
+        {/* ranking */}
+        <div className='lg:mt-4 lg:flex lg:justify-center'>
+          {/* left */}
+          <div className='mb-4 box-border w-full shadow-xl dark:shadow-gray-400/40 lg:mx-4 lg:w-[512px]'>
+            <FRRanking
+              title='減重'
+              users={weightRankUsers as User[]}
+              isLoading={weightRank.isLoading}
+              limit={0}
+            />
+          </div>
+          {/* right */}
+          <div className='mb-4 w-full shadow-xl dark:shadow-gray-400/40 lg:mx-4 lg:w-[512px]'>
+            <FRRanking
+              title='腰瘦'
+              users={waistlineRankUsers as User[]}
+              isLoading={waistlineRank.isLoading}
+              limit={0}
+            />
+          </div>
+        </div>
       </FRContainer>
     </>
   );
 };
 
-export default Ranking;
+export default React.memo(Ranking);
