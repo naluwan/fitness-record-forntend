@@ -77,7 +77,7 @@ const Ranking: React.FC = () => {
             onSetFilteredUsers={setFilteredUsers}
           />
           {search !== '' && (
-            <div className='absolute left-4 top-12 box-border flex w-[90%] justify-center rounded-xl bg-[#1c1c1c] px-3 py-2 lg:left-0 lg:ml-4 lg:w-[480px]'>
+            <div className='absolute left-5 top-12 box-border flex w-[90%] justify-center rounded-xl bg-[#1c1c1c] px-3 py-2 lg:left-0 lg:ml-4 lg:w-[480px]'>
               <FRUsersList filteredUsers={filteredUsers} />
             </div>
           )}
@@ -91,7 +91,7 @@ const Ranking: React.FC = () => {
               title='減重'
               users={weightRankUsers as User[]}
               isLoading={weightRank.isLoading}
-              limit={0}
+              limit={10}
             />
           </div>
           {/* right */}
@@ -100,7 +100,7 @@ const Ranking: React.FC = () => {
               title='腰瘦'
               users={waistlineRankUsers as User[]}
               isLoading={waistlineRank.isLoading}
-              limit={0}
+              limit={10}
             />
           </div>
         </div>
