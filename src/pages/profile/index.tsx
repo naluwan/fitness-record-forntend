@@ -92,7 +92,6 @@ const Profile: React.FC = () => {
 
       intObserver.current = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
         if (entries[0].isIntersecting && allRecords.hasNextPage) {
-          console.log('載入更多資料');
           allRecords.fetchNextPage();
         }
       });

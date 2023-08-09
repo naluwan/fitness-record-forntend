@@ -19,7 +19,13 @@ const Ranking: React.FC = () => {
 
   const [weightRankUsers, setWeightRankUsers] = React.useState<User[] | []>([]);
   const [waistlineRankUsers, setWaistlineRankUsers] = React.useState<User[] | []>([]);
+
+  // 使用者搜尋框輸入的文字
+  const [search, setSearch] = React.useState<string>('');
+  // 從資料庫獲取到的所有使用者資料
   const [users, setUsers] = React.useState<User[] | []>([]);
+  // 根據使用者搜尋框輸入的文字篩選出來的使用者
+  const [filteredUsers, setFilteredUsers] = React.useState<User[] | []>([]);
 
   // popover panel ref
   const panelRef = React.useRef<IRef>(null);
@@ -58,21 +64,24 @@ const Ranking: React.FC = () => {
     }
   }, [weightRank, setWeightRankUsers, waistlineRank, setWaistlineRankUsers]);
 
-  console.log('page users ===> ', users);
-
   return (
     <>
       <FRHeader ref={panelRef} />
       <FRContainer>
         {/* search */}
-        <div className='my-4 flex w-full justify-center lg:my-8 lg:justify-start'>
+        <div className='relative my-4 flex w-full justify-center lg:my-8 lg:justify-start'>
           <FRSearchBar
             users={users}
-            onSetUsers={setUsers}
-            onReSetUsers={() => setUsers(getAllUsers.data)}
+            search={search}
+            onSetSearch={setSearch}
+            onSetFilteredUsers={setFilteredUsers}
           />
+          {search !== '' && (
+            <div className='absolute left-4 top-12 box-border flex w-[90%] justify-center rounded-xl bg-[#1c1c1c] px-3 py-2 lg:left-0 lg:ml-4 lg:w-[480px]'>
+              <FRUsersList filteredUsers={filteredUsers} />
+            </div>
+          )}
         </div>
-        <FRUsersList users={users} />
 
         {/* ranking */}
         <div className='lg:mt-4 lg:flex lg:justify-center'>

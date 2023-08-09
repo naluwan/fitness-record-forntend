@@ -270,7 +270,6 @@ export const fetchGetUser = async (
 export const fetchGetUsers = async () => {
   try {
     const { data } = await axios.get(`${API_URL}/getUsers`);
-    console.log('users ===> ', data);
     return data.data;
   } catch (err) {
     return Promise.reject(err);

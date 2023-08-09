@@ -3,25 +3,28 @@ import { User } from 'types';
 
 type FRSearchBarProps = {
   users: User[];
-  onSetUsers: (users: User[]) => void;
-  onReSetUsers: () => void;
+  search: string;
+  onSetSearch: (text: string) => void;
+  onSetFilteredUsers: (users: User[]) => void;
 };
 
 const FRSearchBar: React.FC<FRSearchBarProps> = (props) => {
-  const { users, onSetUsers, onReSetUsers } = props;
+  const { users, search, onSetSearch, onSetFilteredUsers } = props;
 
-  const [search, setSearch] = React.useState<string>('');
-
+  // 當搜尋文字改變，就執行
   React.useEffect(() => {
-    if (users.length) {
-      if (search === '') {
-        onReSetUsers();
-        return;
-      }
-
-      const filteredUsers = users.filter((user) => user.name.includes(search));
-      onSetUsers(filteredUsers);
+    // 如果搜尋框為空，就將filteredUsers設為空陣列
+    if (search === '') {
+      onSetFilteredUsers([]);
+      return;
     }
+
+    // 根據使用者的搜尋文字，去users中篩選出名字符合搜尋文字的使用者(全部轉小寫做搜尋)
+    const filteredUsers = users.filter((user) =>
+      user.name.toLowerCase().includes(search.toLowerCase()),
+    );
+    // 設定篩選後的使用者
+    onSetFilteredUsers(filteredUsers);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
@@ -34,7 +37,7 @@ const FRSearchBar: React.FC<FRSearchBarProps> = (props) => {
         className='peer/search w-full border-transparent bg-transparent p-0 text-white focus:border-transparent focus:ring-0'
         autoComplete='off'
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => onSetSearch(e.target.value)}
       />
       <svg
         xmlns='http://www.w3.org/2000/svg'
@@ -53,7 +56,7 @@ const FRSearchBar: React.FC<FRSearchBarProps> = (props) => {
 
       <button
         className={`peer-focus/search:block ${!search && 'hidden'}`}
-        onClick={() => setSearch('')}
+        onClick={() => onSetSearch('')}
       >
         <svg
           xmlns='http://www.w3.org/2000/svg'

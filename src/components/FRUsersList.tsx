@@ -3,12 +3,12 @@ import { User } from 'types';
 import FRUser from './FRUser';
 
 type FRUsersListProps = {
-  users: User[];
+  filteredUsers: User[];
 };
 
 const FRUsersList: React.FC<FRUsersListProps> = (props) => {
-  const { users } = props;
-  const filteredUsers = users.map((user) => (
+  const { filteredUsers } = props;
+  const users = filteredUsers.map((user) => (
     <FRUser
       key={user.id}
       userId={user.id}
@@ -20,7 +20,7 @@ const FRUsersList: React.FC<FRUsersListProps> = (props) => {
   ));
 
   const content = filteredUsers?.length ? (
-    <div>{filteredUsers}</div>
+    <div className='w-full'>{users}</div>
   ) : (
     <article>
       <p>找不到查詢的資料</p>
