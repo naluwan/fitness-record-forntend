@@ -11,8 +11,9 @@ import FRSearchBar from 'components/FRSearchBar';
 import FRUsersList from 'components/FRUsersList';
 
 const Ranking: React.FC = () => {
-  const { onSetOpenPanel } = useRecordStore((state) => {
+  const { user, onSetOpenPanel } = useRecordStore((state) => {
     return {
+      user: state.user,
       onSetOpenPanel: state.onSetOpenPanel,
     };
   }, shallow);
@@ -71,13 +72,14 @@ const Ranking: React.FC = () => {
         {/* search */}
         <div className='relative my-4 flex w-full justify-center lg:my-8 lg:justify-start'>
           <FRSearchBar
+            currentUserId={user?.id as number}
             users={users}
             search={search}
             onSetSearch={setSearch}
             onSetFilteredUsers={setFilteredUsers}
           />
           {search !== '' && (
-            <div className='absolute left-5 top-12 box-border flex w-[90%] justify-center rounded-xl bg-[#1c1c1c] px-3 py-2 lg:left-0 lg:ml-4 lg:w-[480px]'>
+            <div className='absolute left-5 top-12 box-border flex w-[90%] justify-center rounded-xl bg-gray-100 px-3 py-2 dark:bg-[#262626] lg:left-0 lg:ml-4 lg:w-[480px]'>
               <FRUsersList filteredUsers={filteredUsers} />
             </div>
           )}

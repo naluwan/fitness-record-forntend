@@ -2,6 +2,7 @@ import React from 'react';
 import { User } from 'types';
 
 type FRSearchBarProps = {
+  currentUserId: number;
   users: User[];
   search: string;
   onSetSearch: (text: string) => void;
@@ -9,7 +10,7 @@ type FRSearchBarProps = {
 };
 
 const FRSearchBar: React.FC<FRSearchBarProps> = (props) => {
-  const { users, search, onSetSearch, onSetFilteredUsers } = props;
+  const { currentUserId, users, search, onSetSearch, onSetFilteredUsers } = props;
 
   // 當搜尋文字改變，就執行
   React.useEffect(() => {
@@ -20,8 +21,8 @@ const FRSearchBar: React.FC<FRSearchBarProps> = (props) => {
     }
 
     // 根據使用者的搜尋文字，去users中篩選出名字符合搜尋文字的使用者(全部轉小寫做搜尋)
-    const filteredUsers = users.filter((user) =>
-      user.name.toLowerCase().includes(search.toLowerCase()),
+    const filteredUsers = users.filter(
+      (user) => user.name.toLowerCase().includes(search.toLowerCase()) && user.id !== currentUserId,
     );
     // 設定篩選後的使用者
     onSetFilteredUsers(filteredUsers);
@@ -29,15 +30,19 @@ const FRSearchBar: React.FC<FRSearchBarProps> = (props) => {
   }, [search]);
 
   return (
-    <div className='box-border flex w-[90%] flex-shrink items-center rounded-full bg-[#1c1c1c] px-3 py-2 lg:ml-4 lg:w-[480px]'>
+    <div className='box-border flex w-[90%] flex-shrink items-center rounded-full bg-gray-100 px-3 py-2 dark:bg-[#262626] lg:ml-4 lg:w-[480px]'>
       <input
         type='text'
         placeholder='搜尋'
         id='search'
-        className='peer/search w-full border-transparent bg-transparent p-0 text-white focus:border-transparent focus:ring-0'
+        className='peer/search w-full border-transparent bg-transparent p-0 text-black focus:border-transparent focus:ring-0 dark:text-white'
         autoComplete='off'
         value={search}
         onChange={(e) => onSetSearch(e.target.value)}
+        onBlur={() => {
+          onSetSearch('');
+          onSetFilteredUsers([]);
+        }}
       />
       <svg
         xmlns='http://www.w3.org/2000/svg'
