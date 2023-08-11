@@ -28,8 +28,13 @@ const Ranking: React.FC = () => {
   // 根據使用者搜尋框輸入的文字篩選出來的使用者
   const [filteredUsers, setFilteredUsers] = React.useState<User[] | []>([]);
 
+  // 控制顯示userList component
+  const [showSearch, setShowSearch] = React.useState<boolean>(false);
+
   // popover panel ref
   const panelRef = React.useRef<IRef>(null);
+  // search area ref
+  const searchAreaRef = React.useRef<HTMLDivElement>(null);
 
   // 畫面點擊時，如果element沒有包含在popoverRef底下的話，就關閉panel
   window.addEventListener('mousedown', (e) => {
@@ -39,6 +44,9 @@ const Ranking: React.FC = () => {
       !panelRef.current.getButton().contains(e.target as HTMLElement)
     ) {
       onSetOpenPanel(false);
+    }
+    if (searchAreaRef.current && !searchAreaRef.current.contains(e.target as HTMLElement)) {
+      setShowSearch(false);
     }
   });
 
@@ -70,17 +78,21 @@ const Ranking: React.FC = () => {
       <FRHeader ref={panelRef} />
       <FRContainer>
         {/* search */}
-        <div className='relative my-4 flex w-full justify-center lg:my-8 lg:justify-start'>
+        <div
+          className='relative my-4 flex w-full justify-center lg:my-8 lg:justify-start'
+          ref={searchAreaRef}
+        >
           <FRSearchBar
             currentUserId={user?.id as number}
             users={users}
             search={search}
             onSetSearch={setSearch}
             onSetFilteredUsers={setFilteredUsers}
+            onSetShowSearch={setShowSearch}
           />
-          {search !== '' && (
+          {showSearch && search !== '' && (
             <div className='absolute left-5 top-12 box-border flex w-[90%] justify-center rounded-xl bg-gray-100 px-3 py-2 dark:bg-[#262626] lg:left-0 lg:ml-4 lg:w-[480px]'>
-              <FRUsersList filteredUsers={filteredUsers} />
+              <FRUsersList filteredUsers={filteredUsers} search={search} />
             </div>
           )}
         </div>

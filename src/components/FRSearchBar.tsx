@@ -7,10 +7,11 @@ type FRSearchBarProps = {
   search: string;
   onSetSearch: (text: string) => void;
   onSetFilteredUsers: (users: User[]) => void;
+  onSetShowSearch: (showSearch: boolean) => void;
 };
 
 const FRSearchBar: React.FC<FRSearchBarProps> = (props) => {
-  const { currentUserId, users, search, onSetSearch, onSetFilteredUsers } = props;
+  const { currentUserId, users, search, onSetSearch, onSetFilteredUsers, onSetShowSearch } = props;
 
   // 當搜尋文字改變，就執行
   React.useEffect(() => {
@@ -38,10 +39,14 @@ const FRSearchBar: React.FC<FRSearchBarProps> = (props) => {
         className='peer/search w-full border-transparent bg-transparent p-0 text-black focus:border-transparent focus:ring-0 dark:text-white'
         autoComplete='off'
         value={search}
-        onChange={(e) => onSetSearch(e.target.value)}
-        onBlur={() => {
-          onSetSearch('');
-          onSetFilteredUsers([]);
+        onChange={(e) => {
+          onSetSearch(e.target.value);
+          onSetShowSearch(true);
+        }}
+        onFocus={() => {
+          if (search !== '') {
+            onSetShowSearch(true);
+          }
         }}
       />
       <svg
