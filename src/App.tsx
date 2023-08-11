@@ -1,4 +1,4 @@
-import { useRoutes } from 'react-router-dom';
+import { useNavigate, useRoutes } from 'react-router-dom';
 import React from 'react';
 import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
@@ -20,20 +20,28 @@ const App: React.FC = () => {
     transports: ['websocket'],
   });
 
-  const { init, onSetIsDark, onSetNeedUpdateRanking, onSetSocket } = useRecordStore(
-    (state: State) => {
+  const go = useNavigate();
+
+  const { init, user, isAppInitializedComplete, onSetIsDark, onSetNeedUpdateRanking, onSetSocket } =
+    useRecordStore((state: State) => {
       return {
         init: state.init,
+        user: state.user,
+        isAppInitializedComplete: state.isAppInitializedComplete,
         onSetIsDark: state.onSetIsDark,
         onSetNeedUpdateRanking: state.onSetNeedUpdateRanking,
         onSetSocket: state.onSetSocket,
       };
-    },
-    shallow,
-  );
+    }, shallow);
 
   // 只要進到這個網站，就會檢查token是否有效
   useQuery('auth', init);
+
+  React.useEffect(() => {
+    if (isAppInitializedComplete && !user) {
+      go('signin');
+    }
+  }, [isAppInitializedComplete, user, go]);
 
   React.useEffect(() => {
     // 進入頁面連接socket.io
