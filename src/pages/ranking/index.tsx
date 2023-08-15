@@ -36,6 +36,8 @@ const Ranking: React.FC = () => {
   // search area ref
   const searchAreaRef = React.useRef<HTMLDivElement>(null);
 
+  const [showX, setShowX] = React.useState<boolean>(false);
+
   // 畫面點擊時，如果element沒有包含在popoverRef底下的話，就關閉panel
   window.addEventListener('mousedown', (e) => {
     if (
@@ -47,6 +49,7 @@ const Ranking: React.FC = () => {
     }
     if (searchAreaRef.current && !searchAreaRef.current.contains(e.target as HTMLElement)) {
       setShowSearch(false);
+      setShowX(false);
     }
   });
 
@@ -86,9 +89,11 @@ const Ranking: React.FC = () => {
             currentUserId={user?.id as number}
             users={users}
             search={search}
+            showX={showX}
             onSetSearch={setSearch}
             onSetFilteredUsers={setFilteredUsers}
             onSetShowSearch={setShowSearch}
+            onSetShowX={setShowX}
           />
           {showSearch && search !== '' && (
             <div className='absolute left-5 top-12 box-border flex w-[90%] justify-center rounded-xl bg-gray-100 px-3 py-2 dark:bg-[#262626] lg:left-0 lg:ml-4 lg:w-[480px]'>

@@ -5,13 +5,24 @@ type FRSearchBarProps = {
   currentUserId: number;
   users: User[];
   search: string;
+  showX: boolean;
   onSetSearch: (text: string) => void;
   onSetFilteredUsers: (users: User[]) => void;
   onSetShowSearch: (showSearch: boolean) => void;
+  onSetShowX: (showX: boolean) => void;
 };
 
 const FRSearchBar: React.FC<FRSearchBarProps> = (props) => {
-  const { currentUserId, users, search, onSetSearch, onSetFilteredUsers, onSetShowSearch } = props;
+  const {
+    currentUserId,
+    users,
+    search,
+    showX,
+    onSetSearch,
+    onSetFilteredUsers,
+    onSetShowSearch,
+    onSetShowX,
+  } = props;
 
   // 當搜尋文字改變，就執行
   React.useEffect(() => {
@@ -47,11 +58,14 @@ const FRSearchBar: React.FC<FRSearchBarProps> = (props) => {
           if (search !== '') {
             onSetShowSearch(true);
           }
+          onSetShowX(true);
         }}
       />
       <svg
         xmlns='http://www.w3.org/2000/svg'
-        className='order-first mr-2 h-[18px] w-[18px] peer-focus/search:hidden'
+        className={`order-first mr-2 h-[18px] w-[18px] peer-focus/search:hidden ${
+          search && 'hidden'
+        }`}
         fill='none'
         viewBox='0 0 24 24'
         stroke='#9ba3af'
@@ -65,7 +79,7 @@ const FRSearchBar: React.FC<FRSearchBarProps> = (props) => {
       </svg>
 
       <button
-        className={`peer-focus/search:block ${!search && 'hidden'}`}
+        className={`peer-focus/search:block ${(!showX || !search) && 'hidden'}`}
         onClick={() => onSetSearch('')}
       >
         <svg
