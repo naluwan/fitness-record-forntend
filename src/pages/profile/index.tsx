@@ -72,14 +72,15 @@ const Profile: React.FC = () => {
   );
 
   // 使用react-query useInfiniteQuery來實現無限下拉載入資料的方式
-  const allRecords = useInfiniteQuery(
-    'allRecords',
+  const allProfilePosts = useInfiniteQuery(
+    'allProfilePosts',
     ({ pageParam = 1 }, limit = 9, id = Number(userId)) => fetchRecords(pageParam, limit, id),
     {
       getNextPageParam: (lastPage, allPages) => {
-        return lastPage.length ? allPages.length + 1 : undefined;
+        // 判斷lastPage是否有資料且資料數量如果小於limit設定的數字代表沒有下一頁
+        return lastPage.length && lastPage.length === 9 ? allPages.length + 1 : undefined;
       },
-      structuralSharing: true,
+      structuralSharing: false,
     },
   );
 
@@ -87,28 +88,28 @@ const Profile: React.FC = () => {
   const intObserver = React.useRef<IntersectionObserver>();
   const lastPostRef = React.useCallback(
     (lastRecordElement: HTMLElement) => {
-      if (allRecords.isFetchingNextPage) return;
+      if (allProfilePosts.isFetchingNextPage) return;
       if (intObserver.current) intObserver.current.disconnect();
 
       intObserver.current = new IntersectionObserver((entries: IntersectionObserverEntry[]) => {
-        if (entries[0].isIntersecting && allRecords.hasNextPage) {
-          allRecords.fetchNextPage();
+        if (entries[0].isIntersecting && allProfilePosts.hasNextPage) {
+          allProfilePosts.fetchNextPage();
         }
       });
 
       if (lastRecordElement) intObserver.current.observe(lastRecordElement);
     },
-    [allRecords],
+    [allProfilePosts],
   );
 
-  const content = allRecords.data?.pages.map((pg, i) => {
+  const content = allProfilePosts.data?.pages.map((pg, i) => {
     return (
       <div
         className='grid grid-cols-3 gap-1'
         key={
-          allRecords.data.pageParams[i] === undefined
+          allProfilePosts.data.pageParams[i] === undefined
             ? 1
-            : (allRecords.data.pageParams[i] as number)
+            : (allProfilePosts.data.pageParams[i] as number)
         }
       >
         {pg.map((record, j) => {
