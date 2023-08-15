@@ -10,10 +10,10 @@ import {
   fetchWaistlineRankUsers,
   fetchWeightRankUsers,
 } from 'services/apis';
-import Loading from 'components/Loading';
 import FRPost from 'components/FRPost';
 import FRRanking from 'components/FRRanking';
 import { Images, SportCategory, User } from 'types';
+import PostLoading from 'components/PostLoading';
 
 const Home: React.FC = () => {
   const [weightRankUsers, setWeightRankUsers] = React.useState<User[] | []>([]);
@@ -157,6 +157,29 @@ const Home: React.FC = () => {
     });
   });
 
+  // 判斷是否在載入新資料
+  const isFetchingContent = allRecords.isFetching ? (
+    <>
+      {content}
+      <>
+        <PostLoading />
+        <PostLoading />
+      </>
+    </>
+  ) : (
+    content
+  );
+
+  // 剛進Profile讀取資料等待畫面
+  const currentContent = allRecords.isLoading ? (
+    <>
+      <PostLoading />
+      <PostLoading />
+    </>
+  ) : (
+    isFetchingContent
+  );
+
   return (
     <>
       <FRHeader
@@ -169,14 +192,7 @@ const Home: React.FC = () => {
       <FRContainer>
         <div className='flex lg:justify-center'>
           {/* left */}
-          <div className='w-full lg:w-[600px]'>
-            {content}
-            {allRecords.isLoading && (
-              <div className='mt-20 flex w-full justify-center'>
-                <Loading />
-              </div>
-            )}
-          </div>
+          <div className='w-full lg:w-[600px]'>{currentContent}</div>
           {/* right */}
           <div className='hidden lg:block lg:w-[424px]'>
             <div className='ml-8 mt-8 box-border p-2 shadow-xl dark:shadow-gray-400/40'>
