@@ -37,7 +37,8 @@ const Home: React.FC = () => {
     ({ pageParam = 1 }, limit = 5) => fetchRecords(pageParam, limit),
     {
       getNextPageParam: (lastPage, allPages) => {
-        return lastPage.length ? allPages.length + 1 : undefined;
+        // 判斷lastPage是否有資料且資料數量如果小於limit設定的數字代表沒有下一頁
+        return lastPage.length && lastPage.length === 5 ? allPages.length + 1 : undefined;
       },
     },
   );
