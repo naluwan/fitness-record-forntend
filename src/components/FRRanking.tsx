@@ -1,7 +1,7 @@
 import React from 'react';
 import { User } from 'types';
 import FRUser from './FRUser';
-import Loading from './Loading';
+import RankingLoading from './RankingLoading';
 
 type FRRankingProps = {
   users: User[];
@@ -19,9 +19,11 @@ const FRRanking: React.FC<FRRankingProps> = (props) => {
     <>
       <p className='text-center text-base font-bold'>{title}排行榜</p>
       {isLoading ? (
-        <div className='my-10 flex w-full justify-center'>
-          <Loading />
-        </div>
+        <>
+          <RankingLoading />
+          <RankingLoading />
+          <RankingLoading />
+        </>
       ) : (
         <div>
           {currentUsers.length > 0 &&
