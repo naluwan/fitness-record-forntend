@@ -105,7 +105,7 @@ const Ranking: React.FC = () => {
         {/* ranking */}
         <div className='lg:mt-4 lg:flex lg:justify-center'>
           {/* left */}
-          <div className='mb-4 box-border w-full shadow-xl dark:shadow-gray-400/40 lg:mx-4 lg:w-[512px]'>
+          <div className='mb-4 box-border w-full p-2 shadow-xl dark:shadow-gray-400/40 lg:mx-4 lg:w-[512px]'>
             <FRRanking
               title='減重'
               users={weightRankUsers as User[]}
@@ -114,7 +114,7 @@ const Ranking: React.FC = () => {
             />
           </div>
           {/* right */}
-          <div className='mb-4 w-full shadow-xl dark:shadow-gray-400/40 lg:mx-4 lg:w-[512px]'>
+          <div className='mb-4 w-full p-2 shadow-xl dark:shadow-gray-400/40 lg:mx-4 lg:w-[512px]'>
             <FRRanking
               title='腰瘦'
               users={waistlineRankUsers as User[]}
