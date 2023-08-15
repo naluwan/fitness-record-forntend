@@ -20,6 +20,7 @@ import FRModal from 'components/FRModal';
 import type { Images, Record, SportCategory } from 'types';
 import FRComment from 'components/FRComment';
 import FRSlides from 'components/FRSlides';
+import ProfilePostLoading from 'components/ProfilePostLoading';
 
 const Profile: React.FC = () => {
   const { userId } = useParams();
@@ -178,6 +179,31 @@ const Profile: React.FC = () => {
     waistlineRank.refetch();
   }, [weightRank, waistlineRank]);
 
+  // 判斷是否在載入新資料
+  const isFetchingContent = allProfilePosts.isFetching ? (
+    <>
+      {content}
+      <div className='grid grid-cols-3 gap-1'>
+        <ProfilePostLoading />
+        <ProfilePostLoading />
+        <ProfilePostLoading />
+      </div>
+    </>
+  ) : (
+    content
+  );
+
+  // 剛進Profile讀取資料等待畫面
+  const currentContent = allProfilePosts.isLoading ? (
+    <div className='grid grid-cols-3 gap-1'>
+      <ProfilePostLoading />
+      <ProfilePostLoading />
+      <ProfilePostLoading />
+    </div>
+  ) : (
+    isFetchingContent
+  );
+
   return (
     <>
       <FRHeader
@@ -222,7 +248,7 @@ const Profile: React.FC = () => {
         </div>
 
         <div className='mx-0 box-border border-t-2 border-t-gray-800 pt-2 lg:mx-4'>
-          {allRecords.isFetching ? <Loading /> : content}
+          {currentContent}
         </div>
 
         <FRModal
