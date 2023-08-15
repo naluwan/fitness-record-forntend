@@ -157,29 +157,6 @@ const Home: React.FC = () => {
     });
   });
 
-  // 判斷是否在載入新資料
-  const isFetchingContent = allRecords.isFetching ? (
-    <>
-      {content}
-      <>
-        <PostLoading />
-        <PostLoading />
-      </>
-    </>
-  ) : (
-    content
-  );
-
-  // 剛進Profile讀取資料等待畫面
-  const currentContent = allRecords.isLoading ? (
-    <>
-      <PostLoading />
-      <PostLoading />
-    </>
-  ) : (
-    isFetchingContent
-  );
-
   return (
     <>
       <FRHeader
@@ -192,7 +169,16 @@ const Home: React.FC = () => {
       <FRContainer>
         <div className='flex lg:justify-center'>
           {/* left */}
-          <div className='w-full lg:w-[600px]'>{currentContent}</div>
+          <div className='w-full lg:w-[600px]'>
+            {content}
+            {allRecords.isFetching &&
+              (allRecords.hasNextPage || !allRecords.data?.pages.length) && (
+                <>
+                  <PostLoading />
+                  <PostLoading />
+                </>
+              )}
+          </div>
           {/* right */}
           <div className='hidden lg:block lg:w-[424px]'>
             <div className='ml-8 mt-8 box-border p-2 shadow-xl dark:shadow-gray-400/40'>

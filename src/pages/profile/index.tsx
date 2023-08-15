@@ -73,8 +73,9 @@ const Profile: React.FC = () => {
   );
 
   // 使用react-query useInfiniteQuery來實現無限下拉載入資料的方式
+  // query key 加入userId來區分不同的請求，否則點擊不同使用者時，會先顯示上一個使用者的記錄
   const allProfilePosts = useInfiniteQuery(
-    'allProfilePosts',
+    `allProfilePosts-${userId}`,
     ({ pageParam = 1 }, limit = 9, id = Number(userId)) => fetchRecords(pageParam, limit, id),
     {
       getNextPageParam: (lastPage, allPages) => {
@@ -179,31 +180,6 @@ const Profile: React.FC = () => {
     waistlineRank.refetch();
   }, [weightRank, waistlineRank]);
 
-  // 判斷是否在載入新資料
-  const isFetchingContent = allProfilePosts.isFetching ? (
-    <>
-      {content}
-      <div className='grid grid-cols-3 gap-1'>
-        <ProfilePostLoading />
-        <ProfilePostLoading />
-        <ProfilePostLoading />
-      </div>
-    </>
-  ) : (
-    content
-  );
-
-  // 剛進Profile讀取資料等待畫面
-  const currentContent = allProfilePosts.isLoading ? (
-    <div className='grid grid-cols-3 gap-1'>
-      <ProfilePostLoading />
-      <ProfilePostLoading />
-      <ProfilePostLoading />
-    </div>
-  ) : (
-    isFetchingContent
-  );
-
   return (
     <>
       <FRHeader
@@ -248,7 +224,15 @@ const Profile: React.FC = () => {
         </div>
 
         <div className='mx-0 box-border border-t-2 border-t-gray-800 pt-2 lg:mx-4'>
-          {currentContent}
+          {content}
+          {allProfilePosts.isFetching &&
+            (allProfilePosts.hasNextPage || !allProfilePosts.data?.pages.length) && (
+              <div className='grid grid-cols-3 gap-1'>
+                <ProfilePostLoading />
+                <ProfilePostLoading />
+                <ProfilePostLoading />
+              </div>
+            )}
         </div>
 
         <FRModal
