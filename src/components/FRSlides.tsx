@@ -8,7 +8,7 @@ import 'swiper/css/pagination';
 
 type FRSlidesProps = {
   images: Images[] | { preview: string; name: string }[];
-  currentPage: 'edit' | 'post' | 'newPost';
+  currentPage: 'edit' | 'post' | 'newPost' | 'profilePost';
 };
 
 const FRSlides: React.FC<FRSlidesProps> = (props) => {
@@ -18,23 +18,18 @@ const FRSlides: React.FC<FRSlidesProps> = (props) => {
     <Swiper
       modules={[Navigation, Pagination, A11y]}
       slidesPerView={1}
-      // onSlideChange={() => console.log('slide change')}
-      // onSwiper={(swiper) => console.log(swiper)}
       navigation
       pagination={{ clickable: false }}
+      initialSlide={0}
     >
-      {currentPage === 'edit' || currentPage === 'post'
+      {currentPage === 'edit' || currentPage === 'post' || currentPage === 'profilePost'
         ? images.map((image) => {
             const currentImage = image as Images;
             return (
               <SwiperSlide key={currentImage.id}>
-                <img
-                  src={currentImage.url}
-                  alt='post'
-                  className={`w-full object-contain lg:w-[600px] ${
-                    currentPage === 'edit' && 'lg:h-[490px]'
-                  }`}
-                />
+                <div className='aspect-1'>
+                  <img src={currentImage.url} alt='post' className='h-full w-full object-contain' />
+                </div>
               </SwiperSlide>
             );
           })

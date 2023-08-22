@@ -18,6 +18,7 @@ import {
 
 import axios from 'axios';
 import { Toast } from 'utils/swal';
+import { Socket } from 'socket.io-client';
 import { setRecordsAction } from '../actions';
 import type { Record, User } from '../types';
 
@@ -28,6 +29,8 @@ const initialState = {
   isDark: false,
   isFetching: false,
   isAppInitializedComplete: false,
+  needUpdateRanking: false,
+  socket: undefined,
 };
 
 export type State = {
@@ -37,6 +40,8 @@ export type State = {
   isDark: boolean;
   isFetching: boolean;
   isAppInitializedComplete: boolean;
+  needUpdateRanking: boolean;
+  socket: Socket | undefined;
   onSetRecords: (records: Record[]) => void;
   onSetOpenPanel: (openPanel: boolean) => void;
   onSetIsFetching: (isFetching: boolean) => void;
@@ -47,6 +52,8 @@ export type State = {
   onSetIsDark: (isDark: boolean) => void;
   onDeleteRecord: (id: number) => Promise<DeleteRecordResponse>;
   onLineLogin: (idToken: IdTokenType) => Promise<LoginResponseType>;
+  onSetNeedUpdateRanking: (needUpdate: boolean) => void;
+  onSetSocket: (socket: Socket) => void;
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -85,7 +92,7 @@ const useRecordStore = create<State>((set) => {
             Toast.fire({
               icon: 'error',
               title: '驗證錯誤',
-              text: '無效Token，請重新登入',
+              text: '登入逾時，請重新登入',
             });
             set({ user: null, isAppInitializedComplete: true });
           })
@@ -164,6 +171,12 @@ const useRecordStore = create<State>((set) => {
       } finally {
         set({ isFetching: false });
       }
+    },
+    onSetNeedUpdateRanking(needUpdate: boolean) {
+      set({ needUpdateRanking: needUpdate });
+    },
+    onSetSocket(socket: Socket) {
+      set({ socket });
     },
   };
 });

@@ -31,18 +31,31 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
 
   const [openModal, setOpenModal] = React.useState(false);
 
-  const { user, isDark, isFetching, onSetIsDark, onSetOpenPanel, onLogout, onSetIsFetching } =
-    useRecordStore((state) => {
-      return {
-        user: state.user,
-        isDark: state.isDark,
-        isFetching: state.isFetching,
-        onSetIsDark: state.onSetIsDark,
-        onSetOpenPanel: state.onSetOpenPanel,
-        onLogout: state.onLogout,
-        onSetIsFetching: state.onSetIsFetching,
-      };
-    }, shallow);
+  const {
+    user,
+    isDark,
+    isFetching,
+    socket,
+    needUpdateRanking,
+    onSetNeedUpdateRanking,
+    onSetIsDark,
+    onSetOpenPanel,
+    onLogout,
+    onSetIsFetching,
+  } = useRecordStore((state) => {
+    return {
+      user: state.user,
+      isDark: state.isDark,
+      isFetching: state.isFetching,
+      socket: state.socket,
+      needUpdateRanking: state.needUpdateRanking,
+      onSetNeedUpdateRanking: state.onSetNeedUpdateRanking,
+      onSetIsDark: state.onSetIsDark,
+      onSetOpenPanel: state.onSetOpenPanel,
+      onLogout: state.onLogout,
+      onSetIsFetching: state.onSetIsFetching,
+    };
+  }, shallow);
 
   // 分別設定div和button的ref
   const divRef = React.useRef<HTMLDivElement>(null);
@@ -68,6 +81,25 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
     Images: null,
   });
 
+  const refetchAll = React.useCallback(() => {
+    if (
+      typeof refreshAllRecord === 'function' &&
+      typeof refreshWeightRank === 'function' &&
+      typeof refreshWaistlineRank === 'function'
+    ) {
+      refreshAllRecord();
+      refreshWeightRank();
+      refreshWaistlineRank();
+    }
+    onSetNeedUpdateRanking(false);
+  }, [refreshAllRecord, refreshWeightRank, refreshWaistlineRank, onSetNeedUpdateRanking]);
+
+  React.useEffect(() => {
+    if (needUpdateRanking) {
+      refetchAll();
+    }
+  }, [needUpdateRanking, refetchAll]);
+
   // submit new record event
   const atSubmitNewRecord = React.useCallback(
     (e: React.FormEvent) => {
@@ -88,15 +120,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
             title: '新增記錄成功',
           });
           setOpenModal(false);
-          if (
-            typeof refreshAllRecord === 'function' &&
-            typeof refreshWeightRank === 'function' &&
-            typeof refreshWaistlineRank === 'function'
-          ) {
-            refreshAllRecord();
-            refreshWeightRank();
-            refreshWaistlineRank();
-          }
+          socket?.emit('updateRanking', true);
         })
         .catch((err) => {
           const { message } = err.response.data;
@@ -110,7 +134,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
           onSetIsFetching(false);
         });
     },
-    [newRecord, refreshAllRecord, refreshWeightRank, refreshWaistlineRank, onSetIsFetching],
+    [newRecord, socket, onSetIsFetching],
   );
 
   // close post new record modal
@@ -206,25 +230,25 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
               </svg>
             </button>
 
-            {/* following */}
+            {/* ranking */}
             <button
               className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
-              onClick={() => go('/following')}
+              onClick={() => go('/ranking')}
               onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
               onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
             >
               <svg
                 xmlns='http://www.w3.org/2000/svg'
-                className='z-20 h-6 w-6 duration-500'
                 fill='none'
                 viewBox='0 0 24 24'
+                strokeWidth='2'
                 stroke='currentColor'
+                className='z-20 h-6 w-6 duration-500'
               >
                 <path
                   strokeLinecap='round'
                   strokeLinejoin='round'
-                  strokeWidth={2}
-                  d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
+                  d='M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z'
                 />
               </svg>
             </button>
@@ -295,7 +319,13 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                 {user !== null ? (
                   // profile
                   <div className='mb-2'>
-                    <button className='flex w-full items-center rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'>
+                    <button
+                      className='flex w-full items-center rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
+                      onClick={() => {
+                        onSetOpenPanel(false);
+                        go(`/profile/${user.id}`);
+                      }}
+                    >
                       {/* left icon */}
                       <div className='mr-3 h-[40px] w-[40px] overflow-hidden rounded-full'>
                         <img
@@ -383,36 +413,37 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                     </button>
                   </div>
 
-                  {/* following */}
+                  {/* ranking */}
                   <div className='mb-2'>
                     <button
                       className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                       onClick={() => {
                         onSetOpenPanel(false);
-                        go('/following');
+                        go('/ranking');
                       }}
                     >
                       {/* left icon */}
                       <div className='bg-fb-input flex items-center justify-center rounded-full p-2'>
                         <svg
                           xmlns='http://www.w3.org/2000/svg'
-                          className='h-7 w-7'
                           fill='none'
                           viewBox='0 0 24 24'
+                          strokeWidth='2'
                           stroke='currentColor'
+                          className='h-7 w-7 dark:text-white'
+                          width={24}
                         >
                           <path
                             strokeLinecap='round'
                             strokeLinejoin='round'
-                            strokeWidth={2}
-                            d='M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
+                            d='M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z'
                           />
                         </svg>
                       </div>
 
                       {/* right icon */}
                       <div className='flex-1'>
-                        <p className='mb-[2px] text-base text-black dark:text-white'>好友</p>
+                        <p className='mb-[2px] text-base text-black dark:text-white'>排行榜</p>
                       </div>
                     </button>
                   </div>
@@ -561,7 +592,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
           </div>
         </div>
       </div>
-      <FRModal open={openModal} onClose={() => atCloseNewPostModal()}>
+      <FRModal open={openModal} currentPage='post' onClose={() => atCloseNewPostModal()}>
         {isFetching ? (
           <div className='flex h-[80%] flex-col items-center justify-center lg:h-[544px]'>
             <Loading />

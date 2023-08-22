@@ -44,16 +44,21 @@ export const verifyToken = async (token: string): Promise<LoginResponseType> => 
 
 type RecordsResponse = {
   records: Record[];
-  sportCategories: SportCategory[];
-  sportCategoryId: string;
-  userId: string;
 };
 
 // get records
-export const fetchRecords = async (): Promise<RecordsResponse> => {
+export const fetchRecords = async (
+  pageParam = 1,
+  limit = 5,
+  userId: number | null = null,
+  options = {},
+) => {
   try {
-    const { data } = await axios.get(`${API_URL}/records`);
-    return data.data;
+    const { data } = await axios.get<RecordsResponse>(
+      `${API_URL}/records?page=${pageParam}&limit=${limit}&userId=${userId}`,
+      options,
+    );
+    return data.records;
   } catch (err) {
     return Promise.reject(err);
   }
@@ -240,6 +245,31 @@ export const fetchPostRecord = async (newRecord: Record): Promise<RecordResponse
   });
   try {
     const { data } = await axiosInstance.post(`${API_URL}/records`, formData);
+    return data.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
+export type UserProfileResponse = {
+  user: User;
+  records: Record[];
+};
+
+export const fetchGetUser = async (
+  userId: string | string[] | undefined,
+): Promise<UserProfileResponse> => {
+  try {
+    const { data } = await axios.get(`${API_URL}/getUser/${userId}`);
+    return data.data;
+  } catch (err) {
+    return Promise.reject(err);
+  }
+};
+
+export const fetchGetUsers = async () => {
+  try {
+    const { data } = await axios.get(`${API_URL}/getUsers`);
     return data.data;
   } catch (err) {
     return Promise.reject(err);

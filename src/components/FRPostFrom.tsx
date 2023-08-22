@@ -33,14 +33,10 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
   const atChangeRecord = React.useCallback(
     (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement | HTMLTextAreaElement>) => {
       const { name, value } = e.target;
-      let currentValue: string | number = value;
-      if (name === 'weight' || name === 'waistline') {
-        currentValue = Number(value);
-      }
       onSetNewRecord((prev) => {
         return {
           ...prev,
-          [name]: currentValue,
+          [name]: value,
         };
       });
     },
@@ -140,7 +136,7 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
   return (
     <div className='lg:flex lg:items-stretch lg:justify-between'>
       {/* 預覽圖片 */}
-      <div className='w-full py-4 lg:w-[600px] lg:py-0 lg:pr-6'>
+      <div className='w-full py-4 lg:min-w-[600px] lg:py-0 lg:pr-6'>
         {record.Images !== null && record.Images.length > 0 ? (
           <FRSlides images={record.Images as Images[]} currentPage={currentPage} />
         ) : (
@@ -210,7 +206,7 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
               id='weight'
               name='weight'
               className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
-              value={record.weight?.toString()}
+              value={record.weight as number}
               placeholder='請填入目前體重...'
               onChange={(e) => atChangeRecord(e)}
               required
@@ -230,7 +226,7 @@ const FRPostFrom: React.FC<FRPostFormProps> = (props) => {
               id='waistline'
               name='waistline'
               className='block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500'
-              value={record.waistline?.toString()}
+              value={record.waistline as number}
               placeholder='請填入目前腰圍...'
               onChange={(e) => atChangeRecord(e)}
               required
