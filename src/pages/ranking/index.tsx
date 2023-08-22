@@ -135,7 +135,7 @@ const Ranking: React.FC = () => {
               title='減重'
               users={weightRankUsers as User[]}
               isLoading={weightRank.isLoading}
-              limit={3}
+              limit={10}
               user={user as User}
             />
           </div>
@@ -145,7 +145,7 @@ const Ranking: React.FC = () => {
               title='腰瘦'
               users={waistlineRankUsers as User[]}
               isLoading={waistlineRank.isLoading}
-              limit={3}
+              limit={10}
               user={user as User}
             />
           </div>

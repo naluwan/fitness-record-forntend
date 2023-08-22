@@ -74,6 +74,24 @@ const App: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const noLoginRoutes: RouteObject[] = [
+    {
+      path: '/signin/line',
+      element: <LineLogin />,
+      children: [],
+    },
+    {
+      path: '/signin',
+      element: <SignIn />,
+      children: [],
+    },
+    {
+      path: '/register',
+      element: <Register />,
+      children: [],
+    },
+  ];
+
   const routes: RouteObject[] = [
     {
       path: '/',
@@ -112,7 +130,8 @@ const App: React.FC = () => {
     },
   ];
 
-  const element = useRoutes(routes);
+  const currentRoutes = user ? routes : noLoginRoutes;
+  const element = useRoutes(currentRoutes);
   return element;
 };
 
