@@ -11,12 +11,17 @@ import FRSearchBar from 'components/FRSearchBar';
 import FRUsersList from 'components/FRUsersList';
 
 const Ranking: React.FC = () => {
-  const { user, onSetOpenPanel } = useRecordStore((state) => {
-    return {
-      user: state.user,
-      onSetOpenPanel: state.onSetOpenPanel,
-    };
-  }, shallow);
+  const { user, needUpdateRanking, onSetNeedUpdateRanking, onSetOpenPanel } = useRecordStore(
+    (state) => {
+      return {
+        user: state.user,
+        needUpdateRanking: state.needUpdateRanking,
+        onSetNeedUpdateRanking: state.onSetNeedUpdateRanking,
+        onSetOpenPanel: state.onSetOpenPanel,
+      };
+    },
+    shallow,
+  );
 
   const [weightRankUsers, setWeightRankUsers] = React.useState<User[] | []>([]);
   const [waistlineRankUsers, setWaistlineRankUsers] = React.useState<User[] | []>([]);
@@ -53,12 +58,17 @@ const Ranking: React.FC = () => {
     }
   });
 
+  // fetch api
+  // 體重排名
   const weightRank = useQuery('weightRank', fetchWeightRankUsers);
 
+  // 腰圍排名
   const waistlineRank = useQuery('waistlineRank', fetchWaistlineRankUsers);
 
+  // 使用者搜尋欄所有使用者資料
   const getAllUsers = useQuery('getAllUsers', fetchGetUsers);
 
+  // 當使用者資料回傳後，設定使用者資料
   React.useEffect(() => {
     if (getAllUsers.isSuccess && !getAllUsers.isLoading && !getAllUsers.isError) {
       setUsers(getAllUsers.data);
@@ -66,6 +76,7 @@ const Ranking: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getAllUsers.data]);
 
+  // 當排名資料回傳後，設定排名資料
   React.useEffect(() => {
     if (weightRank.isSuccess && !weightRank.isLoading && !weightRank.isError) {
       setWeightRankUsers(weightRank.data.users);
@@ -75,6 +86,20 @@ const Ranking: React.FC = () => {
       setWaistlineRankUsers(waistlineRank.data.users);
     }
   }, [weightRank, setWeightRankUsers, waistlineRank, setWaistlineRankUsers]);
+
+  // 獲取最新的排名資訊
+  const refetchAll = React.useCallback(() => {
+    weightRank.refetch();
+    waistlineRank.refetch();
+    onSetNeedUpdateRanking(false);
+  }, [onSetNeedUpdateRanking, waistlineRank, weightRank]);
+
+  // 當needUpdateRanking為true時，就refetch
+  React.useEffect(() => {
+    if (needUpdateRanking) {
+      refetchAll();
+    }
+  }, [needUpdateRanking, refetchAll]);
 
   return (
     <>
@@ -110,7 +135,8 @@ const Ranking: React.FC = () => {
               title='減重'
               users={weightRankUsers as User[]}
               isLoading={weightRank.isLoading}
-              limit={10}
+              limit={3}
+              user={user as User}
             />
           </div>
           {/* right */}
@@ -119,7 +145,8 @@ const Ranking: React.FC = () => {
               title='腰瘦'
               users={waistlineRankUsers as User[]}
               isLoading={waistlineRank.isLoading}
-              limit={10}
+              limit={3}
+              user={user as User}
             />
           </div>
         </div>
