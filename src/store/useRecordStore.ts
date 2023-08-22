@@ -92,7 +92,7 @@ const useRecordStore = create<State>((set) => {
             Toast.fire({
               icon: 'error',
               title: '驗證錯誤',
-              text: '無效Token，請重新登入',
+              text: '登入逾時，請重新登入',
             });
             set({ user: null, isAppInitializedComplete: true });
           })
