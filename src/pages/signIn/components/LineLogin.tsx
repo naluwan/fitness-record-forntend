@@ -79,8 +79,10 @@ const LineLogin = () => {
             text: `${res.user?.name} 您好`,
           });
           go('/');
+          onSetLoginByLine(false);
         })
         .catch((err) => {
+          onSetLoginByLine(false);
           Toast.fire({
             icon: 'error',
             title: '登入失敗',
@@ -97,7 +99,6 @@ const LineLogin = () => {
             };
           });
           setResult({ id_token: '' });
-          onSetLoginByLine(false);
         });
     }
   }, [result, verifyUser, go, onLineLogin, onSetLoginByLine]);
