@@ -212,7 +212,6 @@ export type IdTokenType = {
 export const fetchLineLogin = async (idToken: IdTokenType): Promise<LoginResponseType> => {
   try {
     const res = await axios.post(`${API_URL}/login/line/return`, idToken);
-    console.log('line login api res ===> ', res);
     setToken(res.data.token);
     return res.data;
   } catch (err) {

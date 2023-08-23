@@ -4,7 +4,6 @@ import { shallow } from 'zustand/shallow';
 import useRecordStore from 'store/useRecordStore';
 import type { State } from 'store/useRecordStore';
 import { useQuery } from 'react-query';
-// import type { RouteObject } from 'react-router-dom';
 import SignIn from 'pages/signIn';
 import Register from 'pages/register';
 import LineLogin from 'pages/signIn/components/LineLogin';
@@ -21,38 +20,20 @@ const App: React.FC = () => {
     transports: ['websocket'],
   });
 
-  // const go = useNavigate();
-
-  const {
-    init,
-    // user,
-    // isAppInitializedComplete,
-    // loginByLine,
-    // isNewUser,
-    onSetIsDark,
-    onSetNeedUpdateRanking,
-    onSetSocket,
-  } = useRecordStore((state: State) => {
-    return {
-      init: state.init,
-      user: state.user,
-      isAppInitializedComplete: state.isAppInitializedComplete,
-      loginByLine: state.loginByLine,
-      isNewUser: state.isNewUser,
-      onSetIsDark: state.onSetIsDark,
-      onSetNeedUpdateRanking: state.onSetNeedUpdateRanking,
-      onSetSocket: state.onSetSocket,
-    };
-  }, shallow);
+  const { init, onSetIsDark, onSetNeedUpdateRanking, onSetSocket } = useRecordStore(
+    (state: State) => {
+      return {
+        init: state.init,
+        onSetIsDark: state.onSetIsDark,
+        onSetNeedUpdateRanking: state.onSetNeedUpdateRanking,
+        onSetSocket: state.onSetSocket,
+      };
+    },
+    shallow,
+  );
 
   // 只要進到這個網站，就會檢查token是否有效
   useQuery('auth', init);
-
-  // React.useEffect(() => {
-  //   if (isAppInitializedComplete && !user && !loginByLine && !isNewUser) {
-  //     go('signin');
-  //   }
-  // }, [isAppInitializedComplete, user, loginByLine, isNewUser, go]);
 
   React.useEffect(() => {
     // 進入頁面連接socket.io
@@ -85,46 +66,6 @@ const App: React.FC = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // const routes: RouteObject[] = [
-  //   {
-  //     path: '/',
-  //     element: <Home />,
-  //     children: [],
-  //   },
-  //   {
-  //     path: '/ranking',
-  //     element: <Ranking />,
-  //     children: [],
-  //   },
-  //   {
-  //     path: '/signin/line',
-  //     element: <LineLogin />,
-  //     children: [],
-  //   },
-  //   {
-  //     path: '/signin',
-  //     element: <SignIn />,
-  //     children: [],
-  //   },
-  //   {
-  //     path: '/register',
-  //     element: <Register />,
-  //     children: [],
-  //   },
-  //   {
-  //     path: '/profile/:userId',
-  //     element: <Profile />,
-  //     children: [],
-  //   },
-  //   {
-  //     path: '*',
-  //     element: <NotFound />,
-  //     children: [],
-  //   },
-  // ];
-
-  // const element = useRoutes(routes);
-  // return element;
   return (
     <Routes>
       <Route element={<ProtectedRoutes />}>

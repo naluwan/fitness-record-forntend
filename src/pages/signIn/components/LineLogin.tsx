@@ -23,11 +23,10 @@ const LineLogin = () => {
 
   const [result, setResult] = React.useState({ id_token: '' });
 
-  const { isFetching, onLineLogin, onSetLoginByLine } = useRecordStore((state) => {
+  const { isFetching, onLineLogin } = useRecordStore((state) => {
     return {
       isFetching: state.isFetching,
       onLineLogin: state.onLineLogin,
-      onSetLoginByLine: state.onSetLoginByLine,
     };
   }, shallow);
 
@@ -71,7 +70,6 @@ const LineLogin = () => {
   // 當result的值被更新後，將result打回後端獲取jwt token和user資料，最後到回首頁
   React.useEffect(() => {
     if (verifyUser) {
-      console.log('===== line login =====');
       onLineLogin(result)
         .then((res) => {
           Toast.fire({
@@ -100,7 +98,7 @@ const LineLogin = () => {
           setResult({ id_token: '' });
         });
     }
-  }, [result, verifyUser, go, onLineLogin, onSetLoginByLine]);
+  }, [result, verifyUser, go, onLineLogin]);
 
   // 在執行登入時，都顯示loading圖示
   return <div className='flex h-screen w-full justify-center'>{isFetching && <Loading />}</div>;
