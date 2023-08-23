@@ -23,10 +23,11 @@ const LineLogin = () => {
 
   const [result, setResult] = React.useState({ id_token: '' });
 
-  const { isFetching, onLineLogin } = useRecordStore((state) => {
+  const { isFetching, onLineLogin, onSetLoginByLine } = useRecordStore((state) => {
     return {
       isFetching: state.isFetching,
       onLineLogin: state.onLineLogin,
+      onSetLoginByLine: state.onSetLoginByLine,
     };
   }, shallow);
 
@@ -96,9 +97,10 @@ const LineLogin = () => {
             };
           });
           setResult({ id_token: '' });
+          onSetLoginByLine(false);
         });
     }
-  }, [result, verifyUser, go, onLineLogin]);
+  }, [result, verifyUser, go, onLineLogin, onSetLoginByLine]);
 
   // 在執行登入時，都顯示loading圖示
   return <div className='flex h-screen w-full justify-center'>{isFetching && <Loading />}</div>;
