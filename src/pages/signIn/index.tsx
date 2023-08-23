@@ -11,10 +11,12 @@ const SignIn: React.FC = () => {
   const go = useNavigate();
   const [accountInfo, setAccountInfo] = React.useState({ email: '', password: '' });
 
-  const { onSetOpenPanel, onLogin } = useRecordStore((state) => {
+  const { onSetOpenPanel, onLogin, onSetLoginByLine, onSetIsNewUser } = useRecordStore((state) => {
     return {
       onSetOpenPanel: state.onSetOpenPanel,
       onLogin: state.onLogin,
+      onSetLoginByLine: state.onSetLoginByLine,
+      onSetIsNewUser: state.onSetIsNewUser,
     };
   }, shallow);
 
@@ -58,6 +60,7 @@ const SignIn: React.FC = () => {
 
   // line登入按鈕點擊事件，點擊後開啟
   const lineLoginClick = React.useCallback(() => {
+    onSetLoginByLine(true);
     let URL = 'https://access.line.me/oauth2/v2.1/authorize?';
     // 必填
     URL += 'response_type=code';
@@ -69,7 +72,7 @@ const SignIn: React.FC = () => {
     URL += '&ui_locales=zh-TW';
     // 轉跳到該網址
     window.open(URL, '_self');
-  }, []);
+  }, [onSetLoginByLine]);
 
   // popover panel ref
   const panelRef = React.useRef<IRef>(null);
@@ -165,7 +168,10 @@ const SignIn: React.FC = () => {
                     還沒有帳號？{' '}
                     <span
                       className='cursor-pointer font-semibold text-gray-600 hover:underline focus:text-gray-800 focus:outline-none'
-                      onClick={() => go('/register')}
+                      onClick={() => {
+                        onSetIsNewUser(true);
+                        go('/register');
+                      }}
                       role='button'
                       tabIndex={-1}
                     >
