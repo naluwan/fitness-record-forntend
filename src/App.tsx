@@ -48,6 +48,7 @@ const App: React.FC = () => {
   useQuery('auth', init);
 
   React.useEffect(() => {
+    console.log('user ===> ', user);
     if (isAppInitializedComplete && !user && !loginByLine && !isNewUser) {
       go('signin');
     }
