@@ -71,6 +71,7 @@ const LineLogin = () => {
   // 當result的值被更新後，將result打回後端獲取jwt token和user資料，最後到回首頁
   React.useEffect(() => {
     if (verifyUser) {
+      console.log('===== line login =====');
       onLineLogin(result)
         .then((res) => {
           Toast.fire({
@@ -90,7 +91,6 @@ const LineLogin = () => {
         .finally(() => {
           setGetToken(false);
           setVerifyUser(false);
-          onSetLoginByLine(false);
           setOptions((prev) => {
             return {
               ...prev,
