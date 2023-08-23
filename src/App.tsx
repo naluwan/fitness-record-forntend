@@ -22,26 +22,36 @@ const App: React.FC = () => {
 
   const go = useNavigate();
 
-  const { init, user, isAppInitializedComplete, onSetIsDark, onSetNeedUpdateRanking, onSetSocket } =
-    useRecordStore((state: State) => {
-      return {
-        init: state.init,
-        user: state.user,
-        isAppInitializedComplete: state.isAppInitializedComplete,
-        onSetIsDark: state.onSetIsDark,
-        onSetNeedUpdateRanking: state.onSetNeedUpdateRanking,
-        onSetSocket: state.onSetSocket,
-      };
-    }, shallow);
+  const {
+    init,
+    user,
+    isAppInitializedComplete,
+    loginByLine,
+    isNewUser,
+    onSetIsDark,
+    onSetNeedUpdateRanking,
+    onSetSocket,
+  } = useRecordStore((state: State) => {
+    return {
+      init: state.init,
+      user: state.user,
+      isAppInitializedComplete: state.isAppInitializedComplete,
+      loginByLine: state.loginByLine,
+      isNewUser: state.isNewUser,
+      onSetIsDark: state.onSetIsDark,
+      onSetNeedUpdateRanking: state.onSetNeedUpdateRanking,
+      onSetSocket: state.onSetSocket,
+    };
+  }, shallow);
 
   // 只要進到這個網站，就會檢查token是否有效
   useQuery('auth', init);
 
   React.useEffect(() => {
-    if (isAppInitializedComplete && !user) {
+    if (isAppInitializedComplete && !user && !loginByLine && !isNewUser) {
       go('signin');
     }
-  }, [isAppInitializedComplete, user, go]);
+  }, [isAppInitializedComplete, user, loginByLine, isNewUser, go]);
 
   React.useEffect(() => {
     // 進入頁面連接socket.io
@@ -73,24 +83,6 @@ const App: React.FC = () => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const noLoginRoutes: RouteObject[] = [
-    {
-      path: '/signin/line',
-      element: <LineLogin />,
-      children: [],
-    },
-    {
-      path: '/signin',
-      element: <SignIn />,
-      children: [],
-    },
-    {
-      path: '/register',
-      element: <Register />,
-      children: [],
-    },
-  ];
 
   const routes: RouteObject[] = [
     {
@@ -130,8 +122,7 @@ const App: React.FC = () => {
     },
   ];
 
-  const currentRoutes = user ? routes : noLoginRoutes;
-  const element = useRoutes(currentRoutes);
+  const element = useRoutes(routes);
   return element;
 };
 
