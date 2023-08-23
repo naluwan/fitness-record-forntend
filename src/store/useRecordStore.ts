@@ -31,8 +31,6 @@ const initialState = {
   isAppInitializedComplete: false,
   needUpdateRanking: false,
   socket: undefined,
-  loginByLine: false,
-  isNewUser: false,
 };
 
 export type State = {
@@ -44,8 +42,6 @@ export type State = {
   isAppInitializedComplete: boolean;
   needUpdateRanking: boolean;
   socket: Socket | undefined;
-  loginByLine: boolean;
-  isNewUser: boolean;
   onSetRecords: (records: Record[]) => void;
   onSetOpenPanel: (openPanel: boolean) => void;
   onSetIsFetching: (isFetching: boolean) => void;
@@ -58,8 +54,6 @@ export type State = {
   onLineLogin: (idToken: IdTokenType) => Promise<LoginResponseType>;
   onSetNeedUpdateRanking: (needUpdate: boolean) => void;
   onSetSocket: (socket: Socket) => void;
-  onSetLoginByLine: (loginByLine: boolean) => void;
-  onSetIsNewUser: (isNewUser: boolean) => void;
 };
 
 const reducer = (state: State, action: Action): State => {
@@ -145,7 +139,6 @@ const useRecordStore = create<State>((set) => {
       set({ isFetching: true });
       try {
         const res = await fetchLineLogin(idToken);
-        console.log('res user ==> ', res.user);
         set({ user: res.user });
         return res;
       } finally {
@@ -184,12 +177,6 @@ const useRecordStore = create<State>((set) => {
     },
     onSetSocket(socket: Socket) {
       set({ socket });
-    },
-    onSetLoginByLine(loginByLine: boolean) {
-      set({ loginByLine });
-    },
-    onSetIsNewUser(isNewUser: boolean) {
-      set({ isNewUser });
     },
   };
 });

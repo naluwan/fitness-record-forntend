@@ -42,7 +42,6 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
     onSetOpenPanel,
     onLogout,
     onSetIsFetching,
-    onSetIsNewUser,
   } = useRecordStore((state) => {
     return {
       user: state.user,
@@ -55,7 +54,6 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
       onSetOpenPanel: state.onSetOpenPanel,
       onLogout: state.onLogout,
       onSetIsFetching: state.onSetIsFetching,
-      onSetIsNewUser: state.onSetIsNewUser,
     };
   }, shallow);
 
@@ -196,20 +194,11 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
     }
   }, []);
 
-  // 在註冊頁面時，將isNewUser設為false以防止直接進入網站
-  const checkAuthToGo = React.useCallback(
-    (url: string) => {
-      onSetIsNewUser(false);
-      go(url);
-    },
-    [go, onSetIsNewUser],
-  );
-
   return (
     <header className='sticky top-0 z-50 border-b-[1px] border-gray-300 bg-white dark:bg-black'>
       <div className='box-border flex h-[60px] items-center justify-between px-2 lg:mx-auto lg:max-w-[1024px] lg:px-0'>
         {/* left logo */}
-        <button className='flex items-center' onClick={() => checkAuthToGo('/')}>
+        <button className='flex items-center' onClick={() => go('/')}>
           <div className='mr-4 flex h-[48px] w-[48px] items-center'>
             <img src='images/logo.png' alt='logo' />
           </div>
@@ -221,7 +210,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
             {/* home */}
             <button
               className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
-              onClick={() => checkAuthToGo('/')}
+              onClick={() => go('/')}
               onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
               onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
             >
@@ -244,7 +233,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
             {/* ranking */}
             <button
               className='z-10 mr-4 rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
-              onClick={() => checkAuthToGo('/ranking')}
+              onClick={() => go('/ranking')}
               onMouseEnter={(e) => atIconBtnMouseEnterHandler(e)}
               onMouseLeave={(e) => atIconBtnMouseLeaveHandler(e)}
             >
@@ -334,7 +323,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                       className='flex w-full items-center rounded-lg p-2 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                       onClick={() => {
                         onSetOpenPanel(false);
-                        checkAuthToGo(`/profile/${user.id}`);
+                        go(`/profile/${user.id}`);
                       }}
                     >
                       {/* left icon */}
@@ -360,7 +349,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                       className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                       onClick={() => {
                         onSetOpenPanel(false);
-                        checkAuthToGo('/signin');
+                        go('/signin');
                       }}
                     >
                       {/* left icon */}
@@ -396,7 +385,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                       className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                       onClick={() => {
                         onSetOpenPanel(false);
-                        checkAuthToGo('/');
+                        go('/');
                       }}
                     >
                       {/* left icon */}
@@ -430,7 +419,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                       className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                       onClick={() => {
                         onSetOpenPanel(false);
-                        checkAuthToGo('/ranking');
+                        go('/ranking');
                       }}
                     >
                       {/* left icon */}
@@ -570,7 +559,7 @@ const FRHeader = React.forwardRef<IRef, FRHeaderProps>((props, ref) => {
                       className='flex w-full items-center rounded-lg p-1 hover:bg-[#e6e6e6] dark:hover:bg-[#1c1c1c]'
                       onClick={() => {
                         onLogout();
-                        checkAuthToGo('/');
+                        go('/');
                       }}
                     >
                       {/* left icon */}

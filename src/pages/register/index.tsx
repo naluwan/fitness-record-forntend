@@ -13,12 +13,11 @@ import { Toast } from 'utils/swal';
 const Register: React.FC = () => {
   const go = useNavigate();
 
-  const { isFetching, onSetOpenPanel, onRegister, onSetIsNewUser } = useRecordStore((state) => {
+  const { isFetching, onSetOpenPanel, onRegister } = useRecordStore((state) => {
     return {
       isFetching: state.isFetching,
       onSetOpenPanel: state.onSetOpenPanel,
       onRegister: state.onRegister,
-      onSetIsNewUser: state.onSetIsNewUser,
     };
   }, shallow);
 
@@ -106,7 +105,6 @@ const Register: React.FC = () => {
             icon: 'success',
             title: '註冊成功',
           });
-          onSetIsNewUser(false);
           go('/signin');
         })
         .catch((err) => {
@@ -134,7 +132,7 @@ const Register: React.FC = () => {
           }
         });
     },
-    [registerInfo, go, onRegister, onSetIsNewUser],
+    [registerInfo, go, onRegister],
   );
 
   // popover panel ref
