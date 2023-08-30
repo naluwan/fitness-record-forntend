@@ -37,5 +37,10 @@ jobs:
           user_email: 'github-actions[bot]@users.noreply.github.com'
           github_token: ${{ secrets.DEPLOY_SECRET }}
           repository: ${{ github.repository }}
+          REACT_APP_LINE_LOGIN_CHANNEL_ID: ${{ secrets.REACT_APP_LINE_LOGIN_CHANNEL_ID }}
+          REACT_APP_LINE_LOGIN_CHANNEL_SECRET: ${{ secrets.REACT_APP_LINE_LOGIN_CHANNEL_SECRET }}
+          REACT_APP_LINE_LOGIN_CALLBACK_URL: ${{ secrets.REACT_APP_LINE_LOGIN_CALLBACK_URL }}
+          REACT_APP_LINE_LOGIN_REDIRECT_URL: ${{ secrets.REACT_APP_LINE_LOGIN_REDIRECT_URL }}
+
 
 
