@@ -1,13 +1,10 @@
-//.github/workflows/deploy.yml
-
 name: Deploy to GitHub pages
 
 on:
   push:
     branches: [product]
   pull_request:
-    branches: [product
-]
+    branches: [product]
 
 jobs:
   build:
