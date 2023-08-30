@@ -37,5 +37,6 @@ jobs:
           user_email: 'github-actions[bot]@users.noreply.github.com'
           github_token: ${{ secrets.DEPLOY_SECRET }}
           repository: ${{ github.repository }}
-          REACT_APP_LINE_LOGIN_CHANNEL_ID: '1661252778'
-          REACT_APP_LINE_LOGIN_REDIRECT_URL: 'https%3A%2F%2Fnaluwan.github.io%2Ffitness%5Frecord%5Ffrontend%2F%23%2Fsignin%2Fline'
+          REACT_APP_LINE_LOGIN_CHANNEL_ID: ${{variables.REACT_APP_LINE_LOGIN_CHANNEL_ID}}
+          REACT_APP_LINE_LOGIN_REDIRECT_URL: ${{variables.REACT_APP_LINE_LOGIN_REDIRECT_URL}}
+
